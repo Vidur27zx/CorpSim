@@ -1,0 +1,295 @@
+{
+  "id": "ba-jpmorgan-001",
+  "role": "Business Analyst",
+  "company_name": "JPMorgan Chase",
+  "industry": "Financial Services",
+  "difficulty": "standard",
+  "duration_days": 3,
+  "title": "Basel III Finalization — Regulatory Reporting System Upgrade",
+  "description": "You are a Business Analyst on the Basel III Finalization project at JPMorgan Chase. Your manager Sarah Chen (VP) has assigned you to lead the business analysis for a regulatory reporting system upgrade. This is a high-visibility project with the Managing Director watching closely.",
+  "min_crs_cert": 600,
+  "characters": {
+    "sarah_chen": {
+      "name": "Sarah Chen",
+      "title": "VP, Business Analysis",
+      "role": "manager",
+      "personality": "Professional, supportive but demanding. Expects proactive communication.",
+      "avatar": "sarah_chen"
+    },
+    "david_martinez": {
+      "name": "David Martinez",
+      "title": "Managing Director, Risk Technology",
+      "role": "executive_stakeholder",
+      "personality": "Senior, direct, time-pressed. Values conciseness and ownership.",
+      "avatar": "david_martinez"
+    },
+    "priya_kapoor": {
+      "name": "Priya Kapoor",
+      "title": "Director, Regulatory Compliance",
+      "role": "stakeholder",
+      "personality": "Detail-oriented, cautious. Wants regulatory accuracy above all.",
+      "avatar": "priya_kapoor"
+    },
+    "lisa_park": {
+      "name": "Lisa Park",
+      "title": "Technology PM",
+      "role": "peer",
+      "personality": "Friendly, collaborative, keeps things moving. Good political antennae.",
+      "avatar": "lisa_park"
+    },
+    "tom_walsh": {
+      "name": "Tom Walsh",
+      "title": "Manager, Finance Operations",
+      "role": "stakeholder",
+      "personality": "Practical, compliance-focused. Cares about operational impact.",
+      "avatar": "tom_walsh"
+    }
+  },
+  "tools_enabled": {
+    "inbox": true,
+    "slack": true,
+    "docvault": true,
+    "taskboard": true,
+    "meetingroom": true,
+    "datastudio": false,
+    "calendar": true
+  },
+  "day_scripts": {
+    "1": [
+      {
+        "sim_time": "08:30",
+        "type": "email_inbound",
+        "from": "sarah_chen",
+        "template": "email.welcome_and_brief",
+        "subject": "Welcome to Basel III Project — BRD Review Needed",
+        "body_prompt": "Write a welcome email from Sarah Chen (VP) to a new Business Analyst joining the Basel III regulatory reporting project. Include: welcome, attach BRD v0.9 for review by EOD, kickoff call at 2PM, come with 3-5 clarifying questions, mention MD David Martinez is watching closely.",
+        "requires_response": true,
+        "response_deadline": "17:00",
+        "scoring_weight": 0.15,
+        "curveball_probability": 0.0,
+        "scoring_dimensions": ["communication", "professional_conduct"]
+      },
+      {
+        "sim_time": "09:15",
+        "type": "slack_message",
+        "channel": "dm",
+        "from": "lisa_park",
+        "message_prompt": "Write a casual DM from Lisa Park (Tech PM) to the new BA, giving them a heads-up: Section 4.2 of the BRD references Murex feed integration that was discussed for deprioritizing. Worth flagging before Sarah commits to it in scope.",
+        "requires_response": true,
+        "scoring_weight": 0.10,
+        "scoring_dimensions": ["stakeholder_mgmt", "problem_solving"]
+      },
+      {
+        "sim_time": "09:45",
+        "type": "tasks_assigned",
+        "tasks": [
+          {
+            "title": "Review BRD v0.9 and add comments",
+            "description": "Thoroughly review the Basel III BRD v0.9 document. Add inline comments for any gaps, ambiguities, or concerns. Pay special attention to Section 4.2 (Murex integration).",
+            "deadline": "17:00",
+            "priority": "high",
+            "assigned_by": "sarah_chen"
+          },
+          {
+            "title": "Prepare kickoff meeting questions",
+            "description": "Prepare 3-5 clarifying questions for the 2PM project kickoff meeting. Focus on scope, timeline, and technical dependencies.",
+            "deadline": "13:30",
+            "priority": "high",
+            "assigned_by": "sarah_chen"
+          },
+          {
+            "title": "Set up project folder structure",
+            "description": "Create a logical folder structure in DocVault for all project artifacts: BRDs, meeting notes, test cases, change requests, status reports.",
+            "deadline": "EOW",
+            "priority": "medium",
+            "assigned_by": "sarah_chen"
+          }
+        ],
+        "scoring_weight": 0.10,
+        "scoring_dimensions": ["delivery_execution"]
+      },
+      {
+        "sim_time": "10:00",
+        "type": "slack_message",
+        "channel": "#general",
+        "from": "sarah_chen",
+        "message_prompt": "Write a channel announcement from Sarah Chen welcoming the new BA to the team and briefly introducing the Basel III project.",
+        "requires_response": false,
+        "scoring_weight": 0.0,
+        "scoring_dimensions": []
+      },
+      {
+        "sim_time": "14:00",
+        "type": "meeting",
+        "meeting_id": "kickoff-001",
+        "title": "Basel III Project Kickoff",
+        "attendees": ["sarah_chen", "david_martinez", "priya_kapoor", "lisa_park"],
+        "duration_minutes": 45,
+        "agenda": [
+          "Project overview and timeline",
+          "Role assignments and expectations",
+          "Key deliverables for Phase 1",
+          "Student Q&A — clarifying questions from BRD review",
+          "Next steps and action items"
+        ],
+        "ai_instructions": "Sarah opens the meeting, introduces everyone, provides context. After overview, she turns to the student: 'As our new BA, would you like to share your initial questions after reviewing the BRD?' Evaluate: quality of questions, whether Murex scope issue was raised, active listening. David should ask a challenging question about timeline. Include at least one moment of conflict between Priya's compliance focus and the development timeline.",
+        "scoring_weight": 0.25,
+        "scoring_dimensions": ["communication", "stakeholder_mgmt", "problem_solving"]
+      },
+      {
+        "sim_time": "17:00",
+        "type": "email_inbound",
+        "from": "david_martinez",
+        "template": "email.deadline_change",
+        "subject": "FYI — Regulatory deadline moved",
+        "body_prompt": "Write an email from David Martinez (MD) informing the team that the regulatory deadline has been pulled forward by 3 weeks after discussions with the regulator. No action required today, but the team needs to acknowledge and factor this into planning.",
+        "requires_response": true,
+        "response_deadline": "09:00+1",
+        "scoring_weight": 0.10,
+        "scoring_dimensions": ["professional_conduct", "communication"]
+      }
+    ],
+    "2": [
+      {
+        "sim_time": "08:00",
+        "type": "email_inbound",
+        "from": "sarah_chen",
+        "subject": "Day 2 — Stakeholder alignment needed",
+        "body_prompt": "Email from Sarah asking the student to schedule 1:1s with key stakeholders (Priya and Tom) to gather requirements for their respective areas. Also asks for a status update on BRD review.",
+        "requires_response": true,
+        "response_deadline": "10:00",
+        "scoring_weight": 0.10,
+        "scoring_dimensions": ["communication", "stakeholder_mgmt"]
+      },
+      {
+        "sim_time": "10:30",
+        "type": "meeting",
+        "meeting_id": "stakeholder-priya-001",
+        "title": "Requirements Gathering — Regulatory Compliance",
+        "attendees": ["priya_kapoor"],
+        "duration_minutes": 30,
+        "agenda": [
+          "Current regulatory reporting pain points",
+          "Basel III specific requirements",
+          "Data quality concerns",
+          "Compliance sign-off process"
+        ],
+        "ai_instructions": "Priya is detailed and cautious. She reveals several data quality issues that could impact reporting accuracy. Challenge the student with conflicting requirements between speed and accuracy.",
+        "scoring_weight": 0.15,
+        "scoring_dimensions": ["analysis_insight", "stakeholder_mgmt"]
+      },
+      {
+        "sim_time": "15:30",
+        "type": "curveball",
+        "curveball_type": "scope_change",
+        "from": "david_martinez",
+        "template": "email.scope_change",
+        "subject": "Scope Change — Murex Deprioritized",
+        "body_prompt": "Email from MD David Martinez: After discussion with Regulatory, Murex feed integration is descoped from Phase 1. Student must: update BRD, notify all affected parties, update task board, draft change control doc by tomorrow morning.",
+        "requires_response": true,
+        "response_deadline": "09:00+1",
+        "scoring_weight": 0.20,
+        "scoring_dimensions": ["problem_solving", "documentation", "delivery_execution", "communication"]
+      }
+    ],
+    "3": [
+      {
+        "sim_time": "08:30",
+        "type": "email_inbound",
+        "from": "sarah_chen",
+        "subject": "Final Day — Deliverables Due",
+        "body_prompt": "Email from Sarah listing final deliverables: updated BRD v1.0, status report for MD, and a brief walkthrough of changes with the team at 3PM.",
+        "requires_response": true,
+        "response_deadline": "09:30",
+        "scoring_weight": 0.10,
+        "scoring_dimensions": ["communication", "professional_conduct"]
+      },
+      {
+        "sim_time": "11:00",
+        "type": "slack_message",
+        "channel": "#project-alpha",
+        "from": "tom_walsh",
+        "message_prompt": "Tom Walsh raises a concern in the project channel about how the Murex descoping affects Finance Operations' ability to reconcile certain reports. He needs clarity on the alternative approach.",
+        "requires_response": true,
+        "scoring_weight": 0.10,
+        "scoring_dimensions": ["stakeholder_mgmt", "communication"]
+      },
+      {
+        "sim_time": "15:00",
+        "type": "meeting",
+        "meeting_id": "final-walkthrough-001",
+        "title": "Project Status Walkthrough",
+        "attendees": ["sarah_chen", "david_martinez", "priya_kapoor", "lisa_park", "tom_walsh"],
+        "duration_minutes": 30,
+        "agenda": [
+          "BRD v1.0 changes walkthrough",
+          "Scope change impact assessment",
+          "Updated timeline and next steps",
+          "Open issues and risks"
+        ],
+        "ai_instructions": "This is the final assessment meeting. All stakeholders are present including the MD. Student presents their work. David asks tough questions about timeline implications. Priya challenges on compliance coverage. Evaluate: presentation quality, handling of tough questions, completeness of updates.",
+        "scoring_weight": 0.25,
+        "scoring_dimensions": ["communication", "stakeholder_mgmt", "delivery_execution", "professional_conduct"]
+      }
+    ]
+  },
+  "curveball_pool": [
+    {
+      "type": "stakeholder_conflict",
+      "description": "Priya and Tom give contradictory requirements about data granularity",
+      "trigger_conditions": {"min_day": 2, "probability": 0.3}
+    },
+    {
+      "type": "absent_approver",
+      "description": "Sarah is unexpectedly OOO — student must escalate to David directly",
+      "trigger_conditions": {"min_day": 2, "probability": 0.2}
+    },
+    {
+      "type": "exec_visibility",
+      "description": "CFO's office requests a one-page summary of the project for board materials",
+      "trigger_conditions": {"min_day": 3, "probability": 0.4}
+    }
+  ],
+  "scoring_rubrics": {
+    "communication": {
+      "weight": 0.15,
+      "max_points": 150,
+      "criteria": ["Email clarity", "Meeting participation", "Slack responsiveness", "Tone appropriateness"]
+    },
+    "analysis_insight": {
+      "weight": 0.15,
+      "max_points": 150,
+      "criteria": ["BRD analysis depth", "Requirement gap identification", "Data quality awareness"]
+    },
+    "documentation": {
+      "weight": 0.125,
+      "max_points": 125,
+      "criteria": ["BRD update quality", "Change control documentation", "Status report completeness"]
+    },
+    "stakeholder_mgmt": {
+      "weight": 0.125,
+      "max_points": 125,
+      "criteria": ["Conflict navigation", "Escalation timing", "Stakeholder communication"]
+    },
+    "delivery_execution": {
+      "weight": 0.10,
+      "max_points": 100,
+      "criteria": ["Task completion rate", "Deadline adherence", "Task board maintenance"]
+    },
+    "technical_skill": {
+      "weight": 0.10,
+      "max_points": 100,
+      "criteria": ["Tool proficiency", "Documentation formatting", "Process adherence"]
+    },
+    "problem_solving": {
+      "weight": 0.125,
+      "max_points": 125,
+      "criteria": ["Curveball handling", "Scope change management", "Risk identification"]
+    },
+    "professional_conduct": {
+      "weight": 0.125,
+      "max_points": 125,
+      "criteria": ["Tone and hierarchy awareness", "Confidentiality", "Proactiveness", "Time management"]
+    }
+  }
+}

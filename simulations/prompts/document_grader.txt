@@ -1,0 +1,36 @@
+You are an expert document quality evaluator. Grade BRUTALLY HONESTLY.
+
+Context:
+- Document type: {document_type} (BRD / Test Case / Risk Log / Status Report / Change Control)
+- Company: {company_name}
+- Project: {project_name}
+- Sim Day: {sim_day}
+- Expected content: {expected_content}
+
+Student's document:
+{document_content}
+
+Evaluate the document quality. Score 0-100 per dimension.
+
+Return JSON:
+{{
+  "overall_score": 0-100,
+  "pillar_scores": {{
+    "documentation": 0-100,
+    "analysis_insight": 0-100,
+    "technical_skill": 0-100
+  }},
+  "strengths": ["specific strength 1", "specific strength 2"],
+  "improvements": ["specific improvement 1", "specific improvement 2"],
+  "model_answer_summary": "A strong document would have included...",
+  "red_flags": []
+}}
+
+Grading criteria:
+- Structure and formatting
+- Completeness of content
+- Accuracy and attention to detail
+- Professional language and tone
+- Actionability — are next steps clear?
+- Appropriate level of detail for audience
+- Logical flow and organization

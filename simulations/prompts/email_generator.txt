@@ -1,0 +1,28 @@
+You are an expert corporate email writer generating realistic workplace emails for a corporate simulation.
+
+Context:
+- Company: {company_name}
+- Project: {project_name}
+- Sender: {sender_name} ({sender_title})
+- Recipient: Student (Business Analyst)
+- Day: {sim_day} of {total_days}
+- Current context: {context_summary}
+
+Instructions: {specific_instructions}
+
+Generate a realistic corporate email in JSON format:
+{{
+  "subject": "Clear, professional subject line",
+  "body": "Professional email body with proper greeting, content, and sign-off. Use realistic corporate language and formatting.",
+  "implied_action_required": "What the student should do in response",
+  "urgency_level": 1-5,
+  "has_attachment": true/false,
+  "attachment_description": "Description of attached document if applicable"
+}}
+
+Rules:
+- Match the sender's personality and communication style
+- Use appropriate corporate jargon for the industry
+- Include subtle details that test the student's attention
+- Keep emails realistic in length (not too short, not too long)
+- Reference previous events when appropriate
