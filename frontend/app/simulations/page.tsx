@@ -8,7 +8,6 @@ import { api } from "@/lib/api";
 import {
   Zap,
   Search,
-  Filter,
   Building2,
   Briefcase,
   Clock,

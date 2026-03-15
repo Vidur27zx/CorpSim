@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { api } from "@/lib/api";
+
 
 export interface User {
   id: string;
@@ -52,7 +52,7 @@ export const useAuthStore = create<AuthState>()(
       isLoading: false,
       isAuthenticated: false,
 
-      login: async (email: string, password: string) => {
+      login: async (_email: string, _password: string) => {
         set({ isLoading: true });
         try {
           await new Promise(resolve => setTimeout(resolve, 800));
@@ -63,7 +63,7 @@ export const useAuthStore = create<AuthState>()(
         }
       },
 
-      register: async (data: RegisterData) => {
+      register: async (_data: RegisterData) => {
         set({ isLoading: true });
         try {
           await new Promise(resolve => setTimeout(resolve, 800));

@@ -1,6 +1,6 @@
 "use client";
 
-import { CalendarDays, Clock, Video, FileText, AlertTriangle } from "lucide-react";
+import { CalendarDays, Video, FileText, AlertTriangle } from "lucide-react";
 
 interface CalEvent {
   id: string;
