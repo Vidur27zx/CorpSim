@@ -6,18 +6,16 @@ import {
   Zap,
   Monitor,
   MessageSquare,
-  FileText,
   BarChart3,
-  Mic,
   Award,
   ArrowRight,
   ChevronRight,
   Check,
   Star,
-  Users,
   TrendingUp,
   Shield,
 } from "lucide-react";
+import JourneysSection from "@/components/landing/JourneysSection";
 import {
   Radar,
   RadarChart,
@@ -108,6 +106,7 @@ const plans = [
     highlighted: false,
   },
 ];
+
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -276,6 +275,9 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Three Journeys */}
+      <JourneysSection />
+
       {/* Pricing */}
       <section id="pricing" className="py-24 px-6 bg-slate-50">
         <div className="max-w-6xl mx-auto">
@@ -402,3 +404,4 @@ export default function LandingPage() {
     </div>
   );
 }
+
