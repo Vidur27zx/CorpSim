@@ -816,8 +816,7 @@ export default function JourneysSection() {
             {/* Sidebar */}
             <div className="hidden md:flex w-52 border-r border-white/[0.06] bg-[#0c0c0c] p-4 flex-col gap-1">
               <div className="mb-5 px-2 flex items-center gap-2">
-                <div className="w-6 h-6 bg-amber-500 rounded flex items-center justify-center text-[10px] font-black text-black">π</div>
-                <span className="text-xs font-bold text-white">Pi Dot</span>
+                <img src="/pidot-logo.png" alt="Pi Dot" className="h-5" />
                 <span className="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400 font-semibold ml-auto">Pro</span>
               </div>
               {[
