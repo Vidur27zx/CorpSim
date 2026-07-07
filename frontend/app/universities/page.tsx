@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight, BookOpen, GraduationCap, Building2, Zap, BarChart3, Users, Star } from "lucide-react";
+import { ArrowRight, BookOpen, GraduationCap, Building2, Zap, BarChart3 } from "lucide-react";
+import UniversitySimulationSections from "@/components/landing/UniversitySimulationSections";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -19,13 +20,13 @@ export default function UniversitiesPage() {
     <div className="min-h-screen bg-white overflow-hidden selection:bg-brand-blue selection:text-white">
       {/* Nav */}
       <nav className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Link href="/" className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-gradient-brand flex items-center justify-center shadow-sm">
+              <div className="w-8 h-8 shrink-0 rounded-lg bg-gradient-brand flex items-center justify-center shadow-sm">
                 <Zap className="w-4 h-4 text-white" />
               </div>
-              <span className="text-xl font-bold text-brand-navy tracking-tight">
+              <span className="hidden text-xl font-bold text-brand-navy tracking-tight sm:inline">
                 CorpSim AI
               </span>
             </Link>
@@ -37,14 +38,15 @@ export default function UniversitiesPage() {
             <Link href="/#pricing" className="text-sm font-medium text-slate-600 hover:text-brand-blue transition-colors">Pricing</Link>
           </div>
           <div className="flex items-center gap-4">
-            <Link href="/auth/login" className="text-sm font-medium text-slate-700 hover:text-brand-blue transition-colors">
+            <Link href="/auth/login" className="hidden text-sm font-medium text-slate-700 hover:text-brand-blue transition-colors sm:inline">
               Log In
             </Link>
             <Link
               href="/auth/register"
               className="text-sm font-medium bg-gradient-brand text-white px-4 py-2 rounded-lg hover:opacity-90 transition-opacity"
             >
-              Partner with Us
+              <span className="hidden sm:inline">Partner with Us</span>
+              <span className="sm:hidden">Partner</span>
             </Link>
           </div>
         </div>
@@ -90,7 +92,7 @@ export default function UniversitiesPage() {
               Why Top Universities Partner With Us
             </h2>
             <p className="text-slate-600 max-w-2xl mx-auto text-lg leading-relaxed">
-              Elevate your institution's career services and curriculum with actionable, data-driven readiness metrics.
+              Elevate your institution&apos;s career services and curriculum with actionable, data-driven readiness metrics.
             </p>
           </div>
 
@@ -126,6 +128,8 @@ export default function UniversitiesPage() {
           </div>
         </div>
       </section>
+
+      <UniversitySimulationSections />
     </div>
   );
 }
