@@ -15,6 +15,7 @@ import {
   TrendingUp,
   Shield,
 } from "lucide-react";
+import BeyondHiringSection from "@/components/landing/BeyondHiringSection";
 import JourneysSection from "@/components/landing/JourneysSection";
 import {
   Radar,
@@ -34,12 +35,6 @@ const heroRadarData = [
   { pillar: "Technical", value: 65 },
   { pillar: "Problem Solving", value: 82 },
   { pillar: "Professional", value: 88 },
-];
-
-const roles = [
-  "Business Analyst", "Product Manager", "Data Analyst", "UX Designer",
-  "Software Engineer", "Consultant", "Financial Analyst", "Marketing Manager",
-  "Risk Analyst", "Operations Manager", "Project Manager", "Investment Banking Analyst",
 ];
 
 const companies = [
@@ -79,34 +74,6 @@ const features = [
     description: "Per-event scoring breakdown with model answers, showing exactly where to improve.",
   },
 ];
-
-const plans = [
-  {
-    name: "Free",
-    price: "$0",
-    period: "",
-    features: ["1 simulation/month", "Basic CRS score", "Community access"],
-    cta: "Get Started",
-    highlighted: false,
-  },
-  {
-    name: "Pro",
-    price: "$29",
-    period: "/mo",
-    features: ["Unlimited simulations", "Full 8-pillar debrief", "Certificates", "Priority AI", "All modules"],
-    cta: "Start Pro",
-    highlighted: true,
-  },
-  {
-    name: "Pro+",
-    price: "$49",
-    period: "/mo",
-    features: ["Everything in Pro", "Partner tracks", "Elite certificates", "LinkedIn integration", "Priority support"],
-    cta: "Start Pro+",
-    highlighted: false,
-  },
-];
-
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -278,6 +245,9 @@ export default function LandingPage() {
       {/* Three Journeys */}
       <JourneysSection />
 
+      {/* Beyond Hiring */}
+      <BeyondHiringSection />
+
       {/* Pricing */}
       <section id="pricing" className="py-24 px-6 bg-slate-50">
         <div className="max-w-6xl mx-auto">
@@ -292,7 +262,7 @@ export default function LandingPage() {
               Flexible Plans for Every Journey
             </motion.h2>
             <motion.p variants={fadeUp} className="text-slate-600 max-w-2xl mx-auto">
-              Whether you're a student preparing for interviews, or an Enterprise building a talent pipeline, we have a plan for you.
+              Whether you&apos;re a student preparing for interviews, or an Enterprise building a talent pipeline, we have a plan for you.
             </motion.p>
           </motion.div>
 
