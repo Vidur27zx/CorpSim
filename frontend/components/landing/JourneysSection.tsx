@@ -1072,7 +1072,7 @@ const journeyTabs: JourneyTab[] = [
     steps: [
       {
         icon: BarChart3,
-        title: "Define role-specific assessments",
+        title: "Design the role before you hire",
         description: "Configure job title, department, competency weights, and minimum readiness thresholds.",
         preview: {
           title: "Create role-based simulations",
@@ -1105,7 +1105,7 @@ const journeyTabs: JourneyTab[] = [
       },
       {
         icon: Settings,
-        title: "Configure the assessment environment",
+        title: "Simulate your business environment",
         description: "Set up company context, workflow stages, difficulty level, and scenario events.",
         preview: {
           title: "Candidate screening",
@@ -1179,7 +1179,7 @@ const journeyTabs: JourneyTab[] = [
       },
       {
         icon: Monitor,
-        title: "Monitor candidate performance",
+        title: "Watch candidates perform",
         description: "Review candidate progress as they complete role-specific workplace scenarios.",
         preview: {
           title: "Candidate comparison",
@@ -1255,7 +1255,7 @@ const journeyTabs: JourneyTab[] = [
       },
       {
         icon: UserCheck,
-        title: "Make evidence-based hiring decisions",
+        title: "Hire the right candidate",
         description: "Use structured recommendations backed by objective simulation performance data.",
         preview: {
           title: "Hiring decision report",
@@ -1290,15 +1290,9 @@ const journeyTabs: JourneyTab[] = [
 ];
 
 export default function JourneysSection() {
-  const [activeTab, setActiveTab] = useState<JourneyId>("students");
   const [activeStep, setActiveStep] = useState<number>(0);
-  const activeJourney = journeyTabs.find((tab) => tab.id === activeTab) ?? journeyTabs[0];
+  const activeJourney = journeyTabs.find((tab) => tab.id === "enterprises") ?? journeyTabs[2];
   const activePreview = activeJourney.steps[activeStep].preview;
-
-  const handleTabSwitch = (tabId: JourneyId) => {
-    setActiveTab(tabId);
-    setActiveStep(0);
-  };
 
   return (
     <section className="bg-[#0B0B0B] px-6 py-24">
@@ -1308,15 +1302,25 @@ export default function JourneysSection() {
           whileInView="show"
           viewport={{ once: true, margin: "-100px" }}
           variants={stagger}
-          className="mb-10"
+          className="mb-12 text-center"
         >
+          <motion.div
+            variants={fadeUp}
+            className="mx-auto mb-7 flex h-20 w-20 items-center justify-center rounded-2xl border border-[#4A4A4A]/65 bg-black shadow-[inset_0_1px_0_rgba(255,255,255,0.16),0_22px_55px_rgba(0,0,0,0.45),0_0_34px_rgba(246,149,7,0.16)]"
+          >
+            <div className="relative h-12 w-12 overflow-hidden rounded-full border border-[#4A4A4A]/70 bg-[#0B0B0B]">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_35%_20%,rgba(255,255,255,0.28),transparent_32%),radial-gradient(circle_at_58%_78%,rgba(246,149,7,0.42),transparent_38%)]" />
+              <div className="absolute left-2 top-2 h-3 w-7 rounded-full bg-white/15 blur-[1px]" />
+            </div>
+          </motion.div>
           <motion.div variants={fadeUp}>
             <h2 className="text-4xl font-extrabold leading-tight text-white md:text-5xl">
-              One Platform.{" "}
-              <span className="bg-gradient-to-r from-[#FFB13B] via-[#F69507] to-[#FFD08A] bg-clip-text text-transparent">
-                Three Journeys.
-              </span>
+              Everything in your control
             </h2>
+            <p className="mx-auto mt-4 max-w-2xl text-sm font-medium leading-relaxed text-[#D6D6D6]">
+              From role requirements to final shortlist, you define how candidates are tested, evaluated, and selected in
+              an environment that mirrors your real business.
+            </p>
           </motion.div>
         </motion.div>
 
@@ -1329,39 +1333,8 @@ export default function JourneysSection() {
             className="relative overflow-hidden rounded-xl border border-[#4A4A4A]/60 bg-[#0B0B0B]/95 p-3 shadow-2xl shadow-black/30 backdrop-blur-xl lg:sticky lg:top-24 lg:self-start"
           >
             <div className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-white/[0.08] to-transparent" />
-            <div className="relative mb-3 rounded-lg border border-[#4A4A4A]/55 bg-black p-3">
-              <div className="grid grid-cols-1 gap-2">
-                {journeyTabs.map((tab) => {
-                  const TabIcon = tab.tabIcon;
-                  const selected = activeTab === tab.id;
-
-                  return (
-                    <button
-                      key={tab.id}
-                      type="button"
-                      onClick={() => handleTabSwitch(tab.id)}
-                      className={`flex h-[54px] items-center gap-3 rounded-lg border px-3 text-left transition-all duration-300 ${
-                        selected
-                          ? "border-[#F69507]/70 bg-[#F69507]/10 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.10),0_0_24px_rgba(246,149,7,0.12)]"
-                          : "border-[#4A4A4A]/55 bg-black text-white hover:border-[#A4A4A4]/70"
-                      }`}
-                    >
-                      <span
-                        className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border ${
-                          selected ? "border-[#F69507]/50 bg-[#F69507]/10 text-[#FFB13B]" : "border-[#4A4A4A]/70 bg-[#0B0B0B] text-[#A4A4A4]"
-                        }`}
-                      >
-                        <TabIcon className="h-4 w-4" />
-                      </span>
-                      <span className="min-w-0 truncate text-[13px] font-bold text-white">{tab.label}</span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
             <motion.div
-              key={activeTab}
+              key="enterprises"
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3 }}
@@ -1398,14 +1371,14 @@ export default function JourneysSection() {
           </motion.aside>
 
           <motion.div
-            key={`${activeTab}-${activeStep}`}
+            key={`enterprises-${activeStep}`}
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
             className="min-w-0"
           >
             <PreviewBrowserFrame
-              journeyId={activeTab}
+              journeyId="enterprises"
               stepIndex={activeStep}
               preview={activePreview}
               onStepChange={setActiveStep}
