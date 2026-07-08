@@ -1294,7 +1294,6 @@ export default function JourneysSection() {
   const [activeStep, setActiveStep] = useState<number>(0);
   const activeJourney = journeyTabs.find((tab) => tab.id === activeTab) ?? journeyTabs[0];
   const activePreview = activeJourney.steps[activeStep].preview;
-  const ActiveJourneyIcon = activeJourney.tabIcon;
 
   const handleTabSwitch = (tabId: JourneyId) => {
     setActiveTab(tabId);
@@ -1309,10 +1308,9 @@ export default function JourneysSection() {
           whileInView="show"
           viewport={{ once: true, margin: "-100px" }}
           variants={stagger}
-          className="mb-12 grid gap-6 lg:grid-cols-[360px_1fr] lg:items-end"
+          className="mb-10"
         >
           <motion.div variants={fadeUp}>
-            <p className="mb-3 text-xs font-bold uppercase tracking-[0.24em] text-[#FFB13B]">Platform paths</p>
             <h2 className="text-4xl font-extrabold leading-tight text-white md:text-5xl">
               One Platform.{" "}
               <span className="bg-gradient-to-r from-[#FFB13B] via-[#F69507] to-[#FFD08A] bg-clip-text text-transparent">
@@ -1320,23 +1318,18 @@ export default function JourneysSection() {
               </span>
             </h2>
           </motion.div>
-          <motion.p variants={fadeUp} className="max-w-2xl text-base font-medium leading-relaxed text-[#A4A4A4] lg:justify-self-end">
-            Choose a journey on the left, move through the workflow, and watch the product prototype update on the
-            right.
-          </motion.p>
         </motion.div>
 
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[360px_minmax(0,1fr)]">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[370px_minmax(0,1fr)]">
           <motion.aside
             initial="hidden"
             whileInView="show"
             viewport={{ once: true, margin: "-80px" }}
             variants={fadeUp}
-            className="relative overflow-hidden rounded-2xl border border-[#4A4A4A]/45 bg-[#101010]/90 p-3 shadow-2xl shadow-black/30 backdrop-blur-xl lg:sticky lg:top-24 lg:self-start"
+            className="relative overflow-hidden rounded-xl border border-[#4A4A4A]/60 bg-[#0B0B0B]/95 p-3 shadow-2xl shadow-black/30 backdrop-blur-xl lg:sticky lg:top-24 lg:self-start"
           >
-            <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-white/[0.10] to-transparent" />
-            <div className="relative mb-3 rounded-xl border border-[#4A4A4A]/40 bg-[#0B0B0B]/82 p-3">
-              <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.22em] text-[#A4A4A4]">Journey</p>
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-white/[0.08] to-transparent" />
+            <div className="relative mb-3 rounded-lg border border-[#4A4A4A]/55 bg-black p-3">
               <div className="grid grid-cols-1 gap-2">
                 {journeyTabs.map((tab) => {
                   const TabIcon = tab.tabIcon;
@@ -1347,38 +1340,23 @@ export default function JourneysSection() {
                       key={tab.id}
                       type="button"
                       onClick={() => handleTabSwitch(tab.id)}
-                      className={`flex items-center gap-3 rounded-xl border px-3 py-2.5 text-left transition-all duration-300 ${
+                      className={`flex h-[54px] items-center gap-3 rounded-lg border px-3 text-left transition-all duration-300 ${
                         selected
-                          ? "border-[#F69507]/60 bg-[#FFB13B]/10 text-white shadow-lg shadow-[#F69507]/10"
-                          : "border-transparent bg-transparent text-[#A4A4A4] hover:border-[#4A4A4A]/60 hover:bg-white/[0.03] hover:text-white"
+                          ? "border-[#F69507]/70 bg-[#F69507]/10 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.10),0_0_24px_rgba(246,149,7,0.12)]"
+                          : "border-[#4A4A4A]/55 bg-black text-white hover:border-[#A4A4A4]/70"
                       }`}
                     >
                       <span
-                        className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border ${
-                          selected ? "border-[#F69507]/45 bg-[#F69507]/15 text-[#FFB13B]" : "border-[#4A4A4A]/40 bg-white/[0.03] text-[#A4A4A4]"
+                        className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border ${
+                          selected ? "border-[#F69507]/50 bg-[#F69507]/10 text-[#FFB13B]" : "border-[#4A4A4A]/70 bg-[#0B0B0B] text-[#A4A4A4]"
                         }`}
                       >
                         <TabIcon className="h-4 w-4" />
                       </span>
-                      <span className="min-w-0">
-                        <span className="block text-sm font-bold">{tab.label}</span>
-                        <span className="mt-0.5 block text-[10px] font-medium text-[#A4A4A4]">
-                          {tab.steps.length} workflow steps
-                        </span>
-                      </span>
+                      <span className="min-w-0 truncate text-[13px] font-bold text-white">{tab.label}</span>
                     </button>
                   );
                 })}
-              </div>
-            </div>
-
-            <div className="relative mb-3 flex items-center gap-3 px-1">
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-[#F69507]/45 bg-[#F69507]/15">
-                <ActiveJourneyIcon className="h-4 w-4 text-[#FFB13B]" />
-              </div>
-              <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#A4A4A4]">Workflow</p>
-                <p className="text-sm font-bold text-white">{activeJourney.label}</p>
               </div>
             </div>
 
@@ -1387,7 +1365,7 @@ export default function JourneysSection() {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3 }}
-              className="relative space-y-1.5"
+              className="relative grid grid-cols-1 gap-2"
             >
               {activeJourney.steps.map((step, index) => {
                 const isActive = activeStep === index;
@@ -1398,35 +1376,21 @@ export default function JourneysSection() {
                     key={step.title}
                     type="button"
                     onClick={() => setActiveStep(index)}
-                    className={`group relative w-full rounded-xl border px-3 py-2.5 text-left transition-all duration-300 ${
+                    className={`group relative flex h-[54px] w-full items-center gap-3 rounded-lg border px-3 text-left transition-all duration-300 ${
                       isActive
-                        ? "border-[#F69507]/55 bg-[#F69507]/10"
-                        : "border-[#4A4A4A]/30 bg-white/[0.025] hover:border-[#A4A4A4]/35 hover:bg-white/[0.045]"
+                        ? "border-[#F69507]/70 bg-[#F69507]/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.10),0_0_24px_rgba(246,149,7,0.12)]"
+                        : "border-[#4A4A4A]/60 bg-black hover:border-[#A4A4A4]/70"
                     }`}
                   >
-                    <div className="flex gap-3">
-                      <div
-                        className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border ${
-                          isActive ? "border-[#F69507]/45 bg-[#F69507]/15 text-[#FFB13B]" : "border-[#4A4A4A]/35 bg-[#0B0B0B] text-[#A4A4A4]"
-                        }`}
-                      >
-                        <StepIcon className="h-4 w-4" />
-                      </div>
-                      <div className="min-w-0">
-                        <div className="flex items-center gap-2">
-                          <span className={`text-xs font-black ${isActive ? "text-[#FFB13B]" : "text-[#A4A4A4]"}`}>
-                            {String(index + 1).padStart(2, "0")}
-                          </span>
-                          {isActive && <span className="h-1.5 w-1.5 rounded-full bg-[#FFB13B] shadow-[0_0_16px_rgba(255,177,59,0.85)]" />}
-                        </div>
-                        <p className={`mt-1 text-sm font-bold leading-snug ${isActive ? "text-white" : "text-[#D6D6D6]"}`}>
-                          {step.title}
-                        </p>
-                        <p className={`mt-1 text-[11px] font-medium leading-relaxed text-[#A4A4A4] ${isActive ? "line-clamp-2" : "hidden"}`}>
-                          {step.description}
-                        </p>
-                      </div>
+                    {isActive && <span className="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-[#F69507] to-transparent" />}
+                    <div
+                      className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border ${
+                        isActive ? "border-[#F69507]/50 bg-[#F69507]/10 text-[#FFB13B]" : "border-[#4A4A4A]/70 bg-[#0B0B0B] text-[#A4A4A4]"
+                      }`}
+                    >
+                      <StepIcon className="h-4 w-4" />
                     </div>
+                    <span className="min-w-0 truncate text-[13px] font-bold text-white">{step.title}</span>
                   </button>
                 );
               })}
