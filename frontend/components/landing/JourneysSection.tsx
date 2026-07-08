@@ -107,21 +107,21 @@ type JourneyTab = {
 };
 
 const previewTheme = {
-  bg: "#050505",
+  bg: "#0B0B0B",
   panel: "#0B0B0B",
-  panelElevated: "#111111",
+  panelElevated: "#141414",
   card: "#151515",
-  cardHover: "#1A1A1A",
-  border: "#2A2A2A",
-  borderSoft: "#202020",
+  cardHover: "#1D1D1D",
+  border: "#4A4A4A",
+  borderSoft: "#242424",
   textPrimary: "#FFFFFF",
-  textSecondary: "#C7C7C7",
-  textMuted: "#7A7A7A",
-  accent: "#F5A400",
-  accentSoft: "rgba(245, 164, 0, 0.12)",
-  accentBorder: "rgba(245, 164, 0, 0.35)",
-  grayBar: "#3A3A3A",
-  grayBarLight: "#555555",
+  textSecondary: "#D6D6D6",
+  textMuted: "#A4A4A4",
+  accent: "#F69507",
+  accentSoft: "rgba(255, 177, 59, 0.12)",
+  accentBorder: "rgba(246, 149, 7, 0.45)",
+  grayBar: "#4A4A4A",
+  grayBarLight: "#A4A4A4",
 };
 
 const sidebarItems: Record<JourneyId, { name: string; icon: LucideIcon }[]> = {
@@ -1274,6 +1274,7 @@ export default function JourneysSection() {
   const [activeStep, setActiveStep] = useState<number>(0);
   const activeJourney = journeyTabs.find((tab) => tab.id === activeTab) ?? journeyTabs[0];
   const activePreview = activeJourney.steps[activeStep].preview;
+  const ActiveJourneyIcon = activeJourney.tabIcon;
 
   const handleTabSwitch = (tabId: JourneyId) => {
     setActiveTab(tabId);
@@ -1281,91 +1282,146 @@ export default function JourneysSection() {
   };
 
   return (
-    <section className="bg-[#0a0a0a] px-6 py-24">
-      <div className="mx-auto max-w-6xl">
+    <section className="bg-[#0B0B0B] px-6 py-24">
+      <div className="mx-auto max-w-7xl">
         <motion.div
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, margin: "-100px" }}
           variants={stagger}
-          className="mb-16 text-center"
+          className="mb-12 grid gap-6 lg:grid-cols-[360px_1fr] lg:items-end"
         >
-          <motion.h2 variants={fadeUp} className="mb-4 text-3xl font-extrabold text-white md:text-5xl">
-            One Platform.{" "}
-            <span className="bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">
-              Three Journeys.
-            </span>
-          </motion.h2>
-          <motion.p variants={fadeUp} className="mx-auto max-w-2xl text-lg leading-relaxed text-slate-400">
-            Whether you&apos;re a learner, university team, or hiring organization, Corporate Simulation adapts to your goals.
+          <motion.div variants={fadeUp}>
+            <p className="mb-3 text-xs font-bold uppercase tracking-[0.24em] text-[#FFB13B]">Platform paths</p>
+            <h2 className="text-4xl font-extrabold leading-tight text-white md:text-5xl">
+              One Platform.{" "}
+              <span className="bg-gradient-to-r from-[#FFB13B] via-[#F69507] to-[#FFD08A] bg-clip-text text-transparent">
+                Three Journeys.
+              </span>
+            </h2>
+          </motion.div>
+          <motion.p variants={fadeUp} className="max-w-2xl text-base font-medium leading-relaxed text-[#A4A4A4] lg:justify-self-end">
+            Choose a journey on the left, move through the workflow, and watch the product prototype update on the
+            right.
           </motion.p>
         </motion.div>
 
-        <motion.div
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-          variants={fadeUp}
-          className="mb-10 flex flex-wrap justify-center gap-3"
-        >
-          {journeyTabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => handleTabSwitch(tab.id)}
-              className={`flex items-center gap-2.5 rounded-full border px-6 py-3 text-sm font-semibold transition-all duration-300 ${
-                activeTab === tab.id
-                  ? "border-amber-500/50 bg-gradient-to-r from-amber-500/10 to-orange-500/10 text-amber-400 shadow-lg shadow-amber-500/10"
-                  : "border-white/10 bg-white/[0.03] text-slate-400 hover:bg-white/[0.06] hover:text-slate-300"
-              }`}
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[360px_minmax(0,1fr)]">
+          <motion.aside
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: "-80px" }}
+            variants={fadeUp}
+            className="rounded-2xl border border-[#4A4A4A]/45 bg-[#101010] p-4 shadow-2xl shadow-black/30 lg:sticky lg:top-24 lg:max-h-[calc(100vh-7rem)] lg:self-start lg:overflow-y-auto"
+          >
+            <div className="mb-5 rounded-xl border border-[#4A4A4A]/40 bg-[#0B0B0B] p-4">
+              <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.22em] text-[#A4A4A4]">Journey</p>
+              <div className="grid grid-cols-1 gap-2">
+                {journeyTabs.map((tab) => {
+                  const TabIcon = tab.tabIcon;
+                  const selected = activeTab === tab.id;
+
+                  return (
+                    <button
+                      key={tab.id}
+                      type="button"
+                      onClick={() => handleTabSwitch(tab.id)}
+                      className={`flex items-center gap-3 rounded-xl border px-3.5 py-3 text-left transition-all duration-300 ${
+                        selected
+                          ? "border-[#F69507]/60 bg-[#FFB13B]/10 text-white shadow-lg shadow-[#F69507]/10"
+                          : "border-transparent bg-transparent text-[#A4A4A4] hover:border-[#4A4A4A]/60 hover:bg-white/[0.03] hover:text-white"
+                      }`}
+                    >
+                      <span
+                        className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border ${
+                          selected ? "border-[#F69507]/45 bg-[#F69507]/15 text-[#FFB13B]" : "border-[#4A4A4A]/40 bg-white/[0.03] text-[#A4A4A4]"
+                        }`}
+                      >
+                        <TabIcon className="h-4 w-4" />
+                      </span>
+                      <span className="min-w-0">
+                        <span className="block text-sm font-bold">{tab.label}</span>
+                        <span className="mt-0.5 block text-[11px] font-medium text-[#A4A4A4]">
+                          {tab.steps.length} workflow steps
+                        </span>
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="mb-4 flex items-center gap-3 px-1">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[#F69507]/45 bg-[#F69507]/15">
+                <ActiveJourneyIcon className="h-4 w-4 text-[#FFB13B]" />
+              </div>
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#A4A4A4]">Workflow</p>
+                <p className="text-sm font-bold text-white">{activeJourney.label}</p>
+              </div>
+            </div>
+
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+              className="space-y-2"
             >
-              <tab.tabIcon className="h-4 w-4" />
-              {tab.label}
-            </button>
-          ))}
-        </motion.div>
+              {activeJourney.steps.map((step, index) => {
+                const isActive = activeStep === index;
+                const StepIcon = step.icon;
 
-        <motion.div
-          key={activeTab}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="mb-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3"
-        >
-          {activeJourney.steps.map((step, index) => {
-            const isActive = activeStep === index;
+                return (
+                  <button
+                    key={step.title}
+                    type="button"
+                    onClick={() => setActiveStep(index)}
+                    className={`group relative w-full rounded-xl border px-3.5 py-3 text-left transition-all duration-300 ${
+                      isActive
+                        ? "border-[#F69507]/55 bg-[#F69507]/10"
+                        : "border-[#4A4A4A]/30 bg-white/[0.025] hover:border-[#A4A4A4]/35 hover:bg-white/[0.045]"
+                    }`}
+                  >
+                    <div className="flex gap-3">
+                      <div
+                        className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border ${
+                          isActive ? "border-[#F69507]/45 bg-[#F69507]/15 text-[#FFB13B]" : "border-[#4A4A4A]/35 bg-[#0B0B0B] text-[#A4A4A4]"
+                        }`}
+                      >
+                        <StepIcon className="h-4 w-4" />
+                      </div>
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-2">
+                          <span className={`text-xs font-black ${isActive ? "text-[#FFB13B]" : "text-[#A4A4A4]"}`}>
+                            {String(index + 1).padStart(2, "0")}
+                          </span>
+                          {isActive && <span className="h-1.5 w-1.5 rounded-full bg-[#FFB13B] shadow-[0_0_16px_rgba(255,177,59,0.85)]" />}
+                        </div>
+                        <p className={`mt-1 text-sm font-bold leading-snug ${isActive ? "text-white" : "text-[#D6D6D6]"}`}>
+                          {step.title}
+                        </p>
+                        <p className="mt-1 line-clamp-2 text-[11px] font-medium leading-relaxed text-[#A4A4A4]">
+                          {step.description}
+                        </p>
+                      </div>
+                    </div>
+                  </button>
+                );
+              })}
+            </motion.div>
+          </motion.aside>
 
-            return (
-              <motion.button
-                key={step.title}
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.35, delay: index * 0.05 }}
-                onClick={() => setActiveStep(index)}
-                className={`relative flex min-h-[72px] items-center gap-3 rounded-xl border px-4 py-3.5 text-left transition-all duration-300 ${
-                  isActive
-                    ? "border-white/[0.15] bg-white/[0.06]"
-                    : "border-white/[0.06] bg-white/[0.02] hover:border-white/[0.12] hover:bg-white/[0.05]"
-                }`}
-              >
-                <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${isActive ? "bg-amber-500/15" : "bg-white/[0.06]"}`}>
-                  <step.icon className={`h-4 w-4 ${isActive ? "text-amber-400" : "text-slate-500"}`} />
-                </div>
-                <span className={`text-[13px] font-medium ${isActive ? "text-white" : "text-slate-400"}`}>
-                  {step.title}
-                </span>
-              </motion.button>
-            );
-          })}
-        </motion.div>
-
-        <motion.div
-          key={`${activeTab}-${activeStep}`}
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-        >
-          <PreviewBrowserFrame journeyId={activeTab} stepIndex={activeStep} preview={activePreview} />
-        </motion.div>
+          <motion.div
+            key={`${activeTab}-${activeStep}`}
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+            className="min-w-0"
+          >
+            <PreviewBrowserFrame journeyId={activeTab} stepIndex={activeStep} preview={activePreview} />
+          </motion.div>
+        </div>
       </div>
     </section>
   );
