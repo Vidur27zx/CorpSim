@@ -542,13 +542,31 @@ function PreviewSectionRenderer({ section }: { section: PreviewSection }) {
   return <ActionRow section={section} />;
 }
 
-function PreviewBrowserFrame({ journeyId, stepIndex, preview }: { journeyId: JourneyId; stepIndex: number; preview: PreviewData }) {
+function PreviewBrowserFrame({
+  journeyId,
+  stepIndex,
+  preview,
+  onStepChange,
+}: {
+  journeyId: JourneyId;
+  stepIndex: number;
+  preview: PreviewData;
+  onStepChange: (stepIndex: number) => void;
+}) {
   const items = sidebarItems[journeyId];
   const urlSlug = journeyId === "enterprises" ? "enterprise" : journeyId;
 
   return (
-    <div className="w-full overflow-hidden rounded-2xl border shadow-2xl shadow-black/40" style={{ background: previewTheme.panelElevated, borderColor: previewTheme.borderSoft }}>
-      <div className="flex h-10 items-center gap-3 border-b px-4" style={{ background: previewTheme.panelElevated, borderColor: previewTheme.borderSoft }}>
+    <div
+      className="relative min-h-[640px] w-full overflow-hidden rounded-2xl border shadow-2xl shadow-black/40 backdrop-blur-xl lg:aspect-[16/10] lg:min-h-0"
+      style={{
+        background: "linear-gradient(145deg, rgba(20,20,20,0.92), rgba(11,11,11,0.86))",
+        borderColor: "rgba(164, 164, 164, 0.2)",
+        boxShadow: "0 30px 80px rgba(0,0,0,0.38), inset 0 1px 0 rgba(255,255,255,0.12)",
+      }}
+    >
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-28 bg-gradient-to-b from-white/[0.12] to-transparent" />
+      <div className="relative z-20 flex h-10 items-center gap-3 border-b px-4" style={{ background: "rgba(20,20,20,0.72)", borderColor: previewTheme.borderSoft }}>
         <div className="flex gap-2">
           <div className="h-3 w-3 rounded-full" style={{ background: previewTheme.grayBar }} />
           <div className="h-3 w-3 rounded-full" style={{ background: previewTheme.accent }} />
@@ -561,8 +579,8 @@ function PreviewBrowserFrame({ journeyId, stepIndex, preview }: { journeyId: Jou
         </div>
       </div>
 
-      <div className="flex h-[620px]">
-        <aside className="hidden w-52 flex-col gap-1 border-r p-4 md:flex" style={{ background: previewTheme.panel, borderColor: previewTheme.borderSoft }}>
+      <div className="relative z-20 flex h-[calc(100%-2.5rem)]">
+        <aside className="hidden w-52 flex-col gap-1 border-r p-4 md:flex" style={{ background: "rgba(11, 11, 11, 0.82)", borderColor: previewTheme.borderSoft }}>
           <div className="mb-5 flex items-center gap-2 px-2">
             <div className="rounded-lg border p-1.5" style={{ background: previewTheme.bg, borderColor: previewTheme.accentBorder }}>
               <Image src="/pidot-logo.png" alt="Pi Dot" width={64} height={18} className="h-4 w-auto" />
@@ -576,9 +594,11 @@ function PreviewBrowserFrame({ journeyId, stepIndex, preview }: { journeyId: Jou
             const active = index === stepIndex % items.length;
 
             return (
-              <div
+              <button
+                type="button"
                 key={item.name}
-                className="flex items-center gap-2.5 rounded-lg border-l-2 px-3 py-2 text-[11px] font-medium transition-colors"
+                onClick={() => onStepChange(index)}
+                className="flex items-center gap-2.5 rounded-lg border-l-2 px-3 py-2 text-left text-[11px] font-medium transition-colors hover:bg-white/[0.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB13B]/60"
                 style={{
                   background: active ? previewTheme.panelElevated : "transparent",
                   borderLeftColor: active ? previewTheme.accent : "transparent",
@@ -587,12 +607,12 @@ function PreviewBrowserFrame({ journeyId, stepIndex, preview }: { journeyId: Jou
               >
                 <Icon className="h-3.5 w-3.5 shrink-0" />
                 <span>{item.name}</span>
-              </div>
+              </button>
             );
           })}
         </aside>
 
-        <main className="flex-1 overflow-y-auto p-5 sm:p-7 md:p-9" style={{ background: previewTheme.bg }}>
+        <main className="flex-1 overflow-y-auto p-5 [scrollbar-width:none] sm:p-7 md:p-9 [&::-webkit-scrollbar]:hidden" style={{ background: "rgba(11, 11, 11, 0.88)" }}>
           <div className="max-w-4xl">
             <div className="mb-6">
               <h3 className="text-xl font-bold" style={{ color: previewTheme.textPrimary }}>
@@ -1312,10 +1332,11 @@ export default function JourneysSection() {
             whileInView="show"
             viewport={{ once: true, margin: "-80px" }}
             variants={fadeUp}
-            className="rounded-2xl border border-[#4A4A4A]/45 bg-[#101010] p-4 shadow-2xl shadow-black/30 lg:sticky lg:top-24 lg:max-h-[calc(100vh-7rem)] lg:self-start lg:overflow-y-auto"
+            className="relative overflow-hidden rounded-2xl border border-[#4A4A4A]/45 bg-[#101010]/90 p-3 shadow-2xl shadow-black/30 backdrop-blur-xl lg:sticky lg:top-24 lg:self-start"
           >
-            <div className="mb-5 rounded-xl border border-[#4A4A4A]/40 bg-[#0B0B0B] p-4">
-              <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.22em] text-[#A4A4A4]">Journey</p>
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-white/[0.10] to-transparent" />
+            <div className="relative mb-3 rounded-xl border border-[#4A4A4A]/40 bg-[#0B0B0B]/82 p-3">
+              <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.22em] text-[#A4A4A4]">Journey</p>
               <div className="grid grid-cols-1 gap-2">
                 {journeyTabs.map((tab) => {
                   const TabIcon = tab.tabIcon;
@@ -1326,7 +1347,7 @@ export default function JourneysSection() {
                       key={tab.id}
                       type="button"
                       onClick={() => handleTabSwitch(tab.id)}
-                      className={`flex items-center gap-3 rounded-xl border px-3.5 py-3 text-left transition-all duration-300 ${
+                      className={`flex items-center gap-3 rounded-xl border px-3 py-2.5 text-left transition-all duration-300 ${
                         selected
                           ? "border-[#F69507]/60 bg-[#FFB13B]/10 text-white shadow-lg shadow-[#F69507]/10"
                           : "border-transparent bg-transparent text-[#A4A4A4] hover:border-[#4A4A4A]/60 hover:bg-white/[0.03] hover:text-white"
@@ -1341,7 +1362,7 @@ export default function JourneysSection() {
                       </span>
                       <span className="min-w-0">
                         <span className="block text-sm font-bold">{tab.label}</span>
-                        <span className="mt-0.5 block text-[11px] font-medium text-[#A4A4A4]">
+                        <span className="mt-0.5 block text-[10px] font-medium text-[#A4A4A4]">
                           {tab.steps.length} workflow steps
                         </span>
                       </span>
@@ -1351,8 +1372,8 @@ export default function JourneysSection() {
               </div>
             </div>
 
-            <div className="mb-4 flex items-center gap-3 px-1">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[#F69507]/45 bg-[#F69507]/15">
+            <div className="relative mb-3 flex items-center gap-3 px-1">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-[#F69507]/45 bg-[#F69507]/15">
                 <ActiveJourneyIcon className="h-4 w-4 text-[#FFB13B]" />
               </div>
               <div>
@@ -1366,7 +1387,7 @@ export default function JourneysSection() {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3 }}
-              className="space-y-2"
+              className="relative space-y-1.5"
             >
               {activeJourney.steps.map((step, index) => {
                 const isActive = activeStep === index;
@@ -1377,7 +1398,7 @@ export default function JourneysSection() {
                     key={step.title}
                     type="button"
                     onClick={() => setActiveStep(index)}
-                    className={`group relative w-full rounded-xl border px-3.5 py-3 text-left transition-all duration-300 ${
+                    className={`group relative w-full rounded-xl border px-3 py-2.5 text-left transition-all duration-300 ${
                       isActive
                         ? "border-[#F69507]/55 bg-[#F69507]/10"
                         : "border-[#4A4A4A]/30 bg-white/[0.025] hover:border-[#A4A4A4]/35 hover:bg-white/[0.045]"
@@ -1401,7 +1422,7 @@ export default function JourneysSection() {
                         <p className={`mt-1 text-sm font-bold leading-snug ${isActive ? "text-white" : "text-[#D6D6D6]"}`}>
                           {step.title}
                         </p>
-                        <p className="mt-1 line-clamp-2 text-[11px] font-medium leading-relaxed text-[#A4A4A4]">
+                        <p className={`mt-1 text-[11px] font-medium leading-relaxed text-[#A4A4A4] ${isActive ? "line-clamp-2" : "hidden"}`}>
                           {step.description}
                         </p>
                       </div>
@@ -1419,7 +1440,12 @@ export default function JourneysSection() {
             transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
             className="min-w-0"
           >
-            <PreviewBrowserFrame journeyId={activeTab} stepIndex={activeStep} preview={activePreview} />
+            <PreviewBrowserFrame
+              journeyId={activeTab}
+              stepIndex={activeStep}
+              preview={activePreview}
+              onStepChange={setActiveStep}
+            />
           </motion.div>
         </div>
       </div>
