@@ -760,6 +760,12 @@ function PreviewSectionRenderer({
 }
 
 type EnterprisePrototypeTabId =
+  | "dashboard"
+  | "programs"
+  | "templates"
+  | "schedule"
+  | "parameters"
+  | "stakeholders"
   | "program"
   | "daily"
   | "builder"
@@ -768,6 +774,8 @@ type EnterprisePrototypeTabId =
   | "assign"
   | "progress"
   | "evidence"
+  | "governance"
+  | "reports"
   | "insights";
 
 type EnterprisePrototypeTab = {
@@ -777,6 +785,12 @@ type EnterprisePrototypeTab = {
 };
 
 const enterprisePrototypeTabs: EnterprisePrototypeTab[] = [
+  { id: "dashboard", label: "Dashboard", icon: BarChart3 },
+  { id: "programs", label: "Programs", icon: Briefcase },
+  { id: "templates", label: "Templates", icon: FileText },
+  { id: "schedule", label: "Schedule", icon: ClipboardCheck },
+  { id: "parameters", label: "Parameters", icon: Settings },
+  { id: "stakeholders", label: "AI Stakeholders", icon: Users },
   { id: "program", label: "Program Brief", icon: Briefcase },
   { id: "daily", label: "Daily Tasks", icon: ClipboardCheck },
   { id: "builder", label: "Builder", icon: Settings },
@@ -785,12 +799,50 @@ const enterprisePrototypeTabs: EnterprisePrototypeTab[] = [
   { id: "assign", label: "Assign", icon: Users },
   { id: "progress", label: "Progress", icon: LineChart },
   { id: "evidence", label: "Evidence", icon: Search },
+  { id: "governance", label: "Governance", icon: Shield },
   { id: "insights", label: "Insights", icon: BarChart3 },
+  { id: "reports", label: "Reports", icon: Download },
 ];
 
-const outerStepToEnterpriseTab: EnterprisePrototypeTabId[] = ["program", "daily", "rubric", "progress", "evidence", "insights"];
+const outerStepToEnterpriseTab: EnterprisePrototypeTabId[] = ["dashboard", "schedule", "parameters", "progress", "evidence", "insights"];
 
 const enterpriseTabCopy: Record<EnterprisePrototypeTabId, { title: string; subtitle: string; status: string; metric?: string }> = {
+  dashboard: {
+    title: "Enterprise Control Dashboard",
+    subtitle: "A compact command center for programs, live cohorts, review queues, and readiness signals.",
+    status: "Dashboard live",
+    metric: "4 programs",
+  },
+  programs: {
+    title: "Program Library",
+    subtitle: "Manage role-based simulations across sales, strategy, operations, customer success, and analyst tracks.",
+    status: "Programs mapped",
+    metric: "12 active",
+  },
+  templates: {
+    title: "Simulation Templates",
+    subtitle: "Start from proven workplace scenarios and adapt duration, role, skills, and stakeholder pressure.",
+    status: "Templates ready",
+    metric: "6",
+  },
+  schedule: {
+    title: "Schedule a Role Program",
+    subtitle: "Set duration, daily unlocks, reviewers, reminders, and cohort visibility for a new assignment.",
+    status: "Schedule draft",
+    metric: "3-5 days",
+  },
+  parameters: {
+    title: "Simulation Parameters",
+    subtitle: "Control difficulty, ambiguity, data complexity, AI guidance, stakeholder pressure, and scoring strictness.",
+    status: "Parameters open",
+    metric: "10 controls",
+  },
+  stakeholders: {
+    title: "AI Stakeholder Layer",
+    subtitle: "Configure the realistic people, constraints, emails, and curveballs candidates will respond to.",
+    status: "Stakeholders active",
+    metric: "6 personas",
+  },
   program: {
     title: "Mokabara Malaysia + Singapore Expansion",
     subtitle: "A 5-day enterprise simulation for business analyst and expansion associate readiness.",
@@ -839,11 +891,23 @@ const enterpriseTabCopy: Record<EnterprisePrototypeTabId, { title: string; subti
     status: "Evidence review",
     metric: "CRS",
   },
+  governance: {
+    title: "Governance & Review Controls",
+    subtitle: "Lock rubrics, review AI scoring, keep audit trails, and require override reasons before decisions move forward.",
+    status: "Controls locked",
+    metric: "Audit",
+  },
   insights: {
     title: "AI-Generated Insights",
     subtitle: "Review cohort readiness, top skills, improvement areas, and recommendations after completion.",
     status: "Insights generated",
     metric: "72/100",
+  },
+  reports: {
+    title: "Reports & Handoff",
+    subtitle: "Export cohort summaries, shortlist evidence, skill-gap reports, and stakeholder-ready decision packs.",
+    status: "Reports ready",
+    metric: "4 exports",
   },
 };
 
@@ -965,6 +1029,45 @@ const mokabaraCandidateEvidence = [
   },
 ];
 
+const enterpriseProgramRows = [
+  { name: "Mokabara SEA Expansion", role: "Business Analyst", duration: "5 days", status: "Day 2 live", cohort: "120", score: "72" },
+  { name: "Sales Pipeline Sprint", role: "Sales Associate", duration: "3 days", status: "Draft", cohort: "64", score: "-" },
+  { name: "Customer Escalation Lab", role: "Customer Success", duration: "4 days", status: "Scheduled", cohort: "48", score: "-" },
+  { name: "Operations Breakdown Case", role: "Ops Analyst", duration: "5 days", status: "Review", cohort: "82", score: "78" },
+];
+
+const simulationTemplateRows = [
+  { title: "Market Expansion Analyst", detail: "Country entry, logistics, GTM, pricing, risk", duration: "5 days", skills: "Analysis + strategy" },
+  { title: "Sales Pipeline Simulation", detail: "Lead research, qualification, objections, forecast", duration: "3 days", skills: "Sales judgment" },
+  { title: "Customer Escalation Scenario", detail: "Complaint triage, account context, response plan", duration: "4 days", skills: "Communication" },
+  { title: "Founder Office Sprint", detail: "Ambiguous brief, prioritization, investor-style memo", duration: "5 days", skills: "Ownership" },
+];
+
+const stakeholderPersonaRows = [
+  { name: "Regional Sales Lead", behavior: "Pushes aggressive launch targets", event: "Asks for channel split by Day 3" },
+  { name: "Logistics Manager", behavior: "Raises cost and delivery constraints", event: "Flags Singapore warehouse cost spike" },
+  { name: "Finance Reviewer", behavior: "Challenges margin assumptions", event: "Requests break-even sensitivity" },
+  { name: "Customer Persona", behavior: "Adds price and warranty objections", event: "Compares local competitor offers" },
+  { name: "Leadership Sponsor", behavior: "Changes executive priority", event: "Asks for one-country launch decision" },
+  { name: "Retail Partner", behavior: "Negotiates launch support", event: "Requests shelf visibility commitment" },
+];
+
+const parameterRows = [
+  { label: "Difficulty", value: 72, note: "Intermediate plus" },
+  { label: "Ambiguity", value: 64, note: "Some missing data" },
+  { label: "Data complexity", value: 68, note: "Market + cost sheets" },
+  { label: "Stakeholder pressure", value: 76, note: "Daily prompts" },
+  { label: "AI guidance", value: 35, note: "Low hints" },
+  { label: "Scoring strictness", value: 82, note: "Hiring-grade" },
+];
+
+const governanceRows = [
+  { label: "Rubric version", value: "v2.4 locked", active: true },
+  { label: "AI score review", value: "Human approval required", active: true },
+  { label: "Bias checks", value: "Enabled for shortlist", active: false },
+  { label: "Override reason", value: "Mandatory before export", active: false },
+];
+
 function MiniField({ label, value, active }: { label: string; value: string; active?: boolean }) {
   return (
     <button
@@ -1015,6 +1118,250 @@ function EnterpriseAdminWorkspace({
   activeInteraction: PreviewInteraction;
   onInteract: (interaction: PreviewInteraction) => void;
 }) {
+  if (activeTab === "dashboard") {
+    return (
+      <div className="grid gap-3 lg:grid-cols-[0.9fr_1.1fr]">
+        <div className="grid grid-cols-2 gap-2.5">
+          <MiniField label="Live programs" value="4 active" active />
+          <MiniField label="Participants" value="314" />
+          <MiniField label="Review queue" value="38 submissions" active />
+          <MiniField label="Avg readiness" value="72 / 100" />
+        </div>
+        <div className="rounded-lg border p-3" style={{ background: previewTheme.card, borderColor: previewTheme.borderSoft }}>
+          <SectionTitle title="Today in the workspace" />
+          <div className="space-y-2">
+            {enterpriseProgramRows.slice(0, 3).map((program, index) => (
+              <button
+                type="button"
+                key={program.name}
+                onClick={() =>
+                  onInteract({
+                    title: program.name,
+                    context: `${program.role} program for ${program.cohort} participants. Status: ${program.status}.`,
+                    status: "Program opened",
+                    metric: program.score === "-" ? program.duration : `${program.score}/100`,
+                  })
+                }
+                className="grid w-full grid-cols-[minmax(0,1fr)_70px_54px] gap-2 rounded-lg border px-2.5 py-2 text-left text-[10px] transition-colors hover:border-[#F69507]/50"
+                style={{ background: index === 0 ? previewTheme.accentSoft : previewTheme.panelElevated, borderColor: index === 0 ? previewTheme.accentBorder : previewTheme.borderSoft }}
+              >
+                <div className="min-w-0">
+                  <p className="truncate font-bold" style={{ color: previewTheme.textPrimary }}>{program.name}</p>
+                  <p className="mt-0.5 truncate" style={{ color: previewTheme.textMuted }}>{program.role}</p>
+                </div>
+                <span style={{ color: index === 0 ? previewTheme.accent : previewTheme.textSecondary }}>{program.status}</span>
+                <span className="text-right font-bold" style={{ color: previewTheme.textMuted }}>{program.cohort}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (activeTab === "programs") {
+    return (
+      <div className="rounded-lg border" style={{ background: previewTheme.card, borderColor: previewTheme.borderSoft }}>
+        <div className="grid grid-cols-[minmax(0,1.2fr)_0.8fr_58px_62px] gap-2 border-b px-3 py-2 text-[9px] font-bold uppercase" style={{ borderColor: previewTheme.borderSoft, color: previewTheme.textMuted }}>
+          <span>Program</span>
+          <span>Role</span>
+          <span>Run</span>
+          <span className="text-right">CRS</span>
+        </div>
+        {enterpriseProgramRows.map((program, index) => (
+          <button
+            type="button"
+            key={program.name}
+            onClick={() =>
+              onInteract({
+                title: program.name,
+                context: `${program.duration} ${program.role} workflow. Cohort: ${program.cohort}.`,
+                status: program.status,
+                metric: program.score === "-" ? program.duration : `${program.score}/100`,
+              })
+            }
+            className="grid w-full grid-cols-[minmax(0,1.2fr)_0.8fr_58px_62px] gap-2 border-b px-3 py-2 text-left text-[11px] transition-colors hover:bg-white/[0.04]"
+            style={{ background: activeInteraction.title === program.name || index === 0 ? previewTheme.accentSoft : "transparent", borderColor: previewTheme.borderSoft }}
+          >
+            <span className="truncate font-bold" style={{ color: previewTheme.textPrimary }}>{program.name}</span>
+            <span className="truncate" style={{ color: previewTheme.textMuted }}>{program.role}</span>
+            <span style={{ color: index === 0 ? previewTheme.accent : previewTheme.textSecondary }}>{program.duration}</span>
+            <span className="text-right font-bold" style={{ color: previewTheme.textMuted }}>{program.score}</span>
+          </button>
+        ))}
+      </div>
+    );
+  }
+
+  if (activeTab === "templates") {
+    return (
+      <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
+        {simulationTemplateRows.map((template, index) => (
+          <button
+            type="button"
+            key={template.title}
+            onClick={() =>
+              onInteract({
+                title: template.title,
+                context: template.detail,
+                status: "Template selected",
+                metric: template.duration,
+              })
+            }
+            className="rounded-lg border p-3 text-left transition-colors hover:border-[#F69507]/50"
+            style={{ background: index === 0 ? previewTheme.accentSoft : previewTheme.card, borderColor: index === 0 ? previewTheme.accentBorder : previewTheme.borderSoft }}
+          >
+            <div className="flex items-start justify-between gap-2">
+              <p className="text-xs font-black leading-tight" style={{ color: previewTheme.textPrimary }}>{template.title}</p>
+              <StatusPill text={template.duration} active={index === 0} />
+            </div>
+            <p className="mt-2 line-clamp-2 text-[11px] leading-relaxed" style={{ color: previewTheme.textMuted }}>{template.detail}</p>
+            <p className="mt-2 text-[10px] font-bold uppercase" style={{ color: index === 0 ? previewTheme.accent : previewTheme.textMuted }}>{template.skills}</p>
+          </button>
+        ))}
+      </div>
+    );
+  }
+
+  if (activeTab === "schedule") {
+    return (
+      <div className="grid gap-3 lg:grid-cols-[0.95fr_1.05fr]">
+        <div className="grid grid-cols-2 gap-2.5">
+          <MiniField label="New program" value="Sales Pipeline Sprint" active />
+          <MiniField label="Role" value="Sales Associate" active />
+          <MiniField label="Duration" value="3 days" />
+          <MiniField label="Daily unlock" value="10:00 AM" />
+          <MiniField label="Cohort" value="BBA Final Year" />
+          <MiniField label="Reviewers" value="HR + Faculty" />
+        </div>
+        <div className="rounded-lg border p-3" style={{ background: previewTheme.card, borderColor: previewTheme.borderSoft }}>
+          <SectionTitle title="Schedule rules" />
+          {["Day 1: lead research and ICP fit", "Day 2: discovery call objections", "Day 3: forecast and manager memo"].map((item, index) => (
+            <button
+              type="button"
+              key={item}
+              onClick={() =>
+                onInteract({
+                  title: item,
+                  context: "Daily sales simulation task selected",
+                  status: "Schedule item opened",
+                  metric: `Day ${index + 1}`,
+                })
+              }
+              className="mb-2 flex w-full items-center justify-between rounded-lg border px-2.5 py-2 text-left text-[10px] font-semibold"
+              style={{ background: index === 0 ? previewTheme.accentSoft : previewTheme.panelElevated, borderColor: index === 0 ? previewTheme.accentBorder : previewTheme.borderSoft, color: previewTheme.textSecondary }}
+            >
+              <span>{item}</span>
+              <span style={{ color: index === 0 ? previewTheme.accent : previewTheme.textMuted }}>{index === 0 ? "Ready" : "Queued"}</span>
+            </button>
+          ))}
+          <button
+            type="button"
+            onClick={() =>
+              onInteract({
+                title: "Schedule program",
+                context: "Creates daily tasks, reminder cadence, reviewer access, and participant invite links.",
+                status: "Schedule action previewed",
+                metric: "Ready",
+              })
+            }
+            className="mt-1 inline-flex w-full items-center justify-center rounded-lg px-3 py-2 text-[11px] font-black"
+            style={{ background: previewTheme.accent, color: previewTheme.bg }}
+          >
+            Schedule program
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (activeTab === "parameters") {
+    return (
+      <div className="grid gap-3 lg:grid-cols-[1.15fr_0.85fr]">
+        <div className="rounded-lg border p-3" style={{ background: previewTheme.card, borderColor: previewTheme.borderSoft }}>
+          <SectionTitle title="Adjust simulation behavior" />
+          <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-2">
+            {parameterRows.map((item, index) => (
+              <button
+                type="button"
+                key={item.label}
+                onClick={() =>
+                  onInteract({
+                    title: item.label,
+                    context: item.note,
+                    status: "Parameter adjusted",
+                    metric: `${item.value}%`,
+                  })
+                }
+                className="rounded-lg px-2 py-1.5 text-left transition-colors hover:bg-white/[0.04]"
+                style={{ background: index === 3 ? previewTheme.accentSoft : "transparent" }}
+              >
+                <div className="px-1">
+                  <div className="flex items-center justify-between gap-3">
+                    <span className="truncate text-[10px] font-semibold" style={{ color: previewTheme.textSecondary }}>
+                      {item.label}
+                    </span>
+                    <span className="text-[10px] font-bold" style={{ color: index === 3 ? previewTheme.accent : previewTheme.textMuted }}>
+                      {item.value}%
+                    </span>
+                  </div>
+                  <div className="mt-1 h-1.5 overflow-hidden rounded-full" style={{ background: previewTheme.borderSoft }}>
+                    <div className="h-full rounded-full" style={{ width: `${item.value}%`, background: index === 3 ? previewTheme.accent : previewTheme.grayBarLight }} />
+                  </div>
+                </div>
+                <p className="px-2 text-[9px] font-semibold uppercase" style={{ color: previewTheme.textMuted }}>{item.note}</p>
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="rounded-lg border p-3" style={{ background: previewTheme.accentSoft, borderColor: previewTheme.accentBorder }}>
+          <SectionTitle title="What this controls" />
+          <p className="text-xs font-semibold leading-relaxed" style={{ color: previewTheme.textPrimary }}>
+            Admins decide how realistic the pressure feels: missing information, stakeholder interruptions, scoring strictness, daily task unlocks, and AI hint levels.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (activeTab === "stakeholders") {
+    return (
+      <div className="grid gap-3 lg:grid-cols-[1fr_0.9fr]">
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+          {stakeholderPersonaRows.map((persona, index) => (
+            <button
+              type="button"
+              key={persona.name}
+              onClick={() =>
+                onInteract({
+                  title: persona.name,
+                  context: `${persona.behavior}. ${persona.event}.`,
+                  status: "AI persona opened",
+                  metric: index === 1 ? "Live" : "Ready",
+                })
+              }
+              className="rounded-lg border p-2.5 text-left transition-colors hover:border-[#F69507]/50"
+              style={{ background: index === 1 ? previewTheme.accentSoft : previewTheme.card, borderColor: index === 1 ? previewTheme.accentBorder : previewTheme.borderSoft }}
+            >
+              <p className="text-xs font-bold" style={{ color: previewTheme.textPrimary }}>{persona.name}</p>
+              <p className="mt-1 line-clamp-2 text-[10px] leading-relaxed" style={{ color: previewTheme.textMuted }}>{persona.behavior}</p>
+            </button>
+          ))}
+        </div>
+        <div className="rounded-lg border p-3" style={{ background: previewTheme.card, borderColor: previewTheme.borderSoft }}>
+          <SectionTitle title="Current curveball" />
+          <p className="text-xs font-black" style={{ color: previewTheme.textPrimary }}>Logistics Manager</p>
+          <p className="mt-2 text-[11px] leading-relaxed" style={{ color: previewTheme.textSecondary }}>
+            Singapore warehouse quotes increased by 18%. Candidates must update country priority, margin assumptions, and GTM sequence before Day 3 unlocks.
+          </p>
+          <div className="mt-3">
+            <StatusPill text="Day 2 interruption" active />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (activeTab === "daily") {
     return (
       <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_240px]">
@@ -1327,6 +1674,46 @@ function EnterpriseAdminWorkspace({
     );
   }
 
+  if (activeTab === "governance") {
+    return (
+      <div className="grid gap-3 lg:grid-cols-[0.9fr_1.1fr]">
+        <div className="rounded-lg border p-3" style={{ background: previewTheme.card, borderColor: previewTheme.borderSoft }}>
+          <SectionTitle title="Decision controls" />
+          <div className="space-y-2">
+            {governanceRows.map((row) => (
+              <button
+                type="button"
+                key={row.label}
+                onClick={() =>
+                  onInteract({
+                    title: row.label,
+                    context: row.value,
+                    status: row.active ? "Control active" : "Control available",
+                    metric: row.active ? "On" : "Set",
+                  })
+                }
+                className="flex w-full items-center justify-between rounded-lg border px-2.5 py-2 text-left text-[10px] font-semibold transition-colors hover:border-[#F69507]/50"
+                style={{ background: row.active ? previewTheme.accentSoft : previewTheme.panelElevated, borderColor: row.active ? previewTheme.accentBorder : previewTheme.borderSoft }}
+              >
+                <span style={{ color: row.active ? previewTheme.accent : previewTheme.textSecondary }}>{row.label}</span>
+                <span className="text-right" style={{ color: previewTheme.textMuted }}>{row.value}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="rounded-lg border p-3" style={{ background: previewTheme.accentSoft, borderColor: previewTheme.accentBorder }}>
+          <SectionTitle title="Audit trail" />
+          {["Rubric locked before launch", "AI scores reviewed after Day 5", "Shortlist requires evidence view", "Exports include score explanation"].map((item, index) => (
+            <div key={item} className="mb-2 grid grid-cols-[24px_minmax(0,1fr)] gap-2 text-[11px]">
+              <span className="font-black" style={{ color: previewTheme.accent }}>0{index + 1}</span>
+              <span style={{ color: previewTheme.textSecondary }}>{item}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   if (activeTab === "insights") {
     return (
       <div className="grid gap-3 lg:grid-cols-[0.85fr_1.15fr]">
@@ -1346,6 +1733,48 @@ function EnterpriseAdminWorkspace({
             <MiniProgress label="Operations judgment" value={68} />
             <MiniProgress label="Executive writing" value={61} />
           </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (activeTab === "reports") {
+    return (
+      <div className="grid gap-3 lg:grid-cols-[1fr_0.9fr]">
+        <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
+          {[
+            { title: "Cohort readiness report", detail: "Skill distribution, completion, and Day 1-5 progression", metric: "PDF" },
+            { title: "Shortlist evidence pack", detail: "Candidate-level submissions, signals, and AI notes", metric: "CSV" },
+            { title: "Training gap memo", detail: "Where the cohort struggled and what to teach next", metric: "Memo" },
+            { title: "Placement handoff", detail: "Shareable decision summary for HR or placement teams", metric: "Link" },
+          ].map((report, index) => (
+            <button
+              type="button"
+              key={report.title}
+              onClick={() =>
+                onInteract({
+                  title: report.title,
+                  context: report.detail,
+                  status: "Export previewed",
+                  metric: report.metric,
+                })
+              }
+              className="rounded-lg border p-3 text-left transition-colors hover:border-[#F69507]/50"
+              style={{ background: index === 0 ? previewTheme.accentSoft : previewTheme.card, borderColor: index === 0 ? previewTheme.accentBorder : previewTheme.borderSoft }}
+            >
+              <div className="flex items-center justify-between gap-2">
+                <p className="text-xs font-bold" style={{ color: previewTheme.textPrimary }}>{report.title}</p>
+                <Download className="h-3.5 w-3.5" style={{ color: index === 0 ? previewTheme.accent : previewTheme.textMuted }} />
+              </div>
+              <p className="mt-2 line-clamp-2 text-[11px] leading-relaxed" style={{ color: previewTheme.textMuted }}>{report.detail}</p>
+            </button>
+          ))}
+        </div>
+        <div className="rounded-lg border p-3" style={{ background: previewTheme.card, borderColor: previewTheme.borderSoft }}>
+          <SectionTitle title="Ready to share" />
+          <MiniProgress label="Evidence attached" value={96} active />
+          <MiniProgress label="Reviewer approvals" value={82} />
+          <MiniProgress label="Candidate feedback prepared" value={88} />
         </div>
       </div>
     );
@@ -1387,7 +1816,7 @@ function PreviewBrowserFrame({
 }) {
   const items = sidebarItems[journeyId];
   const urlSlug = journeyId === "enterprises" ? "enterprise" : journeyId;
-  const defaultEnterpriseTab = outerStepToEnterpriseTab[stepIndex] ?? "program";
+  const defaultEnterpriseTab = outerStepToEnterpriseTab[stepIndex] ?? "dashboard";
   const [activeInteraction, setActiveInteraction] = useState<PreviewInteraction>({
     title: enterpriseTabCopy[defaultEnterpriseTab].title,
     context: enterpriseTabCopy[defaultEnterpriseTab].subtitle,
@@ -1408,7 +1837,7 @@ function PreviewBrowserFrame({
       return;
     }
 
-    const nextTab = outerStepToEnterpriseTab[stepIndex] ?? "program";
+    const nextTab = outerStepToEnterpriseTab[stepIndex] ?? "dashboard";
     const nextCopy = enterpriseTabCopy[nextTab];
     setActiveEnterpriseTab(nextTab);
     setActiveInteraction({
@@ -1456,14 +1885,14 @@ function PreviewBrowserFrame({
             <>
               <div className="mb-3 rounded-lg border p-2.5" style={{ background: previewTheme.card, borderColor: previewTheme.borderSoft }}>
                 <p className="text-[10px] font-bold uppercase" style={{ color: previewTheme.textMuted }}>
-                  Workspace
+                  Enterprise admin
                 </p>
                 <p className="mt-1 text-[11px] font-bold leading-tight" style={{ color: previewTheme.textPrimary }}>
-                  Mokabara Expansion
+                  Control dashboard
                 </p>
                 <div className="mt-3 flex flex-wrap gap-1.5">
                   <StatusPill text="Day 2 live" active />
-                  <StatusPill text="Admin" />
+                  <StatusPill text="4 programs" />
                 </div>
               </div>
               {enterprisePrototypeTabs.map((tab) => {
@@ -1566,7 +1995,7 @@ function PreviewBrowserFrame({
             </div>
             {journeyId === "enterprises" ? (
               <div className="space-y-4">
-                <div className="grid grid-cols-2 gap-2 md:hidden">
+                <div className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] md:hidden [&::-webkit-scrollbar]:hidden">
                   {enterprisePrototypeTabs.map((tab) => {
                     const TabIcon = tab.icon;
                     const active = tab.id === activeEnterpriseTab;
@@ -1585,7 +2014,7 @@ function PreviewBrowserFrame({
                             metric: nextCopy.metric,
                           });
                         }}
-                        className="inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-[11px] font-bold transition-colors hover:border-[#F69507]/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB13B]/60"
+                        className="inline-flex shrink-0 items-center gap-2 rounded-lg border px-3 py-2 text-[11px] font-bold transition-colors hover:border-[#F69507]/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB13B]/60"
                         style={{
                           background: active ? previewTheme.accentSoft : previewTheme.card,
                           borderColor: active ? previewTheme.accentBorder : previewTheme.borderSoft,
