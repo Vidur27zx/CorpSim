@@ -759,6 +759,398 @@ function PreviewSectionRenderer({
   return <ActionRow section={section} activeTitle={activeTitle} onInteract={onInteract} />;
 }
 
+type EnterprisePrototypeTabId =
+  | "program"
+  | "daily"
+  | "builder"
+  | "resources"
+  | "rubric"
+  | "assign"
+  | "progress"
+  | "evidence"
+  | "insights";
+
+type EnterprisePrototypeTab = {
+  id: EnterprisePrototypeTabId;
+  label: string;
+  icon: LucideIcon;
+};
+
+const enterprisePrototypeTabs: EnterprisePrototypeTab[] = [
+  { id: "program", label: "Program Brief", icon: Briefcase },
+  { id: "daily", label: "Daily Tasks", icon: ClipboardCheck },
+  { id: "builder", label: "Builder", icon: Settings },
+  { id: "resources", label: "Resources", icon: FileText },
+  { id: "rubric", label: "Rubric", icon: Target },
+  { id: "assign", label: "Assign", icon: Users },
+  { id: "progress", label: "Progress", icon: LineChart },
+  { id: "evidence", label: "Evidence", icon: Search },
+  { id: "insights", label: "Insights", icon: BarChart3 },
+];
+
+const outerStepToEnterpriseTab: EnterprisePrototypeTabId[] = ["program", "builder", "rubric", "progress", "evidence", "insights"];
+
+const mokabaraDailyTasks = [
+  {
+    day: "Day 1",
+    title: "Market Entry Brief",
+    detail: "Assess luggage demand, customer segments, competitors, and entry attractiveness for Malaysia and Singapore.",
+    status: "Brief unlocked",
+    score: "92%",
+  },
+  {
+    day: "Day 2",
+    title: "Logistics & Operations",
+    detail: "Compare warehousing, customs, returns, shipping timelines, and last-mile delivery constraints.",
+    status: "In progress",
+    score: "71%",
+  },
+  {
+    day: "Day 3",
+    title: "GTM & Sales Channels",
+    detail: "Choose between marketplaces, D2C, retail partners, influencer launches, and corporate channels.",
+    status: "Scheduled",
+    score: "Fri",
+  },
+  {
+    day: "Day 4",
+    title: "Pricing, Risk & Financials",
+    detail: "Estimate duties, CAC, pricing bands, margin pressure, break-even logic, and launch risks.",
+    status: "Scheduled",
+    score: "Sat",
+  },
+  {
+    day: "Day 5",
+    title: "Executive Recommendation",
+    detail: "Submit final market-entry plan: launch sequence, operating model, risks, KPIs, and country priority.",
+    status: "Final output",
+    score: "Memo",
+  },
+];
+
+function MiniField({ label, value, active }: { label: string; value: string; active?: boolean }) {
+  return (
+    <button
+      type="button"
+      className="rounded-lg border p-3 text-left transition-colors hover:border-[#F69507]/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB13B]/60"
+      style={{
+        background: active ? previewTheme.accentSoft : previewTheme.card,
+        borderColor: active ? previewTheme.accentBorder : previewTheme.borderSoft,
+      }}
+    >
+      <p className="text-[10px] font-bold uppercase" style={{ color: previewTheme.textMuted }}>
+        {label}
+      </p>
+      <p className="mt-1 truncate text-sm font-bold" style={{ color: active ? previewTheme.accent : previewTheme.textPrimary }}>
+        {value}
+      </p>
+    </button>
+  );
+}
+
+function MiniProgress({ label, value, active }: { label: string; value: number; active?: boolean }) {
+  return (
+    <button
+      type="button"
+      className="w-full rounded-lg p-2 text-left transition-colors hover:bg-white/[0.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB13B]/60"
+    >
+      <div className="flex items-center justify-between gap-3">
+        <span className="truncate text-[11px] font-semibold" style={{ color: previewTheme.textSecondary }}>
+          {label}
+        </span>
+        <span className="text-[11px] font-bold" style={{ color: active ? previewTheme.accent : previewTheme.textMuted }}>
+          {value}%
+        </span>
+      </div>
+      <div className="mt-1.5 h-1.5 overflow-hidden rounded-full" style={{ background: previewTheme.borderSoft }}>
+        <div className="h-full rounded-full" style={{ width: `${value}%`, background: active ? previewTheme.accent : previewTheme.grayBarLight }} />
+      </div>
+    </button>
+  );
+}
+
+function EnterpriseAdminWorkspace({
+  activeTab,
+  onInteract,
+}: {
+  activeTab: EnterprisePrototypeTabId;
+  onInteract: (interaction: PreviewInteraction) => void;
+}) {
+  if (activeTab === "daily") {
+    return (
+      <div className="space-y-3">
+        {mokabaraDailyTasks.map((task, index) => (
+          <button
+            type="button"
+            key={task.day}
+            onClick={() =>
+              onInteract({
+                title: task.title,
+                context: task.detail,
+                status: `${task.day} selected`,
+                metric: task.score,
+              })
+            }
+            className="grid w-full gap-3 rounded-xl border p-3 text-left transition-all hover:-translate-y-0.5 hover:border-[#F69507]/55 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB13B]/60 sm:grid-cols-[76px_minmax(0,1fr)_92px]"
+            style={{
+              background: index === 1 ? previewTheme.accentSoft : previewTheme.card,
+              borderColor: index === 1 ? previewTheme.accentBorder : previewTheme.borderSoft,
+            }}
+          >
+            <div>
+              <p className="text-xs font-black" style={{ color: index === 1 ? previewTheme.accent : previewTheme.textPrimary }}>
+                {task.day}
+              </p>
+              <p className="mt-1 text-[10px] font-semibold uppercase" style={{ color: previewTheme.textMuted }}>
+                {task.status}
+              </p>
+            </div>
+            <div>
+              <p className="text-sm font-bold" style={{ color: previewTheme.textPrimary }}>
+                {task.title}
+              </p>
+              <p className="mt-1 text-xs leading-relaxed" style={{ color: previewTheme.textMuted }}>
+                {task.detail}
+              </p>
+            </div>
+            <StatusPill text={task.score} active={index === 1} />
+          </button>
+        ))}
+      </div>
+    );
+  }
+
+  if (activeTab === "builder") {
+    return (
+      <div className="grid gap-4 lg:grid-cols-[0.95fr_1.05fr]">
+        <div className="grid gap-3">
+          <MiniField label="Simulation" value="Mokabara SEA Expansion" active />
+          <MiniField label="Duration" value="5 days" active />
+          <MiniField label="Daily unlock" value="Enabled" />
+          <MiniField label="Role" value="Business Analyst / Expansion Associate" />
+        </div>
+        <div className="rounded-xl border p-4" style={{ background: previewTheme.card, borderColor: previewTheme.borderSoft }}>
+          <SectionTitle title="Scenario Configuration" />
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <MiniField label="Markets" value="Malaysia + Singapore" active />
+            <MiniField label="Industry" value="Travel goods / luggage" />
+            <MiniField label="Difficulty" value="Intermediate" />
+            <MiniField label="AI stakeholders" value="Logistics, Sales, Finance" active />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (activeTab === "resources") {
+    return (
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {[
+          ["Market research brief", "Demand signals and consumer segments", FileText],
+          ["Logistics cost sheet", "Warehousing, duties, last-mile ranges", ClipboardCheck],
+          ["Competitor snapshot", "Brands, pricing, channels, positioning", Search],
+          ["Customer personas", "Frequent flyers, students, business travelers", Users],
+          ["Leadership email", "CEO asks for country launch recommendation", Mail],
+          ["Sales channel options", "Marketplace, D2C, retail, B2B partnerships", Globe],
+        ].map(([title, detail, Icon], index) => {
+          const ResourceIcon = Icon as LucideIcon;
+          return (
+            <button
+              type="button"
+              key={title as string}
+              onClick={() =>
+                onInteract({
+                  title: title as string,
+                  context: detail as string,
+                  status: "Resource opened",
+                })
+              }
+              className="rounded-xl border p-3 text-left transition-colors hover:border-[#F69507]/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB13B]/60"
+              style={{ background: index === 1 ? previewTheme.accentSoft : previewTheme.card, borderColor: index === 1 ? previewTheme.accentBorder : previewTheme.borderSoft }}
+            >
+              <ResourceIcon className="mb-3 h-4 w-4" style={{ color: index === 1 ? previewTheme.accent : previewTheme.textMuted }} />
+              <p className="text-sm font-bold" style={{ color: previewTheme.textPrimary }}>
+                {title as string}
+              </p>
+              <p className="mt-1 text-xs leading-relaxed" style={{ color: previewTheme.textMuted }}>
+                {detail as string}
+              </p>
+            </button>
+          );
+        })}
+      </div>
+    );
+  }
+
+  if (activeTab === "rubric") {
+    return (
+      <div className="grid gap-4 lg:grid-cols-[1fr_0.9fr]">
+        <div className="rounded-xl border p-4" style={{ background: previewTheme.card, borderColor: previewTheme.borderSoft }}>
+          <SectionTitle title="Eight Pillars Measured" />
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+            <MiniProgress label="Market analysis" value={24} active />
+            <MiniProgress label="Logistics reasoning" value={16} />
+            <MiniProgress label="GTM thinking" value={18} active />
+            <MiniProgress label="Financial judgment" value={14} />
+            <MiniProgress label="Prioritization" value={10} />
+            <MiniProgress label="Communication" value={8} />
+            <MiniProgress label="Decision-making" value={6} />
+            <MiniProgress label="Executive clarity" value={4} />
+          </div>
+        </div>
+        <div className="rounded-xl border p-4" style={{ background: previewTheme.accentSoft, borderColor: previewTheme.accentBorder }}>
+          <SectionTitle title="What good looks like" />
+          <p className="text-sm font-semibold leading-relaxed" style={{ color: previewTheme.textPrimary }}>
+            Candidate prioritizes one launch market first, supports the choice with logistics and GTM tradeoffs, and writes a clear executive recommendation.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (activeTab === "assign") {
+    return (
+      <div className="grid gap-4 lg:grid-cols-[1fr_0.9fr]">
+        <div className="grid gap-3">
+          <MiniField label="Assigned cohort" value="Final Year Business Cohort" active />
+          <MiniField label="Participants" value="120 candidates" />
+          <MiniField label="Start" value="Monday, 10:00 AM" active />
+          <MiniField label="End" value="Friday, 6:00 PM" />
+        </div>
+        <div className="rounded-xl border p-4" style={{ background: previewTheme.card, borderColor: previewTheme.borderSoft }}>
+          <SectionTitle title="Publish Settings" />
+          {["Daily reminders enabled", "Faculty / HR visibility enabled", "Late-submission alerts", "AI evaluation after each day"].map((item) => (
+            <button key={item} type="button" className="mb-3 flex w-full items-center gap-3 text-left">
+              <div className="flex h-5 w-5 items-center justify-center rounded-md border" style={{ background: previewTheme.accentSoft, borderColor: previewTheme.accentBorder }}>
+                <Check className="h-3 w-3" style={{ color: previewTheme.accent }} />
+              </div>
+              <span className="text-xs font-semibold" style={{ color: previewTheme.textSecondary }}>
+                {item}
+              </span>
+            </button>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (activeTab === "progress") {
+    return (
+      <div className="grid gap-4 lg:grid-cols-[0.8fr_1.2fr]">
+        <div className="grid grid-cols-2 gap-3">
+          <MiniField label="Day 1 completed" value="92%" active />
+          <MiniField label="Day 2 in progress" value="71%" active />
+          <MiniField label="At-risk participants" value="14" />
+          <MiniField label="Avg submission quality" value="76 / 100" />
+        </div>
+        <div className="rounded-xl border p-4" style={{ background: previewTheme.card, borderColor: previewTheme.borderSoft }}>
+          <SectionTitle title="Common stuck point" />
+          <p className="text-sm font-bold" style={{ color: previewTheme.textPrimary }}>
+            Logistics cost tradeoffs
+          </p>
+          <p className="mt-2 text-xs leading-relaxed" style={{ color: previewTheme.textMuted }}>
+            Many candidates identified demand but missed customs, return logistics, and last-mile delivery constraints before choosing a market.
+          </p>
+          <div className="mt-4 space-y-2">
+            <MiniProgress label="Market evidence submitted" value={92} active />
+            <MiniProgress label="Operations model quality" value={64} />
+            <MiniProgress label="GTM channel rationale" value={58} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (activeTab === "evidence") {
+    return (
+      <div className="grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
+        <div className="overflow-hidden rounded-xl border" style={{ borderColor: previewTheme.borderSoft }}>
+          {[
+            ["Aarav Mehta", "Day 2", "81", "Logistics reasoning"],
+            ["Diya Rao", "Day 2", "88", "Market analysis"],
+            ["Kabir Shah", "Day 1", "62", "Needs structure"],
+            ["Naina Iyer", "Day 2", "91", "Executive clarity"],
+          ].map((row, index) => (
+            <button
+              type="button"
+              key={row[0]}
+              onClick={() =>
+                onInteract({
+                  title: row[0],
+                  context: `${row[1]} submission selected. Strongest signal: ${row[3]}.`,
+                  status: index === 2 ? "Needs training" : "Candidate evidence opened",
+                  metric: row[2],
+                })
+              }
+              className="grid w-full grid-cols-[1fr_54px_1fr] gap-3 border-b px-3 py-2.5 text-left text-xs transition-colors hover:bg-white/[0.04]"
+              style={{ background: index === 1 ? previewTheme.accentSoft : previewTheme.card, borderColor: previewTheme.borderSoft }}
+            >
+              <span className="font-bold" style={{ color: previewTheme.textPrimary }}>{row[0]}</span>
+              <span style={{ color: previewTheme.accent }}>{row[2]}</span>
+              <span className="truncate" style={{ color: previewTheme.textMuted }}>{row[3]}</span>
+            </button>
+          ))}
+        </div>
+        <div className="rounded-xl border p-4" style={{ background: previewTheme.accentSoft, borderColor: previewTheme.accentBorder }}>
+          <SectionTitle title="Evidence preview" />
+          <p className="text-sm font-bold" style={{ color: previewTheme.textPrimary }}>
+            Recommendation: launch Singapore first, validate Malaysia through marketplace pilot.
+          </p>
+          <p className="mt-2 text-xs leading-relaxed" style={{ color: previewTheme.textSecondary }}>
+            AI notes: Strong market logic, clear channel sequencing, needs deeper return-cost sensitivity.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (activeTab === "insights") {
+    return (
+      <div className="grid gap-4 lg:grid-cols-[0.85fr_1.15fr]">
+        <div className="grid grid-cols-2 gap-3">
+          <MiniField label="Completion rate" value="87%" active />
+          <MiniField label="Cohort readiness" value="72 / 100" active />
+          <MiniField label="Top skill" value="Market analysis" />
+          <MiniField label="Improvement area" value="Business communication" />
+        </div>
+        <div className="rounded-xl border p-4" style={{ background: previewTheme.accentSoft, borderColor: previewTheme.accentBorder }}>
+          <SectionTitle title="AI-generated insight" />
+          <p className="text-sm font-semibold leading-relaxed" style={{ color: previewTheme.textPrimary }}>
+            Most candidates found the correct expansion opportunity, but struggled to connect logistics constraints with GTM sequencing and executive communication.
+          </p>
+          <div className="mt-4 space-y-2">
+            <MiniProgress label="Analysis" value={84} active />
+            <MiniProgress label="Operations judgment" value={68} />
+            <MiniProgress label="Executive writing" value={61} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
+      <div className="rounded-xl border p-5" style={{ background: previewTheme.accentSoft, borderColor: previewTheme.accentBorder }}>
+        <p className="text-[10px] font-bold uppercase" style={{ color: previewTheme.accent }}>
+          5-day simulation
+        </p>
+        <h3 className="mt-2 text-2xl font-black leading-tight" style={{ color: previewTheme.textPrimary }}>
+          Mokabara Malaysia + Singapore Expansion
+        </h3>
+        <p className="mt-3 text-sm leading-relaxed" style={{ color: previewTheme.textSecondary }}>
+          Candidates act as expansion analysts and work through market, logistics, GTM, pricing, risk, and final executive recommendation tasks over multiple days.
+        </p>
+      </div>
+      <div className="grid grid-cols-2 gap-3">
+        <MiniField label="Company" value="Mokabara" active />
+        <MiniField label="Markets" value="Malaysia + Singapore" />
+        <MiniField label="Duration" value="5 days" active />
+        <MiniField label="Output" value="Expansion recommendation" />
+      </div>
+    </div>
+  );
+}
+
 function PreviewBrowserFrame({
   journeyId,
   stepIndex,
@@ -778,6 +1170,7 @@ function PreviewBrowserFrame({
     status: "Live prototype ready",
     metric: "Interactive",
   });
+  const [activeEnterpriseTab, setActiveEnterpriseTab] = useState<EnterprisePrototypeTabId>("program");
 
   return (
     <div
@@ -821,9 +1214,10 @@ function PreviewBrowserFrame({
                 type="button"
                 key={item.name}
                 onClick={() => {
+                  setActiveEnterpriseTab(outerStepToEnterpriseTab[index] ?? "program");
                   setActiveInteraction({
                     title: item.name,
-                    context: "Workspace navigation",
+                    context: "Enterprise workspace navigation",
                     status: active ? "Current workspace" : "Switching prototype view",
                   });
                   onStepChange(index);
@@ -877,16 +1271,52 @@ function PreviewBrowserFrame({
                 </p>
               </div>
             </div>
-            <div className="space-y-4">
-              {preview.sections.map((section, index) => (
-                <PreviewSectionRenderer
-                  key={`${section.type}-${index}`}
-                  section={section}
-                  activeTitle={activeInteraction.title}
-                  onInteract={setActiveInteraction}
-                />
-              ))}
-            </div>
+            {journeyId === "enterprises" ? (
+              <div className="space-y-4">
+                <div className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                  {enterprisePrototypeTabs.map((tab) => {
+                    const TabIcon = tab.icon;
+                    const active = tab.id === activeEnterpriseTab;
+
+                    return (
+                      <button
+                        type="button"
+                        key={tab.id}
+                        onClick={() => {
+                          setActiveEnterpriseTab(tab.id);
+                          setActiveInteraction({
+                            title: tab.label,
+                            context: "Mokabara 5-day expansion simulation",
+                            status: "Prototype tab opened",
+                          });
+                        }}
+                        className="inline-flex shrink-0 items-center gap-2 rounded-lg border px-3 py-2 text-[11px] font-bold transition-colors hover:border-[#F69507]/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB13B]/60"
+                        style={{
+                          background: active ? previewTheme.accentSoft : previewTheme.card,
+                          borderColor: active ? previewTheme.accentBorder : previewTheme.borderSoft,
+                          color: active ? previewTheme.accent : previewTheme.textMuted,
+                        }}
+                      >
+                        <TabIcon className="h-3.5 w-3.5" />
+                        {tab.label}
+                      </button>
+                    );
+                  })}
+                </div>
+                <EnterpriseAdminWorkspace activeTab={activeEnterpriseTab} onInteract={setActiveInteraction} />
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {preview.sections.map((section, index) => (
+                  <PreviewSectionRenderer
+                    key={`${section.type}-${index}`}
+                    section={section}
+                    activeTitle={activeInteraction.title}
+                    onInteract={setActiveInteraction}
+                  />
+                ))}
+              </div>
+            )}
           </div>
         </main>
       </div>
