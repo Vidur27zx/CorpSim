@@ -807,6 +807,18 @@ const enterpriseTabParent: Partial<Record<EnterprisePrototypeTabId, EnterprisePr
   schedule: "assign",
 };
 
+const enterpriseWorkflowStages = enterprisePrototypeTabs.filter((tab) => tab.id !== "dashboard");
+const enterpriseWorkflowShortLabels: Record<string, string> = {
+  program: "Setup",
+  builder: "Build",
+  rubric: "Eval",
+  assign: "Publish",
+  progress: "Monitor",
+  evidence: "Review",
+  insights: "Insights",
+  reports: "Reports",
+};
+
 const outerStepToEnterpriseTab: EnterprisePrototypeTabId[] = ["program", "builder", "rubric", "progress", "evidence", "reports"];
 
 const enterpriseTabCopy: Record<EnterprisePrototypeTabId, { title: string; subtitle: string; status: string; metric?: string }> = {
@@ -2055,6 +2067,10 @@ function PreviewBrowserFrame({
   });
   const [activeEnterpriseTab, setActiveEnterpriseTab] = useState<EnterprisePrototypeTabId>(defaultEnterpriseTab);
   const activeEnterpriseCopy = enterpriseTabCopy[activeEnterpriseTab];
+  const activeEnterpriseParentTab = enterpriseTabParent[activeEnterpriseTab] ?? activeEnterpriseTab;
+  const activeEnterpriseParent = enterprisePrototypeTabs.find((tab) => tab.id === activeEnterpriseParentTab);
+  const activeEnterpriseParentCopy = enterpriseTabCopy[activeEnterpriseParentTab];
+  const isEnterpriseDrilldown = activeEnterpriseParentTab !== activeEnterpriseTab;
   const handleEnterpriseTabChange = (tabId: EnterprisePrototypeTabId) => {
     setActiveEnterpriseTab(tabId);
     const nextCopy = enterpriseTabCopy[tabId];
@@ -2125,7 +2141,7 @@ function PreviewBrowserFrame({
             <>
               {enterprisePrototypeTabs.map((tab) => {
                 const TabIcon = tab.icon;
-                const active = tab.id === activeEnterpriseTab || enterpriseTabParent[activeEnterpriseTab] === tab.id;
+                const active = tab.id === activeEnterpriseParentTab;
 
                 return (
                   <button
@@ -2171,9 +2187,51 @@ function PreviewBrowserFrame({
         </aside>
 
         <main className="flex-1 overflow-y-auto p-3 [scrollbar-width:none] sm:p-4 md:p-5 [&::-webkit-scrollbar]:hidden" style={{ background: "rgba(11, 11, 11, 0.88)" }}>
-          <div className="max-w-4xl">
-            <div className="mb-4 grid gap-3 lg:grid-cols-[minmax(0,1fr)_230px]">
+          <div className="max-w-none">
+            {journeyId === "enterprises" && (
+              <div className="mb-3 hidden grid-cols-8 gap-1 rounded-lg border p-1.5 lg:grid" style={{ background: previewTheme.card, borderColor: previewTheme.borderSoft }}>
+                {enterpriseWorkflowStages.map((stage, index) => {
+                  const active = stage.id === activeEnterpriseParentTab;
+                  const complete = enterpriseWorkflowStages.findIndex((item) => item.id === activeEnterpriseParentTab) > index;
+
+                  return (
+                    <button
+                      type="button"
+                      key={stage.id}
+                      onClick={() => handleEnterpriseTabChange(stage.id)}
+                      className="rounded-md px-1.5 py-1.5 text-center text-[9px] font-bold transition-colors hover:bg-white/[0.04]"
+                      style={{
+                        background: active ? previewTheme.accentSoft : "transparent",
+                        color: active ? previewTheme.accent : complete ? previewTheme.textSecondary : previewTheme.textMuted,
+                      }}
+                    >
+                      <span className="block truncate">{enterpriseWorkflowShortLabels[stage.id] ?? stage.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+            <div className="mb-3 grid gap-3 lg:grid-cols-[minmax(0,1fr)_230px]">
               <div>
+                {journeyId === "enterprises" && (
+                  <div className="mb-1.5 flex flex-wrap items-center gap-1.5 text-[10px] font-bold uppercase" style={{ color: previewTheme.textMuted }}>
+                    <span>{activeEnterpriseParent?.label ?? activeEnterpriseParentCopy.title}</span>
+                    {isEnterpriseDrilldown && (
+                      <>
+                        <span style={{ color: previewTheme.border }}> / </span>
+                        <span style={{ color: previewTheme.accent }}>{activeEnterpriseCopy.title}</span>
+                        <button
+                          type="button"
+                          onClick={() => handleEnterpriseTabChange(activeEnterpriseParentTab)}
+                          className="ml-1 rounded border px-1.5 py-0.5 text-[9px] font-bold transition-colors hover:border-[#F69507]/60"
+                          style={{ background: previewTheme.panelElevated, borderColor: previewTheme.borderSoft, color: previewTheme.textSecondary }}
+                        >
+                          Back to {activeEnterpriseParent?.label ?? "stage"}
+                        </button>
+                      </>
+                    )}
+                  </div>
+                )}
                 <h3 className="text-base font-bold md:text-lg" style={{ color: previewTheme.textPrimary }}>
                   {journeyId === "enterprises" ? activeEnterpriseCopy.title : preview.title}
                 </h3>
@@ -2183,8 +2241,8 @@ function PreviewBrowserFrame({
                 {journeyId === "enterprises" && (
                   <div className="mt-3 flex flex-wrap gap-2">
                     <StatusPill text="Enterprise Manager" />
+                    <StatusPill text={activeEnterpriseParentCopy.title} />
                     <StatusPill text={activeEnterpriseCopy.status} active />
-                    <StatusPill text="Mokabara 5-day program" />
                   </div>
                 )}
               </div>
@@ -2227,7 +2285,7 @@ function PreviewBrowserFrame({
                 <div className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] md:hidden [&::-webkit-scrollbar]:hidden">
                   {enterprisePrototypeTabs.map((tab) => {
                     const TabIcon = tab.icon;
-                    const active = tab.id === activeEnterpriseTab || enterpriseTabParent[activeEnterpriseTab] === tab.id;
+                    const active = tab.id === activeEnterpriseParentTab;
 
                     return (
                       <button
