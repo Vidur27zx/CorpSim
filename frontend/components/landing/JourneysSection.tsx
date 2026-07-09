@@ -969,16 +969,16 @@ function MiniField({ label, value, active }: { label: string; value: string; act
   return (
     <button
       type="button"
-      className="rounded-lg border p-3 text-left transition-colors hover:border-[#F69507]/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB13B]/60"
+      className="rounded-lg border px-2.5 py-2 text-left transition-colors hover:border-[#F69507]/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB13B]/60"
       style={{
         background: active ? previewTheme.accentSoft : previewTheme.card,
         borderColor: active ? previewTheme.accentBorder : previewTheme.borderSoft,
       }}
     >
-      <p className="text-[10px] font-bold uppercase" style={{ color: previewTheme.textMuted }}>
+      <p className="text-[9px] font-bold uppercase" style={{ color: previewTheme.textMuted }}>
         {label}
       </p>
-      <p className="mt-1 truncate text-sm font-bold" style={{ color: active ? previewTheme.accent : previewTheme.textPrimary }}>
+      <p className="mt-1 truncate text-xs font-bold" style={{ color: active ? previewTheme.accent : previewTheme.textPrimary }}>
         {value}
       </p>
     </button>
@@ -992,14 +992,14 @@ function MiniProgress({ label, value, active }: { label: string; value: number; 
       className="w-full rounded-lg p-2 text-left transition-colors hover:bg-white/[0.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB13B]/60"
     >
       <div className="flex items-center justify-between gap-3">
-        <span className="truncate text-[11px] font-semibold" style={{ color: previewTheme.textSecondary }}>
+        <span className="truncate text-[10px] font-semibold" style={{ color: previewTheme.textSecondary }}>
           {label}
         </span>
-        <span className="text-[11px] font-bold" style={{ color: active ? previewTheme.accent : previewTheme.textMuted }}>
+        <span className="text-[10px] font-bold" style={{ color: active ? previewTheme.accent : previewTheme.textMuted }}>
           {value}%
         </span>
       </div>
-      <div className="mt-1.5 h-1.5 overflow-hidden rounded-full" style={{ background: previewTheme.borderSoft }}>
+      <div className="mt-1 h-1.5 overflow-hidden rounded-full" style={{ background: previewTheme.borderSoft }}>
         <div className="h-full rounded-full" style={{ width: `${value}%`, background: active ? previewTheme.accent : previewTheme.grayBarLight }} />
       </div>
     </button>
@@ -1017,8 +1017,8 @@ function EnterpriseAdminWorkspace({
 }) {
   if (activeTab === "daily") {
     return (
-      <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_260px]">
-        <div className="space-y-3">
+      <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_240px]">
+        <div className="space-y-2.5">
         {mokabaraDailyTasks.map((task, index) => (
           <button
             type="button"
@@ -1031,25 +1031,25 @@ function EnterpriseAdminWorkspace({
                 metric: task.score,
               })
             }
-            className="grid w-full gap-3 rounded-xl border p-3 text-left transition-all hover:-translate-y-0.5 hover:border-[#F69507]/55 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB13B]/60 sm:grid-cols-[76px_minmax(0,1fr)_92px]"
+            className="grid w-full gap-2 rounded-lg border px-3 py-2.5 text-left transition-all hover:-translate-y-0.5 hover:border-[#F69507]/55 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB13B]/60 sm:grid-cols-[62px_minmax(0,1fr)_70px]"
             style={{
               background: index === 1 ? previewTheme.accentSoft : previewTheme.card,
               borderColor: index === 1 ? previewTheme.accentBorder : previewTheme.borderSoft,
             }}
           >
             <div>
-              <p className="text-xs font-black" style={{ color: index === 1 ? previewTheme.accent : previewTheme.textPrimary }}>
+              <p className="text-[11px] font-black" style={{ color: index === 1 ? previewTheme.accent : previewTheme.textPrimary }}>
                 {task.day}
               </p>
-              <p className="mt-1 text-[10px] font-semibold uppercase" style={{ color: previewTheme.textMuted }}>
+              <p className="mt-0.5 text-[9px] font-semibold uppercase" style={{ color: previewTheme.textMuted }}>
                 {task.status}
               </p>
             </div>
             <div>
-              <p className="text-sm font-bold" style={{ color: previewTheme.textPrimary }}>
+              <p className="text-xs font-bold" style={{ color: previewTheme.textPrimary }}>
                 {task.title}
               </p>
-              <p className="mt-1 text-xs leading-relaxed" style={{ color: previewTheme.textMuted }}>
+              <p className="mt-1 line-clamp-2 text-[11px] leading-relaxed" style={{ color: previewTheme.textMuted }}>
                 {task.detail}
               </p>
             </div>
@@ -1057,7 +1057,7 @@ function EnterpriseAdminWorkspace({
           </button>
         ))}
         </div>
-        <div className="rounded-xl border p-4" style={{ background: previewTheme.card, borderColor: previewTheme.borderSoft }}>
+        <div className="rounded-lg border p-3" style={{ background: previewTheme.card, borderColor: previewTheme.borderSoft }}>
           <SectionTitle title="Day 2 live constraints" />
           {["Customs and import duties", "Singapore warehousing cost", "Malaysia last-mile coverage", "Returns management"].map((item, index) => (
             <button
@@ -1070,7 +1070,7 @@ function EnterpriseAdminWorkspace({
                   status: "Constraint opened",
                 })
               }
-              className="mb-2 flex w-full items-center justify-between rounded-lg border px-3 py-2 text-left text-[11px] font-semibold"
+              className="mb-2 flex w-full items-center justify-between rounded-lg border px-2.5 py-2 text-left text-[10px] font-semibold"
               style={{
                 background: index === 1 ? previewTheme.accentSoft : previewTheme.panelElevated,
                 borderColor: index === 1 ? previewTheme.accentBorder : previewTheme.borderSoft,
@@ -1088,16 +1088,16 @@ function EnterpriseAdminWorkspace({
 
   if (activeTab === "builder") {
     return (
-      <div className="grid gap-4 lg:grid-cols-[0.95fr_1.05fr]">
-        <div className="grid gap-3">
+      <div className="grid gap-3 lg:grid-cols-[0.95fr_1.05fr]">
+        <div className="grid gap-2.5">
           <MiniField label="Simulation" value="Mokabara SEA Expansion" active />
           <MiniField label="Duration" value="5 days" active />
           <MiniField label="Daily unlock" value="Enabled" />
           <MiniField label="Role" value="Business Analyst / Expansion Associate" />
         </div>
-        <div className="rounded-xl border p-4" style={{ background: previewTheme.card, borderColor: previewTheme.borderSoft }}>
+        <div className="rounded-lg border p-3" style={{ background: previewTheme.card, borderColor: previewTheme.borderSoft }}>
           <SectionTitle title="Scenario Configuration" />
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
             <MiniField label="Markets" value="Malaysia + Singapore" active />
             <MiniField label="Industry" value="Travel goods / luggage" />
             <MiniField label="Difficulty" value="Intermediate" />
@@ -1113,7 +1113,7 @@ function EnterpriseAdminWorkspace({
                 metric: "AI",
               })
             }
-            className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg border px-4 py-2.5 text-xs font-bold transition-colors hover:border-[#F69507]/60"
+            className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-lg border px-3 py-2 text-[11px] font-bold transition-colors hover:border-[#F69507]/60"
             style={{ background: previewTheme.accentSoft, borderColor: previewTheme.accentBorder, color: previewTheme.accent }}
           >
             <Settings className="h-3.5 w-3.5" />
@@ -1129,8 +1129,8 @@ function EnterpriseAdminWorkspace({
       mokabaraResourcePack.find((resource) => resource.title === activeInteraction.title) ?? mokabaraResourcePack[3];
 
     return (
-      <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_280px]">
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+      <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_250px]">
+        <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
           {mokabaraResourcePack.map((resource) => {
           const ResourceIcon = resource.icon;
           const selected = selectedResource.title === resource.title;
@@ -1146,36 +1146,36 @@ function EnterpriseAdminWorkspace({
                   metric: resource.signal,
                 })
               }
-              className="rounded-xl border p-3 text-left transition-colors hover:border-[#F69507]/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB13B]/60"
+              className="rounded-lg border p-2.5 text-left transition-colors hover:border-[#F69507]/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB13B]/60"
               style={{ background: selected ? previewTheme.accentSoft : previewTheme.card, borderColor: selected ? previewTheme.accentBorder : previewTheme.borderSoft }}
             >
-              <ResourceIcon className="mb-3 h-4 w-4" style={{ color: selected ? previewTheme.accent : previewTheme.textMuted }} />
-              <p className="text-sm font-bold" style={{ color: previewTheme.textPrimary }}>
+              <ResourceIcon className="mb-2 h-3.5 w-3.5" style={{ color: selected ? previewTheme.accent : previewTheme.textMuted }} />
+              <p className="text-xs font-bold" style={{ color: previewTheme.textPrimary }}>
                 {resource.title}
               </p>
-              <p className="mt-1 text-xs leading-relaxed" style={{ color: previewTheme.textMuted }}>
+              <p className="mt-1 line-clamp-2 text-[11px] leading-relaxed" style={{ color: previewTheme.textMuted }}>
                 {resource.detail}
               </p>
             </button>
           );
         })}
         </div>
-        <div className="rounded-xl border p-4" style={{ background: previewTheme.accentSoft, borderColor: previewTheme.accentBorder }}>
+        <div className="rounded-lg border p-3" style={{ background: previewTheme.accentSoft, borderColor: previewTheme.accentBorder }}>
           <SectionTitle title="Resource detail" />
-          <p className="text-base font-black leading-tight" style={{ color: previewTheme.textPrimary }}>
+          <p className="text-sm font-black leading-tight" style={{ color: previewTheme.textPrimary }}>
             {selectedResource.title}
           </p>
-          <p className="mt-2 text-xs leading-relaxed" style={{ color: previewTheme.textSecondary }}>
+          <p className="mt-2 line-clamp-3 text-[11px] leading-relaxed" style={{ color: previewTheme.textSecondary }}>
             {selectedResource.detail}
           </p>
-          <div className="mt-4 space-y-2">
+          <div className="mt-3 space-y-1.5">
             {selectedResource.bullets.map((bullet) => (
-              <div key={bullet} className="rounded-lg border px-3 py-2 text-[11px] font-semibold" style={{ background: previewTheme.card, borderColor: previewTheme.borderSoft, color: previewTheme.textSecondary }}>
+              <div key={bullet} className="rounded-md border px-2.5 py-1.5 text-[10px] font-semibold" style={{ background: previewTheme.card, borderColor: previewTheme.borderSoft, color: previewTheme.textSecondary }}>
                 {bullet}
               </div>
             ))}
           </div>
-          <div className="mt-4">
+          <div className="mt-3">
             <StatusPill text={selectedResource.signal} active />
           </div>
         </div>
@@ -1185,8 +1185,8 @@ function EnterpriseAdminWorkspace({
 
   if (activeTab === "rubric") {
     return (
-      <div className="grid gap-4 lg:grid-cols-[1fr_0.9fr]">
-        <div className="rounded-xl border p-4" style={{ background: previewTheme.card, borderColor: previewTheme.borderSoft }}>
+      <div className="grid gap-3 lg:grid-cols-[1fr_0.9fr]">
+        <div className="rounded-lg border p-3" style={{ background: previewTheme.card, borderColor: previewTheme.borderSoft }}>
           <SectionTitle title="Eight Pillars Measured" />
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
             <MiniProgress label="Market analysis" value={24} active />
@@ -1199,9 +1199,9 @@ function EnterpriseAdminWorkspace({
             <MiniProgress label="Executive clarity" value={4} />
           </div>
         </div>
-        <div className="rounded-xl border p-4" style={{ background: previewTheme.accentSoft, borderColor: previewTheme.accentBorder }}>
+        <div className="rounded-lg border p-3" style={{ background: previewTheme.accentSoft, borderColor: previewTheme.accentBorder }}>
           <SectionTitle title="What good looks like" />
-          <p className="text-sm font-semibold leading-relaxed" style={{ color: previewTheme.textPrimary }}>
+          <p className="text-xs font-semibold leading-relaxed" style={{ color: previewTheme.textPrimary }}>
             Candidate prioritizes one launch market first, supports the choice with logistics and GTM tradeoffs, and writes a clear executive recommendation.
           </p>
         </div>
@@ -1211,21 +1211,21 @@ function EnterpriseAdminWorkspace({
 
   if (activeTab === "assign") {
     return (
-      <div className="grid gap-4 lg:grid-cols-[1fr_0.9fr]">
-        <div className="grid gap-3">
+      <div className="grid gap-3 lg:grid-cols-[1fr_0.9fr]">
+        <div className="grid gap-2.5">
           <MiniField label="Assigned cohort" value="Final Year Business Cohort" active />
           <MiniField label="Participants" value="120 candidates" />
           <MiniField label="Start" value="Monday, 10:00 AM" active />
           <MiniField label="End" value="Friday, 6:00 PM" />
         </div>
-        <div className="rounded-xl border p-4" style={{ background: previewTheme.card, borderColor: previewTheme.borderSoft }}>
+        <div className="rounded-lg border p-3" style={{ background: previewTheme.card, borderColor: previewTheme.borderSoft }}>
           <SectionTitle title="Publish Settings" />
           {["Daily reminders enabled", "Faculty / HR visibility enabled", "Late-submission alerts", "AI evaluation after each day"].map((item) => (
-            <button key={item} type="button" className="mb-3 flex w-full items-center gap-3 text-left">
+            <button key={item} type="button" className="mb-2 flex w-full items-center gap-2.5 text-left">
               <div className="flex h-5 w-5 items-center justify-center rounded-md border" style={{ background: previewTheme.accentSoft, borderColor: previewTheme.accentBorder }}>
                 <Check className="h-3 w-3" style={{ color: previewTheme.accent }} />
               </div>
-              <span className="text-xs font-semibold" style={{ color: previewTheme.textSecondary }}>
+              <span className="text-[11px] font-semibold" style={{ color: previewTheme.textSecondary }}>
                 {item}
               </span>
             </button>
@@ -1240,7 +1240,7 @@ function EnterpriseAdminWorkspace({
                 metric: "Ready",
               })
             }
-            className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-xs font-black"
+            className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-lg px-3 py-2 text-[11px] font-black"
             style={{ background: previewTheme.accent, color: previewTheme.bg }}
           >
             Publish simulation
@@ -1252,22 +1252,22 @@ function EnterpriseAdminWorkspace({
 
   if (activeTab === "progress") {
     return (
-      <div className="grid gap-4 lg:grid-cols-[0.8fr_1.2fr]">
-        <div className="grid grid-cols-2 gap-3">
+      <div className="grid gap-3 lg:grid-cols-[0.8fr_1.2fr]">
+        <div className="grid grid-cols-2 gap-2.5">
           <MiniField label="Day 1 completed" value="92%" active />
           <MiniField label="Day 2 in progress" value="71%" active />
           <MiniField label="At-risk participants" value="14" />
           <MiniField label="Avg submission quality" value="76 / 100" />
         </div>
-        <div className="rounded-xl border p-4" style={{ background: previewTheme.card, borderColor: previewTheme.borderSoft }}>
+        <div className="rounded-lg border p-3" style={{ background: previewTheme.card, borderColor: previewTheme.borderSoft }}>
           <SectionTitle title="Common stuck point" />
-          <p className="text-sm font-bold" style={{ color: previewTheme.textPrimary }}>
+          <p className="text-xs font-bold" style={{ color: previewTheme.textPrimary }}>
             Logistics cost tradeoffs
           </p>
-          <p className="mt-2 text-xs leading-relaxed" style={{ color: previewTheme.textMuted }}>
+          <p className="mt-1.5 line-clamp-2 text-[11px] leading-relaxed" style={{ color: previewTheme.textMuted }}>
             Many candidates identified demand but missed customs, return logistics, and last-mile delivery constraints before choosing a market.
           </p>
-          <div className="mt-4 space-y-2">
+          <div className="mt-3 space-y-1.5">
             <MiniProgress label="Market evidence submitted" value={92} active />
             <MiniProgress label="Operations model quality" value={64} />
             <MiniProgress label="GTM channel rationale" value={58} />
@@ -1282,9 +1282,9 @@ function EnterpriseAdminWorkspace({
       mokabaraCandidateEvidence.find((candidate) => candidate.name === activeInteraction.title) ?? mokabaraCandidateEvidence[1];
 
     return (
-      <div className="grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
+      <div className="grid gap-3 lg:grid-cols-[1.1fr_0.9fr]">
         <div className="overflow-hidden rounded-xl border" style={{ borderColor: previewTheme.borderSoft }}>
-          <div className="grid grid-cols-[1fr_54px_1fr] gap-3 border-b px-3 py-2 text-[10px] font-bold uppercase" style={{ background: previewTheme.panelElevated, borderColor: previewTheme.borderSoft, color: previewTheme.textMuted }}>
+          <div className="grid grid-cols-[1fr_44px_1fr] gap-2 border-b px-2.5 py-2 text-[9px] font-bold uppercase" style={{ background: previewTheme.panelElevated, borderColor: previewTheme.borderSoft, color: previewTheme.textMuted }}>
             <span>Candidate</span>
             <span>CRS</span>
             <span>Signal</span>
@@ -1301,7 +1301,7 @@ function EnterpriseAdminWorkspace({
                   metric: candidate.crs,
                 })
               }
-              className="grid w-full grid-cols-[1fr_54px_1fr] gap-3 border-b px-3 py-2.5 text-left text-xs transition-colors hover:bg-white/[0.04]"
+              className="grid w-full grid-cols-[1fr_44px_1fr] gap-2 border-b px-2.5 py-2 text-left text-[11px] transition-colors hover:bg-white/[0.04]"
               style={{ background: selectedCandidate.name === candidate.name ? previewTheme.accentSoft : previewTheme.card, borderColor: previewTheme.borderSoft }}
             >
               <span className="font-bold" style={{ color: previewTheme.textPrimary }}>{candidate.name}</span>
@@ -1310,15 +1310,15 @@ function EnterpriseAdminWorkspace({
             </button>
           ))}
         </div>
-        <div className="rounded-xl border p-4" style={{ background: previewTheme.accentSoft, borderColor: previewTheme.accentBorder }}>
+        <div className="rounded-lg border p-3" style={{ background: previewTheme.accentSoft, borderColor: previewTheme.accentBorder }}>
           <SectionTitle title="Evidence preview" />
-          <p className="text-sm font-bold" style={{ color: previewTheme.textPrimary }}>
+          <p className="text-xs font-bold" style={{ color: previewTheme.textPrimary }}>
             {selectedCandidate.name} · {selectedCandidate.day}
           </p>
-          <p className="mt-2 text-xs leading-relaxed" style={{ color: previewTheme.textSecondary }}>
+          <p className="mt-2 line-clamp-3 text-[11px] leading-relaxed" style={{ color: previewTheme.textSecondary }}>
             {selectedCandidate.note}
           </p>
-          <div className="mt-4 grid grid-cols-2 gap-2">
+          <div className="mt-3 grid grid-cols-2 gap-2">
             <MiniField label="Decision" value={selectedCandidate.recommendation} active />
             <MiniField label="Signal" value={selectedCandidate.signal} />
           </div>
@@ -1329,19 +1329,19 @@ function EnterpriseAdminWorkspace({
 
   if (activeTab === "insights") {
     return (
-      <div className="grid gap-4 lg:grid-cols-[0.85fr_1.15fr]">
-        <div className="grid grid-cols-2 gap-3">
+      <div className="grid gap-3 lg:grid-cols-[0.85fr_1.15fr]">
+        <div className="grid grid-cols-2 gap-2.5">
           <MiniField label="Completion rate" value="87%" active />
           <MiniField label="Cohort readiness" value="72 / 100" active />
           <MiniField label="Top skill" value="Market analysis" />
           <MiniField label="Improvement area" value="Business communication" />
         </div>
-        <div className="rounded-xl border p-4" style={{ background: previewTheme.accentSoft, borderColor: previewTheme.accentBorder }}>
+        <div className="rounded-lg border p-3" style={{ background: previewTheme.accentSoft, borderColor: previewTheme.accentBorder }}>
           <SectionTitle title="AI-generated insight" />
-          <p className="text-sm font-semibold leading-relaxed" style={{ color: previewTheme.textPrimary }}>
+          <p className="line-clamp-3 text-xs font-semibold leading-relaxed" style={{ color: previewTheme.textPrimary }}>
             Most candidates selected Singapore first because of higher purchasing power, but only 38% accounted for warehousing, duties, and return-cost impact.
           </p>
-          <div className="mt-4 space-y-2">
+          <div className="mt-3 space-y-1.5">
             <MiniProgress label="Analysis" value={84} active />
             <MiniProgress label="Operations judgment" value={68} />
             <MiniProgress label="Executive writing" value={61} />
@@ -1352,19 +1352,19 @@ function EnterpriseAdminWorkspace({
   }
 
   return (
-    <div className="grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
-      <div className="rounded-xl border p-5" style={{ background: previewTheme.accentSoft, borderColor: previewTheme.accentBorder }}>
+    <div className="grid gap-3 lg:grid-cols-[0.9fr_1.1fr]">
+      <div className="rounded-lg border p-4" style={{ background: previewTheme.accentSoft, borderColor: previewTheme.accentBorder }}>
         <p className="text-[10px] font-bold uppercase" style={{ color: previewTheme.accent }}>
           5-day simulation
         </p>
-        <h3 className="mt-2 text-2xl font-black leading-tight" style={{ color: previewTheme.textPrimary }}>
+        <h3 className="mt-2 text-lg font-black leading-tight" style={{ color: previewTheme.textPrimary }}>
           Mokabara Malaysia + Singapore Expansion
         </h3>
-        <p className="mt-3 text-sm leading-relaxed" style={{ color: previewTheme.textSecondary }}>
+        <p className="mt-2 line-clamp-3 text-xs leading-relaxed" style={{ color: previewTheme.textSecondary }}>
           Candidates act as expansion analysts and work through market, logistics, GTM, pricing, risk, and final executive recommendation tasks over multiple days.
         </p>
       </div>
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 gap-2.5">
         <MiniField label="Company" value="Mokabara" active />
         <MiniField label="Markets" value="Malaysia + Singapore" />
         <MiniField label="Duration" value="5 days" active />
@@ -1421,7 +1421,7 @@ function PreviewBrowserFrame({
 
   return (
     <div
-      className="relative min-h-[540px] w-full overflow-hidden rounded-2xl border shadow-2xl shadow-black/40 backdrop-blur-xl lg:aspect-[16/9] lg:min-h-0"
+      className="relative min-h-[500px] w-full overflow-hidden rounded-2xl border shadow-2xl shadow-black/40 backdrop-blur-xl lg:aspect-[16/8.8] lg:min-h-0"
       style={{
         background: "linear-gradient(145deg, rgba(20,20,20,0.92), rgba(11,11,11,0.86))",
         borderColor: "rgba(164, 164, 164, 0.2)",
@@ -1443,8 +1443,8 @@ function PreviewBrowserFrame({
       </div>
 
       <div className="relative z-20 flex h-[calc(100%-2.5rem)]">
-        <aside className="hidden w-56 flex-col gap-1 overflow-y-auto border-r p-4 [scrollbar-width:none] md:flex [&::-webkit-scrollbar]:hidden" style={{ background: "rgba(11, 11, 11, 0.82)", borderColor: previewTheme.borderSoft }}>
-          <div className="mb-5 flex items-center gap-2 px-2">
+        <aside className="hidden w-52 flex-col gap-1 overflow-y-auto border-r p-3 [scrollbar-width:none] md:flex [&::-webkit-scrollbar]:hidden" style={{ background: "rgba(11, 11, 11, 0.82)", borderColor: previewTheme.borderSoft }}>
+          <div className="mb-3 flex items-center gap-2 px-2">
             <div className="rounded-lg border p-1.5" style={{ background: previewTheme.bg, borderColor: previewTheme.accentBorder }}>
               <Image src="/pidot-logo.png" alt="Pi Dot" width={64} height={18} className="h-4 w-auto" />
             </div>
@@ -1454,11 +1454,11 @@ function PreviewBrowserFrame({
           </div>
           {journeyId === "enterprises" ? (
             <>
-              <div className="mb-4 rounded-xl border p-3" style={{ background: previewTheme.card, borderColor: previewTheme.borderSoft }}>
+              <div className="mb-3 rounded-lg border p-2.5" style={{ background: previewTheme.card, borderColor: previewTheme.borderSoft }}>
                 <p className="text-[10px] font-bold uppercase" style={{ color: previewTheme.textMuted }}>
                   Workspace
                 </p>
-                <p className="mt-1 text-xs font-bold leading-tight" style={{ color: previewTheme.textPrimary }}>
+                <p className="mt-1 text-[11px] font-bold leading-tight" style={{ color: previewTheme.textPrimary }}>
                   Mokabara Expansion
                 </p>
                 <div className="mt-3 flex flex-wrap gap-1.5">
@@ -1484,7 +1484,7 @@ function PreviewBrowserFrame({
                         metric: nextCopy.metric,
                       });
                     }}
-                    className="flex items-center gap-2.5 rounded-lg border-l-2 px-3 py-2 text-left text-[11px] font-medium transition-colors hover:bg-white/[0.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB13B]/60"
+                    className="flex items-center gap-2 rounded-lg border-l-2 px-2.5 py-1.5 text-left text-[10px] font-semibold transition-colors hover:bg-white/[0.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB13B]/60"
                     style={{
                       background: active ? previewTheme.panelElevated : "transparent",
                       borderLeftColor: active ? previewTheme.accent : "transparent",
@@ -1507,7 +1507,7 @@ function PreviewBrowserFrame({
                   type="button"
                   key={item.name}
                   onClick={() => onStepChange(index)}
-                  className="flex items-center gap-2.5 rounded-lg border-l-2 px-3 py-2 text-left text-[11px] font-medium transition-colors hover:bg-white/[0.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB13B]/60"
+                  className="flex items-center gap-2 rounded-lg border-l-2 px-2.5 py-1.5 text-left text-[10px] font-semibold transition-colors hover:bg-white/[0.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB13B]/60"
                   style={{
                     background: active ? previewTheme.panelElevated : "transparent",
                     borderLeftColor: active ? previewTheme.accent : "transparent",
@@ -1522,14 +1522,14 @@ function PreviewBrowserFrame({
           )}
         </aside>
 
-        <main className="flex-1 overflow-y-auto p-4 [scrollbar-width:none] sm:p-5 md:p-6 [&::-webkit-scrollbar]:hidden" style={{ background: "rgba(11, 11, 11, 0.88)" }}>
+        <main className="flex-1 overflow-y-auto p-3 [scrollbar-width:none] sm:p-4 md:p-5 [&::-webkit-scrollbar]:hidden" style={{ background: "rgba(11, 11, 11, 0.88)" }}>
           <div className="max-w-4xl">
-            <div className="mb-5 grid gap-3 lg:grid-cols-[minmax(0,1fr)_250px]">
+            <div className="mb-4 grid gap-3 lg:grid-cols-[minmax(0,1fr)_230px]">
               <div>
-                <h3 className="text-xl font-bold" style={{ color: previewTheme.textPrimary }}>
+                <h3 className="text-base font-bold md:text-lg" style={{ color: previewTheme.textPrimary }}>
                   {journeyId === "enterprises" ? activeEnterpriseCopy.title : preview.title}
                 </h3>
-                <p className="mt-1 max-w-2xl text-sm" style={{ color: previewTheme.textMuted }}>
+                <p className="mt-1 line-clamp-2 max-w-2xl text-xs leading-relaxed" style={{ color: previewTheme.textMuted }}>
                   {journeyId === "enterprises" ? activeEnterpriseCopy.subtitle : preview.subtitle}
                 </p>
                 {journeyId === "enterprises" && (
@@ -1541,7 +1541,7 @@ function PreviewBrowserFrame({
                 )}
               </div>
               <div
-                className="rounded-xl border p-3 text-left"
+                className="rounded-lg border p-2.5 text-left"
                 style={{
                   background: "linear-gradient(145deg, rgba(255,177,59,0.12), rgba(255,255,255,0.03))",
                   borderColor: previewTheme.accentBorder,
@@ -1553,7 +1553,7 @@ function PreviewBrowserFrame({
                   </p>
                   {activeInteraction.metric && <StatusPill text={activeInteraction.metric} active />}
                 </div>
-                <p className="truncate text-sm font-bold" style={{ color: previewTheme.textPrimary }}>
+                <p className="truncate text-xs font-bold" style={{ color: previewTheme.textPrimary }}>
                   {activeInteraction.title}
                 </p>
                 <p className="mt-1 line-clamp-2 text-[11px] leading-relaxed" style={{ color: previewTheme.textSecondary }}>
