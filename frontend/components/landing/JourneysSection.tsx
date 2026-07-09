@@ -2211,7 +2211,7 @@ function PreviewBrowserFrame({
                 })}
               </div>
             )}
-            <div className="mb-3 grid gap-3 lg:grid-cols-[minmax(0,1fr)_230px]">
+            <div className="mb-2 grid items-start gap-2 lg:grid-cols-[minmax(0,1fr)_260px]">
               <div>
                 {journeyId === "enterprises" && (
                   <div className="mb-1.5 flex flex-wrap items-center gap-1.5 text-[10px] font-bold uppercase" style={{ color: previewTheme.textMuted }}>
@@ -2235,11 +2235,11 @@ function PreviewBrowserFrame({
                 <h3 className="text-base font-bold md:text-lg" style={{ color: previewTheme.textPrimary }}>
                   {journeyId === "enterprises" ? activeEnterpriseCopy.title : preview.title}
                 </h3>
-                <p className="mt-1 line-clamp-2 max-w-2xl text-xs leading-relaxed" style={{ color: previewTheme.textMuted }}>
+                <p className="mt-1 line-clamp-1 max-w-2xl text-xs leading-relaxed" style={{ color: previewTheme.textMuted }}>
                   {journeyId === "enterprises" ? activeEnterpriseCopy.subtitle : preview.subtitle}
                 </p>
                 {journeyId === "enterprises" && (
-                  <div className="mt-3 flex flex-wrap gap-2">
+                  <div className="mt-2 flex flex-wrap gap-1.5">
                     <StatusPill text="Enterprise Manager" />
                     <StatusPill text={activeEnterpriseParentCopy.title} />
                     <StatusPill text={activeEnterpriseCopy.status} active />
@@ -2247,13 +2247,13 @@ function PreviewBrowserFrame({
                 )}
               </div>
               <div
-                className="rounded-lg border p-2.5 text-left"
+                className="rounded-lg border p-2 text-left"
                 style={{
                   background: "linear-gradient(145deg, rgba(255,177,59,0.12), rgba(255,255,255,0.03))",
                   borderColor: previewTheme.accentBorder,
                 }}
               >
-                <div className="mb-2 flex items-center justify-between gap-2">
+                <div className="mb-1 flex items-center justify-between gap-2">
                   <p className="text-[10px] font-bold uppercase" style={{ color: previewTheme.accent }}>
                     Action preview
                   </p>
@@ -2262,21 +2262,13 @@ function PreviewBrowserFrame({
                 <p className="truncate text-xs font-bold" style={{ color: previewTheme.textPrimary }}>
                   {activeInteraction.title}
                 </p>
-                <p className="mt-1 line-clamp-2 text-[11px] leading-relaxed" style={{ color: previewTheme.textSecondary }}>
+                <p className="mt-0.5 line-clamp-1 text-[10px] leading-relaxed" style={{ color: previewTheme.textSecondary }}>
                   {activeInteraction.context}
                 </p>
-                <p className="mt-2 text-[10px] font-semibold uppercase" style={{ color: previewTheme.textMuted }}>
-                  {activeInteraction.status}
-                </p>
                 {journeyId === "enterprises" && (
-                  <div className="mt-2 rounded-md border px-2 py-1.5" style={{ background: previewTheme.bg, borderColor: previewTheme.borderSoft }}>
-                    <p className="text-[9px] font-bold uppercase" style={{ color: previewTheme.textMuted }}>
-                      Next in product
-                    </p>
-                    <p className="mt-1 line-clamp-2 text-[10px] font-semibold leading-relaxed" style={{ color: previewTheme.textSecondary }}>
-                      {getActionOutcome(activeInteraction)}
-                    </p>
-                  </div>
+                  <p className="mt-1 line-clamp-1 text-[10px] font-semibold leading-relaxed" style={{ color: previewTheme.textMuted }}>
+                    <span style={{ color: previewTheme.accent }}>Next:</span> {getActionOutcome(activeInteraction)}
+                  </p>
                 )}
               </div>
             </div>
