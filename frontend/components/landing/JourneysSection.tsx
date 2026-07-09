@@ -935,7 +935,8 @@ function EnterpriseAdminWorkspace({
 }) {
   if (activeTab === "daily") {
     return (
-      <div className="space-y-3">
+      <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_260px]">
+        <div className="space-y-3">
         {mokabaraDailyTasks.map((task, index) => (
           <button
             type="button"
@@ -973,6 +974,32 @@ function EnterpriseAdminWorkspace({
             <StatusPill text={task.score} active={index === 1} />
           </button>
         ))}
+        </div>
+        <div className="rounded-xl border p-4" style={{ background: previewTheme.card, borderColor: previewTheme.borderSoft }}>
+          <SectionTitle title="Day 2 live constraints" />
+          {["Customs and import duties", "Singapore warehousing cost", "Malaysia last-mile coverage", "Returns management"].map((item, index) => (
+            <button
+              type="button"
+              key={item}
+              onClick={() =>
+                onInteract({
+                  title: item,
+                  context: "Operational risk selected for review",
+                  status: "Constraint opened",
+                })
+              }
+              className="mb-2 flex w-full items-center justify-between rounded-lg border px-3 py-2 text-left text-[11px] font-semibold"
+              style={{
+                background: index === 1 ? previewTheme.accentSoft : previewTheme.panelElevated,
+                borderColor: index === 1 ? previewTheme.accentBorder : previewTheme.borderSoft,
+                color: index === 1 ? previewTheme.accent : previewTheme.textSecondary,
+              }}
+            >
+              {item}
+              <span style={{ color: previewTheme.textMuted }}>{index === 1 ? "High" : "Med"}</span>
+            </button>
+          ))}
+        </div>
       </div>
     );
   }
@@ -994,6 +1021,22 @@ function EnterpriseAdminWorkspace({
             <MiniField label="Difficulty" value="Intermediate" />
             <MiniField label="AI stakeholders" value="Logistics, Sales, Finance" active />
           </div>
+          <button
+            type="button"
+            onClick={() =>
+              onInteract({
+                title: "Generate daily task sequence",
+                context: "Creates the 5-day task sequence, resource pack, rubric, and stakeholder events.",
+                status: "Generation previewed",
+                metric: "AI",
+              })
+            }
+            className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg border px-4 py-2.5 text-xs font-bold transition-colors hover:border-[#F69507]/60"
+            style={{ background: previewTheme.accentSoft, borderColor: previewTheme.accentBorder, color: previewTheme.accent }}
+          >
+            <Settings className="h-3.5 w-3.5" />
+            Generate 5-day simulation
+          </button>
         </div>
       </div>
     );
@@ -1086,6 +1129,21 @@ function EnterpriseAdminWorkspace({
               </span>
             </button>
           ))}
+          <button
+            type="button"
+            onClick={() =>
+              onInteract({
+                title: "Publish simulation",
+                context: "Sends invites, schedules daily unlocks, and activates admin monitoring.",
+                status: "Publish action previewed",
+                metric: "Ready",
+              })
+            }
+            className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-xs font-black"
+            style={{ background: previewTheme.accent, color: previewTheme.bg }}
+          >
+            Publish simulation
+          </button>
         </div>
       </div>
     );
@@ -1122,6 +1180,11 @@ function EnterpriseAdminWorkspace({
     return (
       <div className="grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
         <div className="overflow-hidden rounded-xl border" style={{ borderColor: previewTheme.borderSoft }}>
+          <div className="grid grid-cols-[1fr_54px_1fr] gap-3 border-b px-3 py-2 text-[10px] font-bold uppercase" style={{ background: previewTheme.panelElevated, borderColor: previewTheme.borderSoft, color: previewTheme.textMuted }}>
+            <span>Candidate</span>
+            <span>CRS</span>
+            <span>Signal</span>
+          </div>
           {[
             ["Aarav Mehta", "Day 2", "81", "Logistics reasoning"],
             ["Diya Rao", "Day 2", "88", "Market analysis"],
@@ -1156,6 +1219,10 @@ function EnterpriseAdminWorkspace({
           <p className="mt-2 text-xs leading-relaxed" style={{ color: previewTheme.textSecondary }}>
             AI notes: Strong market logic, clear channel sequencing, needs deeper return-cost sensitivity.
           </p>
+          <div className="mt-4 grid grid-cols-2 gap-2">
+            <MiniField label="Decision" value="Advance" active />
+            <MiniField label="Risk" value="Returns model" />
+          </div>
         </div>
       </div>
     );
@@ -1173,7 +1240,7 @@ function EnterpriseAdminWorkspace({
         <div className="rounded-xl border p-4" style={{ background: previewTheme.accentSoft, borderColor: previewTheme.accentBorder }}>
           <SectionTitle title="AI-generated insight" />
           <p className="text-sm font-semibold leading-relaxed" style={{ color: previewTheme.textPrimary }}>
-            Most candidates found the correct expansion opportunity, but struggled to connect logistics constraints with GTM sequencing and executive communication.
+            Most candidates selected Singapore first because of higher purchasing power, but only 38% accounted for warehousing, duties, and return-cost impact.
           </p>
           <div className="mt-4 space-y-2">
             <MiniProgress label="Analysis" value={84} active />
@@ -1277,7 +1344,7 @@ function PreviewBrowserFrame({
       </div>
 
       <div className="relative z-20 flex h-[calc(100%-2.5rem)]">
-        <aside className="hidden w-52 flex-col gap-1 border-r p-4 md:flex" style={{ background: "rgba(11, 11, 11, 0.82)", borderColor: previewTheme.borderSoft }}>
+        <aside className="hidden w-56 flex-col gap-1 border-r p-4 md:flex" style={{ background: "rgba(11, 11, 11, 0.82)", borderColor: previewTheme.borderSoft }}>
           <div className="mb-5 flex items-center gap-2 px-2">
             <div className="rounded-lg border p-1.5" style={{ background: previewTheme.bg, borderColor: previewTheme.accentBorder }}>
               <Image src="/pidot-logo.png" alt="Pi Dot" width={64} height={18} className="h-4 w-auto" />
@@ -1286,35 +1353,74 @@ function PreviewBrowserFrame({
               Pro
             </span>
           </div>
-          {items.map((item, index) => {
-            const Icon = item.icon;
-            const active = index === stepIndex % items.length;
+          {journeyId === "enterprises" ? (
+            <>
+              <div className="mb-4 rounded-xl border p-3" style={{ background: previewTheme.card, borderColor: previewTheme.borderSoft }}>
+                <p className="text-[10px] font-bold uppercase" style={{ color: previewTheme.textMuted }}>
+                  Workspace
+                </p>
+                <p className="mt-1 text-xs font-bold leading-tight" style={{ color: previewTheme.textPrimary }}>
+                  Mokabara Expansion
+                </p>
+                <div className="mt-3 flex flex-wrap gap-1.5">
+                  <StatusPill text="Day 2 live" active />
+                  <StatusPill text="Admin" />
+                </div>
+              </div>
+              {enterprisePrototypeTabs.map((tab) => {
+                const TabIcon = tab.icon;
+                const active = tab.id === activeEnterpriseTab;
 
-            return (
-              <button
-                type="button"
-                key={item.name}
-                onClick={() => {
-                  setActiveEnterpriseTab(outerStepToEnterpriseTab[index] ?? "program");
-                  setActiveInteraction({
-                    title: item.name,
-                    context: "Enterprise workspace navigation",
-                    status: active ? "Current workspace" : "Switching prototype view",
-                  });
-                  onStepChange(index);
-                }}
-                className="flex items-center gap-2.5 rounded-lg border-l-2 px-3 py-2 text-left text-[11px] font-medium transition-colors hover:bg-white/[0.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB13B]/60"
-                style={{
-                  background: active ? previewTheme.panelElevated : "transparent",
-                  borderLeftColor: active ? previewTheme.accent : "transparent",
-                  color: active ? previewTheme.accent : previewTheme.textMuted,
-                }}
-              >
-                <Icon className="h-3.5 w-3.5 shrink-0" />
-                <span>{item.name}</span>
-              </button>
-            );
-          })}
+                return (
+                  <button
+                    type="button"
+                    key={tab.id}
+                    onClick={() => {
+                      setActiveEnterpriseTab(tab.id);
+                      const nextCopy = enterpriseTabCopy[tab.id];
+                      setActiveInteraction({
+                        title: nextCopy.title,
+                        context: nextCopy.subtitle,
+                        status: nextCopy.status,
+                        metric: nextCopy.metric,
+                      });
+                    }}
+                    className="flex items-center gap-2.5 rounded-lg border-l-2 px-3 py-2 text-left text-[11px] font-medium transition-colors hover:bg-white/[0.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB13B]/60"
+                    style={{
+                      background: active ? previewTheme.panelElevated : "transparent",
+                      borderLeftColor: active ? previewTheme.accent : "transparent",
+                      color: active ? previewTheme.accent : previewTheme.textMuted,
+                    }}
+                  >
+                    <TabIcon className="h-3.5 w-3.5 shrink-0" />
+                    <span>{tab.label}</span>
+                  </button>
+                );
+              })}
+            </>
+          ) : (
+            items.map((item, index) => {
+              const Icon = item.icon;
+              const active = index === stepIndex % items.length;
+
+              return (
+                <button
+                  type="button"
+                  key={item.name}
+                  onClick={() => onStepChange(index)}
+                  className="flex items-center gap-2.5 rounded-lg border-l-2 px-3 py-2 text-left text-[11px] font-medium transition-colors hover:bg-white/[0.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB13B]/60"
+                  style={{
+                    background: active ? previewTheme.panelElevated : "transparent",
+                    borderLeftColor: active ? previewTheme.accent : "transparent",
+                    color: active ? previewTheme.accent : previewTheme.textMuted,
+                  }}
+                >
+                  <Icon className="h-3.5 w-3.5 shrink-0" />
+                  <span>{item.name}</span>
+                </button>
+              );
+            })
+          )}
         </aside>
 
         <main className="flex-1 overflow-y-auto p-4 [scrollbar-width:none] sm:p-5 md:p-6 [&::-webkit-scrollbar]:hidden" style={{ background: "rgba(11, 11, 11, 0.88)" }}>
@@ -1327,6 +1433,13 @@ function PreviewBrowserFrame({
                 <p className="mt-1 max-w-2xl text-sm" style={{ color: previewTheme.textMuted }}>
                   {journeyId === "enterprises" ? activeEnterpriseCopy.subtitle : preview.subtitle}
                 </p>
+                {journeyId === "enterprises" && (
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    <StatusPill text="Enterprise Manager" />
+                    <StatusPill text={activeEnterpriseCopy.status} active />
+                    <StatusPill text="Mokabara 5-day program" />
+                  </div>
+                )}
               </div>
               <div
                 className="rounded-xl border p-3 text-left"
@@ -1354,7 +1467,7 @@ function PreviewBrowserFrame({
             </div>
             {journeyId === "enterprises" ? (
               <div className="space-y-4">
-                <div className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                <div className="grid grid-cols-2 gap-2 md:hidden">
                   {enterprisePrototypeTabs.map((tab) => {
                     const TabIcon = tab.icon;
                     const active = tab.id === activeEnterpriseTab;
@@ -1373,7 +1486,7 @@ function PreviewBrowserFrame({
                             metric: nextCopy.metric,
                           });
                         }}
-                        className="inline-flex shrink-0 items-center gap-2 rounded-lg border px-3 py-2 text-[11px] font-bold transition-colors hover:border-[#F69507]/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB13B]/60"
+                        className="inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-[11px] font-bold transition-colors hover:border-[#F69507]/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB13B]/60"
                         style={{
                           background: active ? previewTheme.accentSoft : previewTheme.card,
                           borderColor: active ? previewTheme.accentBorder : previewTheme.borderSoft,
