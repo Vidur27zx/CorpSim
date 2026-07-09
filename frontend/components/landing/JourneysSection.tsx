@@ -796,6 +796,17 @@ const enterprisePrototypeTabs: EnterprisePrototypeTab[] = [
   { id: "reports", label: "Reports", icon: Download },
 ];
 
+const enterpriseTabParent: Partial<Record<EnterprisePrototypeTabId, EnterprisePrototypeTabId>> = {
+  programs: "dashboard",
+  templates: "program",
+  resources: "builder",
+  daily: "builder",
+  stakeholders: "builder",
+  parameters: "rubric",
+  governance: "assign",
+  schedule: "assign",
+};
+
 const outerStepToEnterpriseTab: EnterprisePrototypeTabId[] = ["program", "builder", "rubric", "progress", "evidence", "reports"];
 
 const enterpriseTabCopy: Record<EnterprisePrototypeTabId, { title: string; subtitle: string; status: string; metric?: string }> = {
@@ -1138,14 +1149,49 @@ function getActionOutcome(interaction: PreviewInteraction) {
   return "The workspace updates the selected detail so a decision-maker can see what happens next.";
 }
 
+function WorkflowModuleButton({
+  id,
+  label,
+  detail,
+  icon: Icon,
+  onTabChange,
+}: {
+  id: EnterprisePrototypeTabId;
+  label: string;
+  detail: string;
+  icon: LucideIcon;
+  onTabChange: (tabId: EnterprisePrototypeTabId) => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={() => onTabChange(id)}
+      className="rounded-lg border px-2.5 py-2 text-left transition-colors hover:border-[#F69507]/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB13B]/60"
+      style={{ background: previewTheme.panelElevated, borderColor: previewTheme.borderSoft }}
+    >
+      <div className="flex items-center gap-2">
+        <Icon className="h-3.5 w-3.5 shrink-0" style={{ color: previewTheme.accent }} />
+        <p className="truncate text-[11px] font-bold" style={{ color: previewTheme.textPrimary }}>
+          {label}
+        </p>
+      </div>
+      <p className="mt-1 line-clamp-2 text-[10px] leading-relaxed" style={{ color: previewTheme.textMuted }}>
+        {detail}
+      </p>
+    </button>
+  );
+}
+
 function EnterpriseAdminWorkspace({
   activeTab,
   activeInteraction,
   onInteract,
+  onTabChange,
 }: {
   activeTab: EnterprisePrototypeTabId;
   activeInteraction: PreviewInteraction;
   onInteract: (interaction: PreviewInteraction) => void;
+  onTabChange: (tabId: EnterprisePrototypeTabId) => void;
 }) {
   if (activeTab === "dashboard") {
     return (
@@ -1155,6 +1201,13 @@ function EnterpriseAdminWorkspace({
           <MiniField label="Participants" value="314" />
           <MiniField label="Review queue" value="38 submissions" active />
           <MiniField label="Avg readiness" value="72 / 100" />
+          <WorkflowModuleButton
+            id="programs"
+            label="Open program library"
+            detail="All active, draft, scheduled, and completed role simulations."
+            icon={Briefcase}
+            onTabChange={onTabChange}
+          />
         </div>
         <div className="rounded-lg border p-3" style={{ background: previewTheme.card, borderColor: previewTheme.borderSoft }}>
           <SectionTitle title="Today in the workspace" />
@@ -1410,6 +1463,15 @@ function EnterpriseAdminWorkspace({
             <MiniField label="Duration" value="5 days" active />
             <MiniField label="Output" value="Executive recommendation" />
           </div>
+          <div className="mt-3">
+            <WorkflowModuleButton
+              id="templates"
+              label="Browse templates"
+              detail="Pick a role-ready simulation template before building the program."
+              icon={FileText}
+              onTabChange={onTabChange}
+            />
+          </div>
         </div>
         <div className="rounded-lg border p-3" style={{ background: previewTheme.card, borderColor: previewTheme.borderSoft }}>
           <SectionTitle title="Setup feeds the full workflow" />
@@ -1526,6 +1588,29 @@ function EnterpriseAdminWorkspace({
           <MiniField label="Duration" value="5 days" active />
           <MiniField label="Daily unlock" value="Enabled" />
           <MiniField label="Role" value="Business Analyst / Expansion Associate" />
+          <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-3">
+            <WorkflowModuleButton
+              id="daily"
+              label="Daily tasks"
+              detail="Review the 3-5 day candidate task sequence."
+              icon={ClipboardCheck}
+              onTabChange={onTabChange}
+            />
+            <WorkflowModuleButton
+              id="resources"
+              label="Resources"
+              detail="Briefs, sheets, personas, emails, and channel options."
+              icon={FileText}
+              onTabChange={onTabChange}
+            />
+            <WorkflowModuleButton
+              id="stakeholders"
+              label="AI stakeholders"
+              detail="People, constraints, messages, and curveballs."
+              icon={Users}
+              onTabChange={onTabChange}
+            />
+          </div>
         </div>
         <div className="rounded-lg border p-3" style={{ background: previewTheme.card, borderColor: previewTheme.borderSoft }}>
           <SectionTitle title="Scenario Configuration" />
@@ -1636,6 +1721,15 @@ function EnterpriseAdminWorkspace({
           <p className="text-xs font-semibold leading-relaxed" style={{ color: previewTheme.textPrimary }}>
             Candidate prioritizes one launch market first, supports the choice with logistics and GTM tradeoffs, and writes a clear executive recommendation.
           </p>
+          <div className="mt-3">
+            <WorkflowModuleButton
+              id="parameters"
+              label="Tune simulation parameters"
+              detail="Difficulty, ambiguity, AI guidance, pressure, and scoring strictness."
+              icon={Settings}
+              onTabChange={onTabChange}
+            />
+          </div>
         </div>
       </div>
     );
@@ -1696,6 +1790,22 @@ function EnterpriseAdminWorkspace({
             <p className="mt-1 text-[11px] font-semibold leading-relaxed" style={{ color: previewTheme.textSecondary }}>
               Sends invites, locks the rubric, schedules the 5 daily tasks, enables AI review, and opens the live monitoring dashboard.
             </p>
+          </div>
+          <div className="mt-3 grid grid-cols-1 gap-2.5 sm:grid-cols-2">
+            <WorkflowModuleButton
+              id="schedule"
+              label="Schedule rules"
+              detail="Daily unlocks, reviewers, reminders, and invite method."
+              icon={ClipboardCheck}
+              onTabChange={onTabChange}
+            />
+            <WorkflowModuleButton
+              id="governance"
+              label="Governance"
+              detail="Rubric lock, AI review, bias checks, and override reasons."
+              icon={Shield}
+              onTabChange={onTabChange}
+            />
           </div>
           <button
             type="button"
@@ -1945,6 +2055,16 @@ function PreviewBrowserFrame({
   });
   const [activeEnterpriseTab, setActiveEnterpriseTab] = useState<EnterprisePrototypeTabId>(defaultEnterpriseTab);
   const activeEnterpriseCopy = enterpriseTabCopy[activeEnterpriseTab];
+  const handleEnterpriseTabChange = (tabId: EnterprisePrototypeTabId) => {
+    setActiveEnterpriseTab(tabId);
+    const nextCopy = enterpriseTabCopy[tabId];
+    setActiveInteraction({
+      title: nextCopy.title,
+      context: nextCopy.subtitle,
+      status: nextCopy.status,
+      metric: nextCopy.metric,
+    });
+  };
 
   useEffect(() => {
     if (journeyId !== "enterprises") {
@@ -2005,22 +2125,13 @@ function PreviewBrowserFrame({
             <>
               {enterprisePrototypeTabs.map((tab) => {
                 const TabIcon = tab.icon;
-                const active = tab.id === activeEnterpriseTab;
+                const active = tab.id === activeEnterpriseTab || enterpriseTabParent[activeEnterpriseTab] === tab.id;
 
                 return (
                   <button
                     type="button"
                     key={tab.id}
-                    onClick={() => {
-                      setActiveEnterpriseTab(tab.id);
-                      const nextCopy = enterpriseTabCopy[tab.id];
-                      setActiveInteraction({
-                        title: nextCopy.title,
-                        context: nextCopy.subtitle,
-                        status: nextCopy.status,
-                        metric: nextCopy.metric,
-                      });
-                    }}
+                    onClick={() => handleEnterpriseTabChange(tab.id)}
                     className="flex items-center gap-2 rounded-lg border-l-2 px-2.5 py-1.5 text-left text-[10px] font-semibold transition-colors hover:bg-white/[0.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB13B]/60"
                     style={{
                       background: active ? previewTheme.panelElevated : "transparent",
@@ -2116,22 +2227,13 @@ function PreviewBrowserFrame({
                 <div className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] md:hidden [&::-webkit-scrollbar]:hidden">
                   {enterprisePrototypeTabs.map((tab) => {
                     const TabIcon = tab.icon;
-                    const active = tab.id === activeEnterpriseTab;
+                    const active = tab.id === activeEnterpriseTab || enterpriseTabParent[activeEnterpriseTab] === tab.id;
 
                     return (
                       <button
                         type="button"
                         key={tab.id}
-                        onClick={() => {
-                          setActiveEnterpriseTab(tab.id);
-                          const nextCopy = enterpriseTabCopy[tab.id];
-                          setActiveInteraction({
-                            title: nextCopy.title,
-                            context: nextCopy.subtitle,
-                            status: nextCopy.status,
-                            metric: nextCopy.metric,
-                          });
-                        }}
+                        onClick={() => handleEnterpriseTabChange(tab.id)}
                         className="inline-flex shrink-0 items-center gap-2 rounded-lg border px-3 py-2 text-[11px] font-bold transition-colors hover:border-[#F69507]/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB13B]/60"
                         style={{
                           background: active ? previewTheme.accentSoft : previewTheme.card,
@@ -2145,7 +2247,12 @@ function PreviewBrowserFrame({
                     );
                   })}
                 </div>
-                <EnterpriseAdminWorkspace activeTab={activeEnterpriseTab} activeInteraction={activeInteraction} onInteract={setActiveInteraction} />
+                <EnterpriseAdminWorkspace
+                  activeTab={activeEnterpriseTab}
+                  activeInteraction={activeInteraction}
+                  onInteract={setActiveInteraction}
+                  onTabChange={handleEnterpriseTabChange}
+                />
               </div>
             ) : (
               <div className="space-y-4">
