@@ -1883,18 +1883,6 @@ function PreviewBrowserFrame({
           </div>
           {journeyId === "enterprises" ? (
             <>
-              <div className="mb-3 rounded-lg border p-2.5" style={{ background: previewTheme.card, borderColor: previewTheme.borderSoft }}>
-                <p className="text-[10px] font-bold uppercase" style={{ color: previewTheme.textMuted }}>
-                  Enterprise admin
-                </p>
-                <p className="mt-1 text-[11px] font-bold leading-tight" style={{ color: previewTheme.textPrimary }}>
-                  Control dashboard
-                </p>
-                <div className="mt-3 flex flex-wrap gap-1.5">
-                  <StatusPill text="Day 2 live" active />
-                  <StatusPill text="4 programs" />
-                </div>
-              </div>
               {enterprisePrototypeTabs.map((tab) => {
                 const TabIcon = tab.icon;
                 const active = tab.id === activeEnterpriseTab;
