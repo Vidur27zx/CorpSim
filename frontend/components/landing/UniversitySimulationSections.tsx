@@ -526,9 +526,9 @@ function SimulateEasePanel({ step }: { step: WorkflowItem }) {
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35 }}
-      className="mx-auto mt-12 max-w-5xl overflow-hidden rounded-xl border border-white/[0.1] bg-[#080808] shadow-2xl shadow-black/30"
+      className="mx-auto mt-10 max-w-6xl overflow-hidden rounded-xl border border-white/[0.1] bg-[#080808] shadow-2xl shadow-black/30"
     >
-      <div className="flex items-center justify-between gap-4 border-b border-white/[0.08] px-4 py-3">
+      <div className="flex h-11 items-center justify-between gap-4 border-b border-white/[0.08] px-4">
         <div className="flex items-center gap-2">
           <span className="h-2.5 w-2.5 rounded-full bg-slate-700" />
           <span className="h-2.5 w-2.5 rounded-full bg-amber-400" />
@@ -538,22 +538,22 @@ function SimulateEasePanel({ step }: { step: WorkflowItem }) {
         <Calendar className="h-4 w-4 text-slate-600" />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_330px]">
-        <div className="border-b border-white/[0.08] p-5 lg:border-b-0 lg:border-r lg:border-white/[0.08]">
-          <div className="mb-5 rounded-xl border border-white/[0.07] bg-white/[0.03] p-5 text-left">
-            <div className="mb-5 flex flex-wrap items-start justify-between gap-4">
+      <div className="grid min-h-[560px] grid-cols-1 lg:min-h-0 lg:aspect-[16/8.7] lg:grid-cols-[minmax(0,1fr)_300px]">
+        <div className="min-h-0 overflow-y-auto border-b border-white/[0.08] p-4 [scrollbar-width:none] lg:border-b-0 lg:border-r lg:border-white/[0.08] [&::-webkit-scrollbar]:hidden">
+          <div className="mb-4 rounded-xl border border-white/[0.07] bg-white/[0.03] p-4 text-left">
+            <div className="mb-4 flex flex-wrap items-start justify-between gap-4">
               <div className="flex min-w-0 items-start gap-4">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-amber-500/30 bg-amber-500/10">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-amber-500/30 bg-amber-500/10">
                   <PrimaryIcon className="h-5 w-5 text-amber-300" />
                 </div>
                 <div className="min-w-0">
                   <p className="text-[10px] font-bold uppercase text-amber-300/80">{step.label} workflow</p>
-                  <h3 className="mt-1 text-2xl font-black leading-tight text-white">{step.headline}</h3>
+                  <h3 className="mt-1 text-xl font-black leading-tight text-white">{step.headline}</h3>
                   <p className="mt-2 max-w-2xl text-sm font-medium leading-relaxed text-slate-400">{step.description}</p>
                 </div>
               </div>
-              <div className="rounded-xl border border-amber-500/25 bg-amber-500/[0.08] px-4 py-3 text-left">
-                <p className="text-3xl font-black text-white">{step.metric}</p>
+              <div className="rounded-xl border border-amber-500/25 bg-amber-500/[0.08] px-3 py-2 text-left">
+                <p className="text-2xl font-black text-white">{step.metric}</p>
                 <p className="mt-1 text-[10px] font-bold uppercase text-amber-300/80">{step.metricLabel}</p>
               </div>
             </div>
@@ -587,7 +587,7 @@ function SimulateEasePanel({ step }: { step: WorkflowItem }) {
             </div>
           </div>
 
-          <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-3">
+          <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
             {step.progress.map((item) => (
               <div key={item.label} className="rounded-lg border border-white/[0.07] bg-white/[0.03] p-3">
                 <ProgressRow label={item.label} value={item.value} active={item.active} />
@@ -596,12 +596,12 @@ function SimulateEasePanel({ step }: { step: WorkflowItem }) {
           </div>
         </div>
 
-        <div className="p-5 text-left">
-          <div className="mb-5 rounded-xl border border-amber-500/25 bg-amber-500/[0.08] p-4">
+        <div className="min-h-0 overflow-y-auto p-4 text-left [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div className="mb-4 rounded-xl border border-amber-500/25 bg-amber-500/[0.08] p-4">
             <div className="flex items-center justify-between gap-3">
               <div>
                 <p className="text-[10px] font-bold uppercase text-amber-300/80">Active stage</p>
-                <p className="mt-1 text-xl font-black text-white">{step.headline}</p>
+                <p className="mt-1 text-lg font-black leading-tight text-white">{step.headline}</p>
               </div>
               <CheckCircle2 className="h-8 w-8 shrink-0 text-amber-300" />
             </div>
@@ -626,7 +626,7 @@ function SimulateEasePanel({ step }: { step: WorkflowItem }) {
             </div>
           </div>
 
-          <div className="mt-5 rounded-xl border border-white/[0.08] bg-black/25 p-4">
+          <div className="mt-4 rounded-xl border border-white/[0.08] bg-black/25 p-4">
             <p className="mb-4 text-[10px] font-bold uppercase text-slate-600">Readiness signal</p>
             <div className="space-y-4">
               {step.progress.map((item) => (
@@ -698,7 +698,7 @@ export default function UniversitySimulationSections() {
               engineering and management programs.
             </motion.p>
 
-            <motion.div variants={fadeUp} className="mx-auto mt-9 grid max-w-4xl grid-cols-4 gap-4 sm:grid-cols-8">
+            <motion.div variants={fadeUp} className="mx-auto mt-9 grid max-w-5xl grid-cols-4 gap-4 sm:grid-cols-8">
               {workflowSteps.map((step, index) => (
                 <WorkflowStepButton
                   key={step.label}
