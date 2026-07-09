@@ -558,7 +558,7 @@ function PreviewBrowserFrame({
 
   return (
     <div
-      className="relative min-h-[640px] w-full overflow-hidden rounded-2xl border shadow-2xl shadow-black/40 backdrop-blur-xl lg:aspect-[16/10] lg:min-h-0"
+      className="relative min-h-[540px] w-full overflow-hidden rounded-2xl border shadow-2xl shadow-black/40 backdrop-blur-xl lg:aspect-[16/9] lg:min-h-0"
       style={{
         background: "linear-gradient(145deg, rgba(20,20,20,0.92), rgba(11,11,11,0.86))",
         borderColor: "rgba(164, 164, 164, 0.2)",
@@ -612,9 +612,9 @@ function PreviewBrowserFrame({
           })}
         </aside>
 
-        <main className="flex-1 overflow-y-auto p-5 [scrollbar-width:none] sm:p-7 md:p-9 [&::-webkit-scrollbar]:hidden" style={{ background: "rgba(11, 11, 11, 0.88)" }}>
+        <main className="flex-1 overflow-y-auto p-4 [scrollbar-width:none] sm:p-5 md:p-6 [&::-webkit-scrollbar]:hidden" style={{ background: "rgba(11, 11, 11, 0.88)" }}>
           <div className="max-w-4xl">
-            <div className="mb-6">
+            <div className="mb-5">
               <h3 className="text-xl font-bold" style={{ color: previewTheme.textPrimary }}>
                 {preview.title}
               </h3>
@@ -622,7 +622,7 @@ function PreviewBrowserFrame({
                 {preview.subtitle}
               </p>
             </div>
-            <div className="space-y-5">
+            <div className="space-y-4">
               {preview.sections.map((section, index) => (
                 <PreviewSectionRenderer key={`${section.type}-${index}`} section={section} />
               ))}
@@ -1295,14 +1295,14 @@ export default function JourneysSection() {
   const activePreview = activeJourney.steps[activeStep].preview;
 
   return (
-    <section className="bg-[#0B0B0B] px-6 py-24">
+    <section className="bg-[#0B0B0B] px-6 pb-12 pt-24">
       <div className="mx-auto max-w-7xl">
         <motion.div
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, margin: "-100px" }}
           variants={stagger}
-          className="mb-12 text-center"
+          className="mb-10 text-center"
         >
           <motion.div
             variants={fadeUp}
@@ -1324,7 +1324,7 @@ export default function JourneysSection() {
           </motion.div>
         </motion.div>
 
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[370px_minmax(0,1fr)]">
+        <div className="grid grid-cols-1 gap-5 lg:grid-cols-[340px_minmax(0,1fr)]">
           <motion.aside
             initial="hidden"
             whileInView="show"

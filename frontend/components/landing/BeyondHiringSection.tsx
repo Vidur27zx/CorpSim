@@ -66,8 +66,8 @@ function Pill({ children, active }: { children: string; active?: boolean }) {
     <span
       className={`rounded-md border px-2.5 py-1 text-[10px] font-semibold ${
         active
-          ? "border-amber-500/35 bg-amber-500/10 text-amber-300"
-          : "border-white/[0.08] bg-white/[0.03] text-slate-500"
+          ? "border-[#F69507]/35 bg-[#FFB13B]/10 text-[#FFB13B]"
+          : "border-white/[0.08] bg-white/[0.03] text-[#A4A4A4]"
       }`}
     >
       {children}
@@ -79,13 +79,13 @@ function ProgressRow({ label, value, active }: { label: string; value: string; a
   return (
     <div className="space-y-1.5">
       <div className="flex items-center justify-between gap-3">
-        <span className="truncate text-[11px] font-medium text-slate-400">{label}</span>
-        <span className={active ? "text-[11px] font-bold text-amber-300" : "text-[11px] font-semibold text-slate-500"}>
+        <span className="truncate text-[11px] font-medium text-[#A4A4A4]">{label}</span>
+        <span className={active ? "text-[11px] font-bold text-[#FFB13B]" : "text-[11px] font-semibold text-[#A4A4A4]"}>
           {value}
         </span>
       </div>
       <div className="h-1.5 overflow-hidden rounded-full bg-white/[0.06]">
-        <div className={active ? "h-full rounded-full bg-amber-400" : "h-full rounded-full bg-slate-600"} style={{ width: value }} />
+        <div className={active ? "h-full rounded-full bg-[#F69507]" : "h-full rounded-full bg-[#4A4A4A]"} style={{ width: value }} />
       </div>
     </div>
   );
@@ -257,17 +257,17 @@ function BeyondHiringCard({ card }: { card: BeyondHiringCard }) {
   return (
     <motion.article
       variants={fadeUp}
-      className="group flex min-h-[470px] flex-col overflow-hidden rounded-xl border border-white/[0.1] bg-[#0B0B0B] p-4 shadow-2xl shadow-black/20 transition-colors duration-300 hover:border-amber-500/30"
+      className="group flex min-h-[430px] flex-col overflow-hidden rounded-xl border border-white/[0.1] bg-[#0B0B0B] p-4 shadow-2xl shadow-black/20 transition-colors duration-300 hover:border-[#F69507]/35"
     >
-      <div className="h-56 min-h-0">
+      <div className="h-52 min-h-0">
         <CardVisual type={card.visual} />
       </div>
-      <div className="flex flex-1 flex-col justify-end px-1 pb-2 pt-7">
+      <div className="flex flex-1 flex-col justify-end px-1 pb-2 pt-6">
         <div className="mb-5 flex h-9 w-9 items-center justify-center rounded-lg border border-white/[0.08] bg-white/[0.03]">
-          <Icon className="h-4 w-4 text-amber-300" />
+          <Icon className="h-4 w-4 text-[#FFB13B]" />
         </div>
         <h3 className="max-w-sm text-xl font-bold leading-tight text-white">{card.title}</h3>
-        <p className="mt-4 max-w-sm text-sm font-medium leading-relaxed text-slate-400">{card.description}</p>
+        <p className="mt-4 max-w-sm text-sm font-medium leading-relaxed text-[#A4A4A4]">{card.description}</p>
       </div>
     </motion.article>
   );
@@ -275,19 +275,19 @@ function BeyondHiringCard({ card }: { card: BeyondHiringCard }) {
 
 export default function BeyondHiringSection() {
   return (
-    <section className="bg-[#050505] px-6 py-24">
+    <section className="border-t border-[#4A4A4A]/25 bg-[#0B0B0B] px-6 pb-24 pt-12">
       <div className="mx-auto max-w-6xl">
         <motion.div
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, margin: "-100px" }}
           variants={stagger}
-          className="mb-12 grid gap-5 lg:grid-cols-[0.95fr_1.05fr] lg:items-end"
+          className="mb-10 grid gap-5 lg:grid-cols-[0.95fr_1.05fr] lg:items-end"
         >
-          <motion.h2 variants={fadeUp} className="max-w-3xl text-4xl font-extrabold leading-tight text-white md:text-5xl">
+          <motion.h2 variants={fadeUp} className="max-w-3xl text-3xl font-extrabold leading-tight text-white md:text-4xl">
             Go beyond traditional hiring
           </motion.h2>
-          <motion.p variants={fadeUp} className="max-w-2xl text-base font-medium leading-relaxed text-slate-400 lg:justify-self-end">
+          <motion.p variants={fadeUp} className="max-w-2xl text-sm font-medium leading-relaxed text-[#A4A4A4] lg:justify-self-end">
             Move past resumes, interviews, and assumptions. Evaluate talent in real-world scenarios where skills,
             decision-making, and execution speak for themselves.
           </motion.p>
