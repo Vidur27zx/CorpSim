@@ -1070,9 +1070,8 @@ const governanceRows = [
 
 function MiniField({ label, value, active }: { label: string; value: string; active?: boolean }) {
   return (
-    <button
-      type="button"
-      className="rounded-lg border px-2.5 py-2 text-left transition-colors hover:border-[#F69507]/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB13B]/60"
+    <div
+      className="rounded-lg border px-2.5 py-2 text-left"
       style={{
         background: active ? previewTheme.accentSoft : previewTheme.card,
         borderColor: active ? previewTheme.accentBorder : previewTheme.borderSoft,
@@ -1084,16 +1083,13 @@ function MiniField({ label, value, active }: { label: string; value: string; act
       <p className="mt-1 truncate text-xs font-bold" style={{ color: active ? previewTheme.accent : previewTheme.textPrimary }}>
         {value}
       </p>
-    </button>
+    </div>
   );
 }
 
 function MiniProgress({ label, value, active }: { label: string; value: number; active?: boolean }) {
   return (
-    <button
-      type="button"
-      className="w-full rounded-lg p-2 text-left transition-colors hover:bg-white/[0.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB13B]/60"
-    >
+    <div className="w-full rounded-lg p-2 text-left">
       <div className="flex items-center justify-between gap-3">
         <span className="truncate text-[10px] font-semibold" style={{ color: previewTheme.textSecondary }}>
           {label}
@@ -1105,8 +1101,45 @@ function MiniProgress({ label, value, active }: { label: string; value: number; 
       <div className="mt-1 h-1.5 overflow-hidden rounded-full" style={{ background: previewTheme.borderSoft }}>
         <div className="h-full rounded-full" style={{ width: `${value}%`, background: active ? previewTheme.accent : previewTheme.grayBarLight }} />
       </div>
-    </button>
+    </div>
   );
+}
+
+function getActionOutcome(interaction: PreviewInteraction) {
+  const status = interaction.status.toLowerCase();
+
+  if (status.includes("dashboard live")) return "Admins see live programs, participants, review queues, and cohort readiness at a glance.";
+  if (status.includes("programs mapped")) return "Admins can open, duplicate, compare, or schedule role-based simulations from the program library.";
+  if (status.includes("templates ready")) return "A template can be converted into a full 3-5 day simulation with role, skills, and daily tasks prefilled.";
+  if (status.includes("schedule draft")) return "The admin sets cohort, daily unlock time, reviewers, reminders, and publish rules before launch.";
+  if (status.includes("parameters open")) return "Simulation behavior can be tuned before launch: ambiguity, AI guidance, difficulty, and scoring strictness.";
+  if (status.includes("stakeholders active")) return "AI personas create realistic workplace messages, constraints, and curveballs during the simulation.";
+  if (status.includes("program brief open")) return "The program brief defines the company, markets, role context, duration, and final candidate output.";
+  if (status.includes("daily tasks configured")) return "Candidates receive one workplace task per day across the 3-5 day simulation window.";
+  if (status.includes("builder open")) return "The builder generates the daily sequence, resource pack, stakeholder events, and evaluation rubric.";
+  if (status.includes("resources ready")) return "Admins control which briefs, sheets, personas, and emails candidates use inside the workspace.";
+  if (status.includes("rubric calibrated")) return "Each submission is scored against the eight pillars and mapped to role-readiness signals.";
+  if (status.includes("assignment ready")) return "Publishing sends invites, schedules daily unlocks, enables reminders, and opens live monitoring.";
+  if (status.includes("live monitoring")) return "Admins can see completion, stuck points, at-risk candidates, and quality signals while the simulation runs.";
+  if (status.includes("evidence review")) return "Reviewers inspect candidate submissions, AI notes, skill signals, and shortlist recommendations.";
+  if (status.includes("controls locked")) return "Rubrics, score review, bias checks, and override rules are enforced before reports are exported.";
+  if (status.includes("insights generated")) return "CorpSim summarizes completion, readiness, top skills, gaps, and recommended follow-up actions.";
+  if (status.includes("reports ready")) return "Stakeholder-ready exports can be shared with HR, faculty, placement teams, or leadership.";
+  if (status.includes("program opened")) return "Program detail is selected; the admin can duplicate, monitor, or move it into setup.";
+  if (status.includes("template")) return "Template selection pre-fills role, duration, skills, resources, and rubric structure.";
+  if (status.includes("schedule action")) return "Daily unlocks, reviewer access, reminders, and participant invites are queued.";
+  if (status.includes("schedule item")) return "The selected day opens as an editable assignment task inside the program plan.";
+  if (status.includes("parameter")) return "Future prompts, AI guidance, scoring strictness, and pressure level adjust for the cohort.";
+  if (status.includes("persona")) return "This AI stakeholder can message candidates, add constraints, or trigger a curveball.";
+  if (status.includes("resource")) return "The selected file becomes part of the candidate workspace and admin evidence pack.";
+  if (status.includes("generation")) return "CorpSim drafts daily tasks, resource prompts, stakeholder events, and scoring criteria.";
+  if (status.includes("publish")) return "Invites are sent, Day 1 unlocks, and live monitoring becomes active for the cohort.";
+  if (status.includes("constraint")) return "The constraint is marked for admin review and can be added into the live simulation.";
+  if (status.includes("control")) return "Governance settings update the review flow before scores can be exported.";
+  if (status.includes("export")) return "A stakeholder-ready report is prepared for HR, faculty, placement, or leadership review.";
+  if (status.includes("advance") || status.includes("review") || status.includes("training")) return "Candidate evidence is opened so reviewers can compare submissions before shortlisting.";
+
+  return "The workspace updates the selected detail so a decision-maker can see what happens next.";
 }
 
 function EnterpriseAdminWorkspace({
@@ -1568,14 +1601,14 @@ function EnterpriseAdminWorkspace({
         <div className="rounded-lg border p-3" style={{ background: previewTheme.card, borderColor: previewTheme.borderSoft }}>
           <SectionTitle title="Publish Settings" />
           {["Daily reminders enabled", "Faculty / HR visibility enabled", "Late-submission alerts", "AI evaluation after each day"].map((item) => (
-            <button key={item} type="button" className="mb-2 flex w-full items-center gap-2.5 text-left">
+            <div key={item} className="mb-2 flex w-full items-center gap-2.5 text-left">
               <div className="flex h-5 w-5 items-center justify-center rounded-md border" style={{ background: previewTheme.accentSoft, borderColor: previewTheme.accentBorder }}>
                 <Check className="h-3 w-3" style={{ color: previewTheme.accent }} />
               </div>
               <span className="text-[11px] font-semibold" style={{ color: previewTheme.textSecondary }}>
                 {item}
               </span>
-            </button>
+            </div>
           ))}
           <button
             type="button"
@@ -1966,7 +1999,7 @@ function PreviewBrowserFrame({
               >
                 <div className="mb-2 flex items-center justify-between gap-2">
                   <p className="text-[10px] font-bold uppercase" style={{ color: previewTheme.accent }}>
-                    Active signal
+                    Action preview
                   </p>
                   {activeInteraction.metric && <StatusPill text={activeInteraction.metric} active />}
                 </div>
@@ -1979,6 +2012,16 @@ function PreviewBrowserFrame({
                 <p className="mt-2 text-[10px] font-semibold uppercase" style={{ color: previewTheme.textMuted }}>
                   {activeInteraction.status}
                 </p>
+                {journeyId === "enterprises" && (
+                  <div className="mt-2 rounded-md border px-2 py-1.5" style={{ background: previewTheme.bg, borderColor: previewTheme.borderSoft }}>
+                    <p className="text-[9px] font-bold uppercase" style={{ color: previewTheme.textMuted }}>
+                      Next in product
+                    </p>
+                    <p className="mt-1 line-clamp-2 text-[10px] font-semibold leading-relaxed" style={{ color: previewTheme.textSecondary }}>
+                      {getActionOutcome(activeInteraction)}
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
             {journeyId === "enterprises" ? (
