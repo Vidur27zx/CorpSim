@@ -16,7 +16,7 @@ import {
   Shield,
 } from "lucide-react";
 import BeyondHiringSection from "@/components/landing/BeyondHiringSection";
-import JourneysSection from "@/components/landing/JourneysSection";
+import EnterpriseSimulationPreview from "@/components/landing/EnterpriseSimulationPreview";
 import {
   Radar,
   RadarChart,
@@ -242,8 +242,8 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Three Journeys */}
-      <JourneysSection />
+      {/* Enterprise Simulation Preview */}
+      <EnterpriseSimulationPreview />
 
       {/* Beyond Hiring */}
       <BeyondHiringSection />
