@@ -885,6 +885,86 @@ const mokabaraDailyTasks = [
   },
 ];
 
+const mokabaraResourcePack = [
+  {
+    title: "Market research brief",
+    detail: "Demand signals, market sizing prompts, customer segments, tourism/business travel context, and early competitor notes.",
+    icon: FileText,
+    signal: "Demand",
+    bullets: ["Singapore: higher purchasing power", "Malaysia: broader volume potential", "Premium cabin luggage demand rising"],
+  },
+  {
+    title: "Logistics cost sheet",
+    detail: "Warehousing, duties, returns, shipping timelines, last-mile delivery assumptions, and operating cost ranges.",
+    icon: ClipboardCheck,
+    signal: "Cost risk",
+    bullets: ["Singapore warehouse cost is high", "Malaysia last-mile coverage varies by city", "Return logistics affects margin"],
+  },
+  {
+    title: "Competitor snapshot",
+    detail: "Local and global luggage brands, marketplace pricing, D2C offers, retail presence, and positioning gaps.",
+    icon: Search,
+    signal: "Positioning",
+    bullets: ["Marketplace discounting pressure", "Premium utility positioning gap", "Retail partners demand launch support"],
+  },
+  {
+    title: "Customer personas",
+    detail: "Frequent flyers, students, young professionals, founders, and business travelers with channel and price sensitivity.",
+    icon: Users,
+    signal: "Segments",
+    bullets: ["Students prioritize durability and price", "Business travelers value warranty and cabin fit", "Young professionals respond to creators"],
+  },
+  {
+    title: "Leadership email",
+    detail: "CEO asks for a country-first recommendation with launch sequence, operating model, risk view, and 90-day KPIs.",
+    icon: Mail,
+    signal: "Executive ask",
+    bullets: ["Pick one country first", "Defend channel choice", "Show risk and KPI logic"],
+  },
+  {
+    title: "Sales channel options",
+    detail: "Marketplace, D2C, retail partnerships, influencer-led launch, campus communities, and corporate gifting channels.",
+    icon: Globe,
+    signal: "GTM",
+    bullets: ["Marketplace for discovery", "D2C for brand control", "Retail for trust and trial"],
+  },
+];
+
+const mokabaraCandidateEvidence = [
+  {
+    name: "Aarav Mehta",
+    day: "Day 2",
+    crs: "81",
+    signal: "Logistics reasoning",
+    recommendation: "Review",
+    note: "Good Singapore warehouse cost comparison, but return-cost sensitivity needs stronger evidence.",
+  },
+  {
+    name: "Diya Rao",
+    day: "Day 2",
+    crs: "88",
+    signal: "Market analysis",
+    recommendation: "Advance",
+    note: "Clear country sequencing, strong demand logic, and practical marketplace-to-D2C transition plan.",
+  },
+  {
+    name: "Kabir Shah",
+    day: "Day 1",
+    crs: "62",
+    signal: "Needs structure",
+    recommendation: "Needs training",
+    note: "Identified demand, but missed import duties, returns, and channel economics in the recommendation.",
+  },
+  {
+    name: "Naina Iyer",
+    day: "Day 2",
+    crs: "91",
+    signal: "Executive clarity",
+    recommendation: "Advance",
+    note: "Strong executive memo with clear Singapore-first thesis and Malaysia pilot risk controls.",
+  },
+];
+
 function MiniField({ label, value, active }: { label: string; value: string; active?: boolean }) {
   return (
     <button
@@ -928,9 +1008,11 @@ function MiniProgress({ label, value, active }: { label: string; value: number; 
 
 function EnterpriseAdminWorkspace({
   activeTab,
+  activeInteraction,
   onInteract,
 }: {
   activeTab: EnterprisePrototypeTabId;
+  activeInteraction: PreviewInteraction;
   onInteract: (interaction: PreviewInteraction) => void;
 }) {
   if (activeTab === "daily") {
@@ -1043,41 +1125,60 @@ function EnterpriseAdminWorkspace({
   }
 
   if (activeTab === "resources") {
+    const selectedResource =
+      mokabaraResourcePack.find((resource) => resource.title === activeInteraction.title) ?? mokabaraResourcePack[3];
+
     return (
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        {[
-          ["Market research brief", "Demand signals and consumer segments", FileText],
-          ["Logistics cost sheet", "Warehousing, duties, last-mile ranges", ClipboardCheck],
-          ["Competitor snapshot", "Brands, pricing, channels, positioning", Search],
-          ["Customer personas", "Frequent flyers, students, business travelers", Users],
-          ["Leadership email", "CEO asks for country launch recommendation", Mail],
-          ["Sales channel options", "Marketplace, D2C, retail, B2B partnerships", Globe],
-        ].map(([title, detail, Icon], index) => {
-          const ResourceIcon = Icon as LucideIcon;
+      <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_280px]">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          {mokabaraResourcePack.map((resource) => {
+          const ResourceIcon = resource.icon;
+          const selected = selectedResource.title === resource.title;
           return (
             <button
               type="button"
-              key={title as string}
+              key={resource.title}
               onClick={() =>
                 onInteract({
-                  title: title as string,
-                  context: detail as string,
+                  title: resource.title,
+                  context: resource.detail,
                   status: "Resource opened",
+                  metric: resource.signal,
                 })
               }
               className="rounded-xl border p-3 text-left transition-colors hover:border-[#F69507]/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB13B]/60"
-              style={{ background: index === 1 ? previewTheme.accentSoft : previewTheme.card, borderColor: index === 1 ? previewTheme.accentBorder : previewTheme.borderSoft }}
+              style={{ background: selected ? previewTheme.accentSoft : previewTheme.card, borderColor: selected ? previewTheme.accentBorder : previewTheme.borderSoft }}
             >
-              <ResourceIcon className="mb-3 h-4 w-4" style={{ color: index === 1 ? previewTheme.accent : previewTheme.textMuted }} />
+              <ResourceIcon className="mb-3 h-4 w-4" style={{ color: selected ? previewTheme.accent : previewTheme.textMuted }} />
               <p className="text-sm font-bold" style={{ color: previewTheme.textPrimary }}>
-                {title as string}
+                {resource.title}
               </p>
               <p className="mt-1 text-xs leading-relaxed" style={{ color: previewTheme.textMuted }}>
-                {detail as string}
+                {resource.detail}
               </p>
             </button>
           );
         })}
+        </div>
+        <div className="rounded-xl border p-4" style={{ background: previewTheme.accentSoft, borderColor: previewTheme.accentBorder }}>
+          <SectionTitle title="Resource detail" />
+          <p className="text-base font-black leading-tight" style={{ color: previewTheme.textPrimary }}>
+            {selectedResource.title}
+          </p>
+          <p className="mt-2 text-xs leading-relaxed" style={{ color: previewTheme.textSecondary }}>
+            {selectedResource.detail}
+          </p>
+          <div className="mt-4 space-y-2">
+            {selectedResource.bullets.map((bullet) => (
+              <div key={bullet} className="rounded-lg border px-3 py-2 text-[11px] font-semibold" style={{ background: previewTheme.card, borderColor: previewTheme.borderSoft, color: previewTheme.textSecondary }}>
+                {bullet}
+              </div>
+            ))}
+          </div>
+          <div className="mt-4">
+            <StatusPill text={selectedResource.signal} active />
+          </div>
+        </div>
       </div>
     );
   }
@@ -1177,6 +1278,9 @@ function EnterpriseAdminWorkspace({
   }
 
   if (activeTab === "evidence") {
+    const selectedCandidate =
+      mokabaraCandidateEvidence.find((candidate) => candidate.name === activeInteraction.title) ?? mokabaraCandidateEvidence[1];
+
     return (
       <div className="grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
         <div className="overflow-hidden rounded-xl border" style={{ borderColor: previewTheme.borderSoft }}>
@@ -1185,43 +1289,38 @@ function EnterpriseAdminWorkspace({
             <span>CRS</span>
             <span>Signal</span>
           </div>
-          {[
-            ["Aarav Mehta", "Day 2", "81", "Logistics reasoning"],
-            ["Diya Rao", "Day 2", "88", "Market analysis"],
-            ["Kabir Shah", "Day 1", "62", "Needs structure"],
-            ["Naina Iyer", "Day 2", "91", "Executive clarity"],
-          ].map((row, index) => (
+          {mokabaraCandidateEvidence.map((candidate) => (
             <button
               type="button"
-              key={row[0]}
+              key={candidate.name}
               onClick={() =>
                 onInteract({
-                  title: row[0],
-                  context: `${row[1]} submission selected. Strongest signal: ${row[3]}.`,
-                  status: index === 2 ? "Needs training" : "Candidate evidence opened",
-                  metric: row[2],
+                  title: candidate.name,
+                  context: `${candidate.day} submission selected. Strongest signal: ${candidate.signal}.`,
+                  status: candidate.recommendation,
+                  metric: candidate.crs,
                 })
               }
               className="grid w-full grid-cols-[1fr_54px_1fr] gap-3 border-b px-3 py-2.5 text-left text-xs transition-colors hover:bg-white/[0.04]"
-              style={{ background: index === 1 ? previewTheme.accentSoft : previewTheme.card, borderColor: previewTheme.borderSoft }}
+              style={{ background: selectedCandidate.name === candidate.name ? previewTheme.accentSoft : previewTheme.card, borderColor: previewTheme.borderSoft }}
             >
-              <span className="font-bold" style={{ color: previewTheme.textPrimary }}>{row[0]}</span>
-              <span style={{ color: previewTheme.accent }}>{row[2]}</span>
-              <span className="truncate" style={{ color: previewTheme.textMuted }}>{row[3]}</span>
+              <span className="font-bold" style={{ color: previewTheme.textPrimary }}>{candidate.name}</span>
+              <span style={{ color: previewTheme.accent }}>{candidate.crs}</span>
+              <span className="truncate" style={{ color: previewTheme.textMuted }}>{candidate.signal}</span>
             </button>
           ))}
         </div>
         <div className="rounded-xl border p-4" style={{ background: previewTheme.accentSoft, borderColor: previewTheme.accentBorder }}>
           <SectionTitle title="Evidence preview" />
           <p className="text-sm font-bold" style={{ color: previewTheme.textPrimary }}>
-            Recommendation: launch Singapore first, validate Malaysia through marketplace pilot.
+            {selectedCandidate.name} · {selectedCandidate.day}
           </p>
           <p className="mt-2 text-xs leading-relaxed" style={{ color: previewTheme.textSecondary }}>
-            AI notes: Strong market logic, clear channel sequencing, needs deeper return-cost sensitivity.
+            {selectedCandidate.note}
           </p>
           <div className="mt-4 grid grid-cols-2 gap-2">
-            <MiniField label="Decision" value="Advance" active />
-            <MiniField label="Risk" value="Returns model" />
+            <MiniField label="Decision" value={selectedCandidate.recommendation} active />
+            <MiniField label="Signal" value={selectedCandidate.signal} />
           </div>
         </div>
       </div>
@@ -1344,7 +1443,7 @@ function PreviewBrowserFrame({
       </div>
 
       <div className="relative z-20 flex h-[calc(100%-2.5rem)]">
-        <aside className="hidden w-56 flex-col gap-1 border-r p-4 md:flex" style={{ background: "rgba(11, 11, 11, 0.82)", borderColor: previewTheme.borderSoft }}>
+        <aside className="hidden w-56 flex-col gap-1 overflow-y-auto border-r p-4 [scrollbar-width:none] md:flex [&::-webkit-scrollbar]:hidden" style={{ background: "rgba(11, 11, 11, 0.82)", borderColor: previewTheme.borderSoft }}>
           <div className="mb-5 flex items-center gap-2 px-2">
             <div className="rounded-lg border p-1.5" style={{ background: previewTheme.bg, borderColor: previewTheme.accentBorder }}>
               <Image src="/pidot-logo.png" alt="Pi Dot" width={64} height={18} className="h-4 w-auto" />
@@ -1499,7 +1598,7 @@ function PreviewBrowserFrame({
                     );
                   })}
                 </div>
-                <EnterpriseAdminWorkspace activeTab={activeEnterpriseTab} onInteract={setActiveInteraction} />
+                <EnterpriseAdminWorkspace activeTab={activeEnterpriseTab} activeInteraction={activeInteraction} onInteract={setActiveInteraction} />
               </div>
             ) : (
               <div className="space-y-4">
