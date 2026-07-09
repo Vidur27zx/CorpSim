@@ -92,6 +92,13 @@ type PreviewData = {
   sections: PreviewSection[];
 };
 
+type PreviewInteraction = {
+  title: string;
+  context: string;
+  status: string;
+  metric?: string;
+};
+
 type JourneyStep = {
   icon: LucideIcon;
   title: string;
@@ -176,13 +183,30 @@ function StatusPill({ text, active }: { text: string; active?: boolean }) {
   );
 }
 
-function MetricCard({ metric }: { metric: PreviewMetric }) {
+function MetricCard({
+  metric,
+  active,
+  onInteract,
+}: {
+  metric: PreviewMetric;
+  active?: boolean;
+  onInteract: (interaction: PreviewInteraction) => void;
+}) {
   return (
-    <div
-      className="rounded-lg border p-3"
+    <button
+      type="button"
+      onClick={() =>
+        onInteract({
+          title: metric.label,
+          context: metric.sub ?? "Live performance signal",
+          status: metric.highlight ? "High priority signal" : "Available for review",
+          metric: metric.value,
+        })
+      }
+      className="rounded-lg border p-3 text-left transition-all hover:-translate-y-0.5 hover:border-[#F69507]/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB13B]/60"
       style={{
-        background: metric.highlight ? previewTheme.accentSoft : previewTheme.card,
-        borderColor: metric.highlight ? previewTheme.accentBorder : previewTheme.borderSoft,
+        background: active || metric.highlight ? previewTheme.accentSoft : previewTheme.card,
+        borderColor: active || metric.highlight ? previewTheme.accentBorder : previewTheme.borderSoft,
       }}
     >
       <p className="text-lg font-bold" style={{ color: metric.highlight ? previewTheme.accent : previewTheme.textPrimary }}>
@@ -196,7 +220,7 @@ function MetricCard({ metric }: { metric: PreviewMetric }) {
           {metric.sub}
         </p>
       )}
-    </div>
+    </button>
   );
 }
 
@@ -231,7 +255,15 @@ function SectionTitle({ title }: { title?: string }) {
   );
 }
 
-function PreviewCardGrid({ section }: { section: Extract<PreviewSection, { type: "cards" }> }) {
+function PreviewCardGrid({
+  section,
+  activeTitle,
+  onInteract,
+}: {
+  section: Extract<PreviewSection, { type: "cards" }>;
+  activeTitle?: string;
+  onInteract: (interaction: PreviewInteraction) => void;
+}) {
   const gridClass = {
     2: "md:grid-cols-2",
     3: "md:grid-cols-3",
@@ -246,12 +278,21 @@ function PreviewCardGrid({ section }: { section: Extract<PreviewSection, { type:
           const Icon = item.icon ?? FileText;
 
           return (
-            <div
+            <button
+              type="button"
               key={item.title}
-              className="rounded-xl border p-3 transition-colors"
+              onClick={() =>
+                onInteract({
+                  title: item.title,
+                  context: item.meta ?? item.detail ?? "Simulation workspace item",
+                  status: item.tag ?? (item.selected ? "Selected for review" : "Ready to inspect"),
+                  metric: item.detail,
+                })
+              }
+              className="rounded-xl border p-3 text-left transition-all hover:-translate-y-0.5 hover:border-[#F69507]/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB13B]/60"
               style={{
-                background: item.selected ? previewTheme.accentSoft : previewTheme.card,
-                borderColor: item.selected ? previewTheme.accentBorder : previewTheme.borderSoft,
+                background: activeTitle === item.title || item.selected ? previewTheme.accentSoft : previewTheme.card,
+                borderColor: activeTitle === item.title || item.selected ? previewTheme.accentBorder : previewTheme.borderSoft,
               }}
             >
               <div className="mb-3 flex items-start justify-between gap-3">
@@ -259,12 +300,12 @@ function PreviewCardGrid({ section }: { section: Extract<PreviewSection, { type:
                   className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border"
                   style={{
                     background: previewTheme.panelElevated,
-                    borderColor: item.selected ? previewTheme.accentBorder : previewTheme.borderSoft,
+                    borderColor: activeTitle === item.title || item.selected ? previewTheme.accentBorder : previewTheme.borderSoft,
                   }}
                 >
-                  <Icon className="h-4 w-4" style={{ color: item.selected ? previewTheme.accent : previewTheme.textMuted }} />
+                  <Icon className="h-4 w-4" style={{ color: activeTitle === item.title || item.selected ? previewTheme.accent : previewTheme.textMuted }} />
                 </div>
-                {item.tag && <StatusPill text={item.tag} active={item.selected} />}
+                {item.tag && <StatusPill text={item.tag} active={activeTitle === item.title || item.selected} />}
               </div>
               <p className="text-sm font-bold" style={{ color: previewTheme.textPrimary }}>
                 {item.title}
@@ -279,7 +320,7 @@ function PreviewCardGrid({ section }: { section: Extract<PreviewSection, { type:
                   {item.detail}
                 </p>
               )}
-            </div>
+            </button>
           );
         })}
       </div>
@@ -287,7 +328,15 @@ function PreviewCardGrid({ section }: { section: Extract<PreviewSection, { type:
   );
 }
 
-function DataTable({ section }: { section: Extract<PreviewSection, { type: "table" }> }) {
+function DataTable({
+  section,
+  activeTitle,
+  onInteract,
+}: {
+  section: Extract<PreviewSection, { type: "table" }>;
+  activeTitle?: string;
+  onInteract: (interaction: PreviewInteraction) => void;
+}) {
   return (
     <div>
       <SectionTitle title={section.title} />
@@ -307,7 +356,29 @@ function DataTable({ section }: { section: Extract<PreviewSection, { type: "tabl
               const rowHighlighted = section.table.highlightRows?.includes(rowIndex);
 
               return (
-                <tr key={row.join("-")} className="border-t" style={{ borderColor: previewTheme.borderSoft }}>
+                <tr
+                  key={row.join("-")}
+                  role="button"
+                  tabIndex={0}
+                  onClick={() =>
+                    onInteract({
+                      title: row[0],
+                      context: row.slice(1).join(" / "),
+                      status: rowHighlighted ? "Recommended action" : "Candidate evidence opened",
+                    })
+                  }
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter" || event.key === " ") {
+                      onInteract({
+                        title: row[0],
+                        context: row.slice(1).join(" / "),
+                        status: rowHighlighted ? "Recommended action" : "Candidate evidence opened",
+                      });
+                    }
+                  }}
+                  className="cursor-pointer border-t transition-colors hover:bg-white/[0.04] focus-visible:outline-none"
+                  style={{ borderColor: previewTheme.borderSoft, background: activeTitle === row[0] ? previewTheme.accentSoft : undefined }}
+                >
                   {row.map((cell, cellIndex) => {
                     const cellHighlighted = section.table.highlightCells?.includes(cell);
 
@@ -333,7 +404,15 @@ function DataTable({ section }: { section: Extract<PreviewSection, { type: "tabl
   );
 }
 
-function ColumnBoard({ section }: { section: Extract<PreviewSection, { type: "columns" }> }) {
+function ColumnBoard({
+  section,
+  activeTitle,
+  onInteract,
+}: {
+  section: Extract<PreviewSection, { type: "columns" }>;
+  activeTitle?: string;
+  onInteract: (interaction: PreviewInteraction) => void;
+}) {
   return (
     <div>
       <SectionTitle title={section.title} />
@@ -352,17 +431,25 @@ function ColumnBoard({ section }: { section: Extract<PreviewSection, { type: "co
             </p>
             <div className="space-y-2">
               {column.items.map((item, index) => (
-                <div
+                <button
+                  type="button"
                   key={item}
-                  className="rounded-lg border px-3 py-2 text-[11px]"
+                  onClick={() =>
+                    onInteract({
+                      title: item,
+                      context: `${column.title} workflow`,
+                      status: column.active ? "Currently in focus" : "Pipeline item opened",
+                    })
+                  }
+                  className="w-full rounded-lg border px-3 py-2 text-left text-[11px] transition-colors hover:border-[#F69507]/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB13B]/60"
                   style={{
-                    background: index === 0 && column.active ? previewTheme.panel : previewTheme.card,
-                    borderColor: index === 0 && column.active ? previewTheme.accentBorder : previewTheme.borderSoft,
+                    background: activeTitle === item || (index === 0 && column.active) ? previewTheme.panel : previewTheme.card,
+                    borderColor: activeTitle === item || (index === 0 && column.active) ? previewTheme.accentBorder : previewTheme.borderSoft,
                     color: previewTheme.textSecondary,
                   }}
                 >
                   {item}
-                </div>
+                </button>
               ))}
             </div>
           </div>
@@ -372,31 +459,59 @@ function ColumnBoard({ section }: { section: Extract<PreviewSection, { type: "co
   );
 }
 
-function Timeline({ section }: { section: Extract<PreviewSection, { type: "timeline" }> }) {
+function Timeline({
+  section,
+  activeTitle,
+  onInteract,
+}: {
+  section: Extract<PreviewSection, { type: "timeline" }>;
+  activeTitle?: string;
+  onInteract: (interaction: PreviewInteraction) => void;
+}) {
   return (
     <div className="rounded-xl border p-4" style={{ background: previewTheme.card, borderColor: previewTheme.borderSoft }}>
       <SectionTitle title={section.title} />
       <div className="space-y-3">
         {section.items.map((item) => (
-          <div key={`${item.time}-${item.title}`} className="flex items-center gap-3">
+          <button
+            type="button"
+            key={`${item.time}-${item.title}`}
+            onClick={() =>
+              onInteract({
+                title: item.title,
+                context: `Scheduled at ${item.time}`,
+                status: item.active ? "Current task in progress" : "Queued workflow event",
+              })
+            }
+            className="flex w-full items-center gap-3 rounded-lg px-2 py-1 text-left transition-colors hover:bg-white/[0.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB13B]/60"
+            style={{ background: activeTitle === item.title ? previewTheme.accentSoft : undefined }}
+          >
             <div
               className="h-2.5 w-2.5 rounded-full"
-              style={{ background: item.active ? previewTheme.accent : previewTheme.grayBarLight }}
+              style={{ background: activeTitle === item.title || item.active ? previewTheme.accent : previewTheme.grayBarLight }}
             />
-            <span className="w-16 text-[11px] font-semibold" style={{ color: item.active ? previewTheme.accent : previewTheme.textMuted }}>
+            <span className="w-16 text-[11px] font-semibold" style={{ color: activeTitle === item.title || item.active ? previewTheme.accent : previewTheme.textMuted }}>
               {item.time}
             </span>
             <span className="text-xs" style={{ color: previewTheme.textSecondary }}>
               {item.title}
             </span>
-          </div>
+          </button>
         ))}
       </div>
     </div>
   );
 }
 
-function Checklist({ section }: { section: Extract<PreviewSection, { type: "checklist" }> }) {
+function Checklist({
+  section,
+  activeTitle,
+  onInteract,
+}: {
+  section: Extract<PreviewSection, { type: "checklist" }>;
+  activeTitle?: string;
+  onInteract: (interaction: PreviewInteraction) => void;
+}) {
   return (
     <div className="rounded-xl border p-4" style={{ background: previewTheme.card, borderColor: previewTheme.borderSoft }}>
       <SectionTitle title={section.title} />
@@ -405,20 +520,32 @@ function Checklist({ section }: { section: Extract<PreviewSection, { type: "chec
           const active = section.activeIndex === index;
 
           return (
-            <div key={item} className="flex items-center gap-3">
+            <button
+              type="button"
+              key={item}
+              onClick={() =>
+                onInteract({
+                  title: item,
+                  context: "Evaluation checklist",
+                  status: active ? "Primary checkpoint" : "Checkpoint available",
+                })
+              }
+              className="flex w-full items-center gap-3 rounded-lg px-2 py-1 text-left transition-colors hover:bg-white/[0.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB13B]/60"
+              style={{ background: activeTitle === item ? previewTheme.accentSoft : undefined }}
+            >
               <div
                 className="flex h-5 w-5 items-center justify-center rounded-md border"
                 style={{
-                  background: active ? previewTheme.accentSoft : previewTheme.panelElevated,
-                  borderColor: active ? previewTheme.accentBorder : previewTheme.border,
+                  background: activeTitle === item || active ? previewTheme.accentSoft : previewTheme.panelElevated,
+                  borderColor: activeTitle === item || active ? previewTheme.accentBorder : previewTheme.border,
                 }}
               >
-                <Check className="h-3 w-3" style={{ color: active ? previewTheme.accent : previewTheme.textMuted }} />
+                <Check className="h-3 w-3" style={{ color: activeTitle === item || active ? previewTheme.accent : previewTheme.textMuted }} />
               </div>
               <span className="text-xs" style={{ color: active ? previewTheme.textPrimary : previewTheme.textSecondary }}>
                 {item}
               </span>
-            </div>
+            </button>
           );
         })}
       </div>
@@ -426,30 +553,69 @@ function Checklist({ section }: { section: Extract<PreviewSection, { type: "chec
   );
 }
 
-function EditorPreview({ section }: { section: Extract<PreviewSection, { type: "editor" }> }) {
+function EditorPreview({
+  section,
+  activeTitle,
+  onInteract,
+}: {
+  section: Extract<PreviewSection, { type: "editor" }>;
+  activeTitle?: string;
+  onInteract: (interaction: PreviewInteraction) => void;
+}) {
   return (
     <div className="rounded-xl border p-4" style={{ background: previewTheme.card, borderColor: previewTheme.borderSoft }}>
       <SectionTitle title={section.title} />
-      <div className="mb-3 rounded-lg border px-3 py-2" style={{ background: previewTheme.panelElevated, borderColor: previewTheme.border }}>
+      <button
+        type="button"
+        onClick={() =>
+          onInteract({
+            title: section.subject,
+            context: section.title,
+            status: "Subject opened for review",
+          })
+        }
+        className="mb-3 w-full rounded-lg border px-3 py-2 text-left transition-colors hover:border-[#F69507]/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB13B]/60"
+        style={{ background: activeTitle === section.subject ? previewTheme.accentSoft : previewTheme.panelElevated, borderColor: activeTitle === section.subject ? previewTheme.accentBorder : previewTheme.border }}
+      >
         <p className="text-[11px]" style={{ color: previewTheme.textMuted }}>
           Subject
         </p>
         <p className="text-sm font-semibold" style={{ color: previewTheme.textPrimary }}>
           {section.subject}
         </p>
-      </div>
+      </button>
       <div className="space-y-2">
         {section.lines.map((line) => (
-          <div key={line} className="rounded-md px-3 py-2 text-xs" style={{ background: previewTheme.panel, color: previewTheme.textSecondary }}>
+          <button
+            type="button"
+            key={line}
+            onClick={() =>
+              onInteract({
+                title: line,
+                context: section.subject,
+                status: "Draft line selected",
+              })
+            }
+            className="w-full rounded-md px-3 py-2 text-left text-xs transition-colors hover:bg-white/[0.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB13B]/60"
+            style={{ background: activeTitle === line ? previewTheme.accentSoft : previewTheme.panel, color: previewTheme.textSecondary }}
+          >
             {line}
-          </div>
+          </button>
         ))}
       </div>
     </div>
   );
 }
 
-function CertificatePreview({ section }: { section: Extract<PreviewSection, { type: "certificate" }> }) {
+function CertificatePreview({
+  section,
+  activeTitle,
+  onInteract,
+}: {
+  section: Extract<PreviewSection, { type: "certificate" }>;
+  activeTitle?: string;
+  onInteract: (interaction: PreviewInteraction) => void;
+}) {
   return (
     <div className="rounded-2xl border p-5" style={{ background: previewTheme.card, borderColor: previewTheme.accentBorder }}>
       <div className="mb-5 flex items-center justify-between gap-4">
@@ -470,76 +636,127 @@ function CertificatePreview({ section }: { section: Extract<PreviewSection, { ty
       </div>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         {section.rows.map((row) => (
-          <div key={row.label} className="rounded-lg border p-3" style={{ background: previewTheme.panelElevated, borderColor: previewTheme.borderSoft }}>
+          <button
+            type="button"
+            key={row.label}
+            onClick={() =>
+              onInteract({
+                title: row.label,
+                context: row.value,
+                status: "Credential evidence selected",
+              })
+            }
+            className="rounded-lg border p-3 text-left transition-colors hover:border-[#F69507]/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB13B]/60"
+            style={{ background: activeTitle === row.label ? previewTheme.accentSoft : previewTheme.panelElevated, borderColor: activeTitle === row.label ? previewTheme.accentBorder : previewTheme.borderSoft }}
+          >
             <p className="text-[10px] font-semibold uppercase" style={{ color: previewTheme.textMuted }}>
               {row.label}
             </p>
             <p className="mt-1 text-xs font-semibold" style={{ color: previewTheme.textSecondary }}>
               {row.value}
             </p>
-          </div>
+          </button>
         ))}
       </div>
     </div>
   );
 }
 
-function ActionRow({ section }: { section: Extract<PreviewSection, { type: "actions" }> }) {
+function ActionRow({
+  section,
+  activeTitle,
+  onInteract,
+}: {
+  section: Extract<PreviewSection, { type: "actions" }>;
+  activeTitle?: string;
+  onInteract: (interaction: PreviewInteraction) => void;
+}) {
   return (
     <div className="flex flex-wrap gap-2">
       {section.items.map((item, index) => {
         const Icon = index === 0 ? Download : Share2;
 
         return (
-          <div
+          <button
+            type="button"
             key={item}
-            className="inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-[11px] font-semibold"
+            onClick={() =>
+              onInteract({
+                title: item,
+                context: index === 0 ? "Export workflow" : "Share workflow",
+                status: "Action previewed",
+              })
+            }
+            className="inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-[11px] font-semibold transition-colors hover:border-[#F69507]/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB13B]/60"
             style={{
-              background: index === 0 ? previewTheme.accentSoft : previewTheme.card,
-              borderColor: index === 0 ? previewTheme.accentBorder : previewTheme.borderSoft,
-              color: index === 0 ? previewTheme.accent : previewTheme.textSecondary,
+              background: activeTitle === item || index === 0 ? previewTheme.accentSoft : previewTheme.card,
+              borderColor: activeTitle === item || index === 0 ? previewTheme.accentBorder : previewTheme.borderSoft,
+              color: activeTitle === item || index === 0 ? previewTheme.accent : previewTheme.textSecondary,
             }}
           >
             <Icon className="h-3.5 w-3.5" />
             {item}
-          </div>
+          </button>
         );
       })}
     </div>
   );
 }
 
-function PreviewSectionRenderer({ section }: { section: PreviewSection }) {
+function PreviewSectionRenderer({
+  section,
+  activeTitle,
+  onInteract,
+}: {
+  section: PreviewSection;
+  activeTitle?: string;
+  onInteract: (interaction: PreviewInteraction) => void;
+}) {
   if (section.type === "metrics") {
     return (
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         {section.items.map((metric) => (
-          <MetricCard key={metric.label} metric={metric} />
+          <MetricCard key={metric.label} metric={metric} active={activeTitle === metric.label} onInteract={onInteract} />
         ))}
       </div>
     );
   }
 
-  if (section.type === "cards") return <PreviewCardGrid section={section} />;
+  if (section.type === "cards") return <PreviewCardGrid section={section} activeTitle={activeTitle} onInteract={onInteract} />;
   if (section.type === "bars") {
     return (
       <div className="rounded-xl border p-4" style={{ background: previewTheme.card, borderColor: previewTheme.borderSoft }}>
         <SectionTitle title={section.title} />
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
           {section.items.map((item) => (
-            <NeutralProgressBar key={item.label} item={item} compact={section.compact} />
+            <button
+              type="button"
+              key={item.label}
+              onClick={() =>
+                onInteract({
+                  title: item.label,
+                  context: item.sub ?? `${item.value}% configured`,
+                  status: item.highlight ? "Priority performance signal" : "Performance signal opened",
+                  metric: item.sub ?? `${item.value}%`,
+                })
+              }
+              className="rounded-lg p-2 text-left transition-colors hover:bg-white/[0.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB13B]/60"
+              style={{ background: activeTitle === item.label ? previewTheme.accentSoft : undefined }}
+            >
+              <NeutralProgressBar item={item} compact={section.compact} />
+            </button>
           ))}
         </div>
       </div>
     );
   }
-  if (section.type === "table") return <DataTable section={section} />;
-  if (section.type === "columns") return <ColumnBoard section={section} />;
-  if (section.type === "timeline") return <Timeline section={section} />;
-  if (section.type === "checklist") return <Checklist section={section} />;
-  if (section.type === "editor") return <EditorPreview section={section} />;
-  if (section.type === "certificate") return <CertificatePreview section={section} />;
-  return <ActionRow section={section} />;
+  if (section.type === "table") return <DataTable section={section} activeTitle={activeTitle} onInteract={onInteract} />;
+  if (section.type === "columns") return <ColumnBoard section={section} activeTitle={activeTitle} onInteract={onInteract} />;
+  if (section.type === "timeline") return <Timeline section={section} activeTitle={activeTitle} onInteract={onInteract} />;
+  if (section.type === "checklist") return <Checklist section={section} activeTitle={activeTitle} onInteract={onInteract} />;
+  if (section.type === "editor") return <EditorPreview section={section} activeTitle={activeTitle} onInteract={onInteract} />;
+  if (section.type === "certificate") return <CertificatePreview section={section} activeTitle={activeTitle} onInteract={onInteract} />;
+  return <ActionRow section={section} activeTitle={activeTitle} onInteract={onInteract} />;
 }
 
 function PreviewBrowserFrame({
@@ -555,6 +772,12 @@ function PreviewBrowserFrame({
 }) {
   const items = sidebarItems[journeyId];
   const urlSlug = journeyId === "enterprises" ? "enterprise" : journeyId;
+  const [activeInteraction, setActiveInteraction] = useState<PreviewInteraction>({
+    title: preview.title,
+    context: preview.subtitle,
+    status: "Live prototype ready",
+    metric: "Interactive",
+  });
 
   return (
     <div
@@ -597,7 +820,14 @@ function PreviewBrowserFrame({
               <button
                 type="button"
                 key={item.name}
-                onClick={() => onStepChange(index)}
+                onClick={() => {
+                  setActiveInteraction({
+                    title: item.name,
+                    context: "Workspace navigation",
+                    status: active ? "Current workspace" : "Switching prototype view",
+                  });
+                  onStepChange(index);
+                }}
                 className="flex items-center gap-2.5 rounded-lg border-l-2 px-3 py-2 text-left text-[11px] font-medium transition-colors hover:bg-white/[0.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB13B]/60"
                 style={{
                   background: active ? previewTheme.panelElevated : "transparent",
@@ -614,17 +844,47 @@ function PreviewBrowserFrame({
 
         <main className="flex-1 overflow-y-auto p-4 [scrollbar-width:none] sm:p-5 md:p-6 [&::-webkit-scrollbar]:hidden" style={{ background: "rgba(11, 11, 11, 0.88)" }}>
           <div className="max-w-4xl">
-            <div className="mb-5">
-              <h3 className="text-xl font-bold" style={{ color: previewTheme.textPrimary }}>
-                {preview.title}
-              </h3>
-              <p className="mt-1 max-w-2xl text-sm" style={{ color: previewTheme.textMuted }}>
-                {preview.subtitle}
-              </p>
+            <div className="mb-5 grid gap-3 lg:grid-cols-[minmax(0,1fr)_250px]">
+              <div>
+                <h3 className="text-xl font-bold" style={{ color: previewTheme.textPrimary }}>
+                  {preview.title}
+                </h3>
+                <p className="mt-1 max-w-2xl text-sm" style={{ color: previewTheme.textMuted }}>
+                  {preview.subtitle}
+                </p>
+              </div>
+              <div
+                className="rounded-xl border p-3 text-left"
+                style={{
+                  background: "linear-gradient(145deg, rgba(255,177,59,0.12), rgba(255,255,255,0.03))",
+                  borderColor: previewTheme.accentBorder,
+                }}
+              >
+                <div className="mb-2 flex items-center justify-between gap-2">
+                  <p className="text-[10px] font-bold uppercase" style={{ color: previewTheme.accent }}>
+                    Active signal
+                  </p>
+                  {activeInteraction.metric && <StatusPill text={activeInteraction.metric} active />}
+                </div>
+                <p className="truncate text-sm font-bold" style={{ color: previewTheme.textPrimary }}>
+                  {activeInteraction.title}
+                </p>
+                <p className="mt-1 line-clamp-2 text-[11px] leading-relaxed" style={{ color: previewTheme.textSecondary }}>
+                  {activeInteraction.context}
+                </p>
+                <p className="mt-2 text-[10px] font-semibold uppercase" style={{ color: previewTheme.textMuted }}>
+                  {activeInteraction.status}
+                </p>
+              </div>
             </div>
             <div className="space-y-4">
               {preview.sections.map((section, index) => (
-                <PreviewSectionRenderer key={`${section.type}-${index}`} section={section} />
+                <PreviewSectionRenderer
+                  key={`${section.type}-${index}`}
+                  section={section}
+                  activeTitle={activeInteraction.title}
+                  onInteract={setActiveInteraction}
+                />
               ))}
             </div>
           </div>
