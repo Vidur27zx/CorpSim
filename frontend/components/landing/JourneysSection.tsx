@@ -786,25 +786,17 @@ type EnterprisePrototypeTab = {
 
 const enterprisePrototypeTabs: EnterprisePrototypeTab[] = [
   { id: "dashboard", label: "Dashboard", icon: BarChart3 },
-  { id: "programs", label: "Programs", icon: Briefcase },
-  { id: "templates", label: "Templates", icon: FileText },
-  { id: "schedule", label: "Schedule", icon: ClipboardCheck },
-  { id: "parameters", label: "Parameters", icon: Settings },
-  { id: "stakeholders", label: "AI Stakeholders", icon: Users },
-  { id: "program", label: "Program Brief", icon: Briefcase },
-  { id: "daily", label: "Daily Tasks", icon: ClipboardCheck },
-  { id: "builder", label: "Builder", icon: Settings },
-  { id: "resources", label: "Resources", icon: FileText },
-  { id: "rubric", label: "Rubric", icon: Target },
-  { id: "assign", label: "Assign", icon: Users },
-  { id: "progress", label: "Progress", icon: LineChart },
-  { id: "evidence", label: "Evidence", icon: Search },
-  { id: "governance", label: "Governance", icon: Shield },
+  { id: "program", label: "Setup", icon: Briefcase },
+  { id: "builder", label: "Build", icon: Settings },
+  { id: "rubric", label: "Evaluation", icon: Target },
+  { id: "assign", label: "Schedule & Publish", icon: ClipboardCheck },
+  { id: "progress", label: "Monitor", icon: LineChart },
+  { id: "evidence", label: "Review Evidence", icon: Search },
   { id: "insights", label: "Insights", icon: BarChart3 },
   { id: "reports", label: "Reports", icon: Download },
 ];
 
-const outerStepToEnterpriseTab: EnterprisePrototypeTabId[] = ["dashboard", "schedule", "parameters", "progress", "evidence", "insights"];
+const outerStepToEnterpriseTab: EnterprisePrototypeTabId[] = ["program", "builder", "rubric", "progress", "evidence", "reports"];
 
 const enterpriseTabCopy: Record<EnterprisePrototypeTabId, { title: string; subtitle: string; status: string; metric?: string }> = {
   dashboard: {
@@ -844,9 +836,9 @@ const enterpriseTabCopy: Record<EnterprisePrototypeTabId, { title: string; subti
     metric: "6 personas",
   },
   program: {
-    title: "Mokabara Malaysia + Singapore Expansion",
-    subtitle: "A 5-day enterprise simulation for business analyst and expansion associate readiness.",
-    status: "Program brief open",
+    title: "Program Setup",
+    subtitle: "Define the role, company context, cohort, duration, resources, and stakeholders in one launch-ready brief.",
+    status: "Program setup open",
     metric: "5 days",
   },
   daily: {
@@ -856,8 +848,8 @@ const enterpriseTabCopy: Record<EnterprisePrototypeTabId, { title: string; subti
     metric: "Day 1-5",
   },
   builder: {
-    title: "Simulation Builder",
-    subtitle: "Set the market, role, scenario complexity, AI stakeholders, and multi-day unlock rules.",
+    title: "Build Simulation",
+    subtitle: "Generate daily tasks, resource packs, AI stakeholder events, and scenario pressure from the approved setup.",
     status: "Builder open",
     metric: "Live",
   },
@@ -874,9 +866,9 @@ const enterpriseTabCopy: Record<EnterprisePrototypeTabId, { title: string; subti
     metric: "8 pillars",
   },
   assign: {
-    title: "Assign Cohort",
-    subtitle: "Schedule the 5-day simulation, assign it to a cohort, and enable daily reminders and visibility.",
-    status: "Assignment ready",
+    title: "Schedule & Publish",
+    subtitle: "Review launch readiness, assign the cohort, set daily unlocks, and publish from one control screen.",
+    status: "Ready to publish",
     metric: "120",
   },
   progress: {
@@ -1114,17 +1106,21 @@ function getActionOutcome(interaction: PreviewInteraction) {
   if (status.includes("schedule draft")) return "The admin sets cohort, daily unlock time, reviewers, reminders, and publish rules before launch.";
   if (status.includes("parameters open")) return "Simulation behavior can be tuned before launch: ambiguity, AI guidance, difficulty, and scoring strictness.";
   if (status.includes("stakeholders active")) return "AI personas create realistic workplace messages, constraints, and curveballs during the simulation.";
+  if (status.includes("program setup open")) return "This is the single setup brief used by the builder, rubric, scheduler, and publish flow.";
   if (status.includes("program brief open")) return "The program brief defines the company, markets, role context, duration, and final candidate output.";
   if (status.includes("daily tasks configured")) return "Candidates receive one workplace task per day across the 3-5 day simulation window.";
   if (status.includes("builder open")) return "The builder generates the daily sequence, resource pack, stakeholder events, and evaluation rubric.";
   if (status.includes("resources ready")) return "Admins control which briefs, sheets, personas, and emails candidates use inside the workspace.";
   if (status.includes("rubric calibrated")) return "Each submission is scored against the eight pillars and mapped to role-readiness signals.";
+  if (status.includes("ready to publish")) return "The admin reviews readiness, confirms cohort timing, then publishes without jumping across separate setup pages.";
   if (status.includes("assignment ready")) return "Publishing sends invites, schedules daily unlocks, enables reminders, and opens live monitoring.";
   if (status.includes("live monitoring")) return "Admins can see completion, stuck points, at-risk candidates, and quality signals while the simulation runs.";
   if (status.includes("evidence review")) return "Reviewers inspect candidate submissions, AI notes, skill signals, and shortlist recommendations.";
   if (status.includes("controls locked")) return "Rubrics, score review, bias checks, and override rules are enforced before reports are exported.";
   if (status.includes("insights generated")) return "CorpSim summarizes completion, readiness, top skills, gaps, and recommended follow-up actions.";
   if (status.includes("reports ready")) return "Stakeholder-ready exports can be shared with HR, faculty, placement teams, or leadership.";
+  if (status.includes("setup item")) return "This item is edited inside setup and reused automatically by build, evaluation, and publish.";
+  if (status.includes("readiness check")) return "The admin can inspect this launch requirement here before pressing publish.";
   if (status.includes("program opened")) return "Program detail is selected; the admin can duplicate, monitor, or move it into setup.";
   if (status.includes("template")) return "Template selection pre-fills role, duration, skills, resources, and rubric structure.";
   if (status.includes("schedule action")) return "Daily unlocks, reviewer access, reminders, and participant invites are queued.";
@@ -1395,6 +1391,62 @@ function EnterpriseAdminWorkspace({
     );
   }
 
+  if (activeTab === "program") {
+    return (
+      <div className="grid gap-3 lg:grid-cols-[1fr_0.95fr]">
+        <div className="rounded-lg border p-3" style={{ background: previewTheme.accentSoft, borderColor: previewTheme.accentBorder }}>
+          <p className="text-[10px] font-bold uppercase" style={{ color: previewTheme.accent }}>
+            Launch brief
+          </p>
+          <h3 className="mt-2 text-base font-black leading-tight" style={{ color: previewTheme.textPrimary }}>
+            Mokabara Malaysia + Singapore Expansion
+          </h3>
+          <p className="mt-2 line-clamp-3 text-xs leading-relaxed" style={{ color: previewTheme.textSecondary }}>
+            Candidates act as expansion analysts and work through market, logistics, GTM, pricing, risk, and final executive recommendation tasks across a 5-day simulation.
+          </p>
+          <div className="mt-3 grid grid-cols-2 gap-2.5">
+            <MiniField label="Role" value="Business Analyst" active />
+            <MiniField label="Cohort" value="Final Year Business" />
+            <MiniField label="Duration" value="5 days" active />
+            <MiniField label="Output" value="Executive recommendation" />
+          </div>
+        </div>
+        <div className="rounded-lg border p-3" style={{ background: previewTheme.card, borderColor: previewTheme.borderSoft }}>
+          <SectionTitle title="Setup feeds the full workflow" />
+          {[
+            ["Template", "Market Expansion Analyst"],
+            ["Company context", "Mokabara entering Malaysia + Singapore"],
+            ["Resources", "Market brief, logistics sheet, personas, email"],
+            ["AI stakeholders", "Sales, logistics, finance, leadership"],
+            ["Evaluation", "8-pillar rubric auto-linked"],
+          ].map(([label, value], index) => (
+            <button
+              type="button"
+              key={label}
+              onClick={() =>
+                onInteract({
+                  title: label,
+                  context: value,
+                  status: "Setup item opened",
+                  metric: index === 0 ? "Base" : "Ready",
+                })
+              }
+              className="mb-2 grid w-full grid-cols-[88px_minmax(0,1fr)] gap-2 rounded-lg border px-2.5 py-2 text-left text-[10px] transition-colors hover:border-[#F69507]/50"
+              style={{ background: index === 0 ? previewTheme.accentSoft : previewTheme.panelElevated, borderColor: index === 0 ? previewTheme.accentBorder : previewTheme.borderSoft }}
+            >
+              <span className="font-bold uppercase" style={{ color: index === 0 ? previewTheme.accent : previewTheme.textMuted }}>
+                {label}
+              </span>
+              <span className="truncate font-semibold" style={{ color: previewTheme.textSecondary }}>
+                {value}
+              </span>
+            </button>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   if (activeTab === "daily") {
     return (
       <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_240px]">
@@ -1591,25 +1643,60 @@ function EnterpriseAdminWorkspace({
 
   if (activeTab === "assign") {
     return (
-      <div className="grid gap-3 lg:grid-cols-[1fr_0.9fr]">
-        <div className="grid gap-2.5">
-          <MiniField label="Assigned cohort" value="Final Year Business Cohort" active />
-          <MiniField label="Participants" value="120 candidates" />
-          <MiniField label="Start" value="Monday, 10:00 AM" active />
-          <MiniField label="End" value="Friday, 6:00 PM" />
-        </div>
+      <div className="grid gap-3 lg:grid-cols-[1.05fr_0.95fr]">
         <div className="rounded-lg border p-3" style={{ background: previewTheme.card, borderColor: previewTheme.borderSoft }}>
-          <SectionTitle title="Publish Settings" />
-          {["Daily reminders enabled", "Faculty / HR visibility enabled", "Late-submission alerts", "AI evaluation after each day"].map((item) => (
-            <div key={item} className="mb-2 flex w-full items-center gap-2.5 text-left">
-              <div className="flex h-5 w-5 items-center justify-center rounded-md border" style={{ background: previewTheme.accentSoft, borderColor: previewTheme.accentBorder }}>
+          <SectionTitle title="Publish readiness" />
+          {[
+            ["Program setup", "Role, company, cohort, duration"],
+            ["Simulation build", "Daily tasks and AI stakeholders"],
+            ["Evaluation rules", "8 pillars and reviewer policy"],
+            ["Resources", "Candidate brief, sheets, personas"],
+            ["Schedule", "Mon 10:00 AM to Fri 6:00 PM"],
+          ].map(([label, value], index) => (
+            <button
+              type="button"
+              key={label}
+              onClick={() =>
+                onInteract({
+                  title: label,
+                  context: value,
+                  status: "Readiness check opened",
+                  metric: "Ready",
+                })
+              }
+              className="mb-2 flex w-full items-center gap-2.5 rounded-lg border px-2.5 py-2 text-left transition-colors hover:border-[#F69507]/50"
+              style={{ background: index === 4 ? previewTheme.accentSoft : previewTheme.panelElevated, borderColor: index === 4 ? previewTheme.accentBorder : previewTheme.borderSoft }}
+            >
+              <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md border" style={{ background: previewTheme.accentSoft, borderColor: previewTheme.accentBorder }}>
                 <Check className="h-3 w-3" style={{ color: previewTheme.accent }} />
               </div>
-              <span className="text-[11px] font-semibold" style={{ color: previewTheme.textSecondary }}>
-                {item}
-              </span>
-            </div>
+              <div className="min-w-0">
+                <p className="text-[11px] font-bold" style={{ color: previewTheme.textPrimary }}>
+                  {label}
+                </p>
+                <p className="truncate text-[10px]" style={{ color: previewTheme.textMuted }}>
+                  {value}
+                </p>
+              </div>
+            </button>
           ))}
+        </div>
+        <div className="rounded-lg border p-3" style={{ background: previewTheme.card, borderColor: previewTheme.borderSoft }}>
+          <SectionTitle title="Launch controls" />
+          <div className="grid grid-cols-2 gap-2.5">
+            <MiniField label="Assigned cohort" value="Final Year Business" active />
+            <MiniField label="Participants" value="120 candidates" />
+            <MiniField label="Daily unlock" value="10:00 AM" active />
+            <MiniField label="Reminders" value="Auto-enabled" />
+          </div>
+          <div className="mt-3 rounded-lg border p-2.5" style={{ background: previewTheme.accentSoft, borderColor: previewTheme.accentBorder }}>
+            <p className="text-[10px] font-bold uppercase" style={{ color: previewTheme.accent }}>
+              What publish does
+            </p>
+            <p className="mt-1 text-[11px] font-semibold leading-relaxed" style={{ color: previewTheme.textSecondary }}>
+              Sends invites, locks the rubric, schedules the 5 daily tasks, enables AI review, and opens the live monitoring dashboard.
+            </p>
+          </div>
           <button
             type="button"
             onClick={() =>
