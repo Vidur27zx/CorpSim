@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import {
@@ -788,7 +788,64 @@ const enterprisePrototypeTabs: EnterprisePrototypeTab[] = [
   { id: "insights", label: "Insights", icon: BarChart3 },
 ];
 
-const outerStepToEnterpriseTab: EnterprisePrototypeTabId[] = ["program", "builder", "rubric", "progress", "evidence", "insights"];
+const outerStepToEnterpriseTab: EnterprisePrototypeTabId[] = ["program", "daily", "rubric", "progress", "evidence", "insights"];
+
+const enterpriseTabCopy: Record<EnterprisePrototypeTabId, { title: string; subtitle: string; status: string; metric?: string }> = {
+  program: {
+    title: "Mokabara Malaysia + Singapore Expansion",
+    subtitle: "A 5-day enterprise simulation for business analyst and expansion associate readiness.",
+    status: "Program brief open",
+    metric: "5 days",
+  },
+  daily: {
+    title: "Daily Task Timeline",
+    subtitle: "Candidates receive one realistic workplace task per day, from market entry to final recommendation.",
+    status: "Daily tasks configured",
+    metric: "Day 1-5",
+  },
+  builder: {
+    title: "Simulation Builder",
+    subtitle: "Set the market, role, scenario complexity, AI stakeholders, and multi-day unlock rules.",
+    status: "Builder open",
+    metric: "Live",
+  },
+  resources: {
+    title: "Resource Pack",
+    subtitle: "Attach the market brief, logistics sheet, competitor notes, leadership email, and sales channel options.",
+    status: "Resources ready",
+    metric: "6 files",
+  },
+  rubric: {
+    title: "Evaluation Rubric",
+    subtitle: "Define what will be measured across market analysis, logistics reasoning, GTM thinking, and communication.",
+    status: "Rubric calibrated",
+    metric: "8 pillars",
+  },
+  assign: {
+    title: "Assign Cohort",
+    subtitle: "Schedule the 5-day simulation, assign it to a cohort, and enable daily reminders and visibility.",
+    status: "Assignment ready",
+    metric: "120",
+  },
+  progress: {
+    title: "Live Progress",
+    subtitle: "Monitor day-wise completion, stuck points, at-risk candidates, and submission quality while the simulation runs.",
+    status: "Live monitoring",
+    metric: "71%",
+  },
+  evidence: {
+    title: "Candidate Evidence",
+    subtitle: "Open candidate submissions, daily task evidence, AI notes, and skill-level signals.",
+    status: "Evidence review",
+    metric: "CRS",
+  },
+  insights: {
+    title: "AI-Generated Insights",
+    subtitle: "Review cohort readiness, top skills, improvement areas, and recommendations after completion.",
+    status: "Insights generated",
+    metric: "72/100",
+  },
+};
 
 const mokabaraDailyTasks = [
   {
@@ -1164,13 +1221,37 @@ function PreviewBrowserFrame({
 }) {
   const items = sidebarItems[journeyId];
   const urlSlug = journeyId === "enterprises" ? "enterprise" : journeyId;
+  const defaultEnterpriseTab = outerStepToEnterpriseTab[stepIndex] ?? "program";
   const [activeInteraction, setActiveInteraction] = useState<PreviewInteraction>({
-    title: preview.title,
-    context: preview.subtitle,
-    status: "Live prototype ready",
-    metric: "Interactive",
+    title: enterpriseTabCopy[defaultEnterpriseTab].title,
+    context: enterpriseTabCopy[defaultEnterpriseTab].subtitle,
+    status: enterpriseTabCopy[defaultEnterpriseTab].status,
+    metric: enterpriseTabCopy[defaultEnterpriseTab].metric,
   });
-  const [activeEnterpriseTab, setActiveEnterpriseTab] = useState<EnterprisePrototypeTabId>("program");
+  const [activeEnterpriseTab, setActiveEnterpriseTab] = useState<EnterprisePrototypeTabId>(defaultEnterpriseTab);
+  const activeEnterpriseCopy = enterpriseTabCopy[activeEnterpriseTab];
+
+  useEffect(() => {
+    if (journeyId !== "enterprises") {
+      setActiveInteraction({
+        title: preview.title,
+        context: preview.subtitle,
+        status: "Live prototype ready",
+        metric: "Interactive",
+      });
+      return;
+    }
+
+    const nextTab = outerStepToEnterpriseTab[stepIndex] ?? "program";
+    const nextCopy = enterpriseTabCopy[nextTab];
+    setActiveEnterpriseTab(nextTab);
+    setActiveInteraction({
+      title: nextCopy.title,
+      context: nextCopy.subtitle,
+      status: nextCopy.status,
+      metric: nextCopy.metric,
+    });
+  }, [journeyId, preview.subtitle, preview.title, stepIndex]);
 
   return (
     <div
@@ -1241,10 +1322,10 @@ function PreviewBrowserFrame({
             <div className="mb-5 grid gap-3 lg:grid-cols-[minmax(0,1fr)_250px]">
               <div>
                 <h3 className="text-xl font-bold" style={{ color: previewTheme.textPrimary }}>
-                  {preview.title}
+                  {journeyId === "enterprises" ? activeEnterpriseCopy.title : preview.title}
                 </h3>
                 <p className="mt-1 max-w-2xl text-sm" style={{ color: previewTheme.textMuted }}>
-                  {preview.subtitle}
+                  {journeyId === "enterprises" ? activeEnterpriseCopy.subtitle : preview.subtitle}
                 </p>
               </div>
               <div
@@ -1284,10 +1365,12 @@ function PreviewBrowserFrame({
                         key={tab.id}
                         onClick={() => {
                           setActiveEnterpriseTab(tab.id);
+                          const nextCopy = enterpriseTabCopy[tab.id];
                           setActiveInteraction({
-                            title: tab.label,
-                            context: "Mokabara 5-day expansion simulation",
-                            status: "Prototype tab opened",
+                            title: nextCopy.title,
+                            context: nextCopy.subtitle,
+                            status: nextCopy.status,
+                            metric: nextCopy.metric,
                           });
                         }}
                         className="inline-flex shrink-0 items-center gap-2 rounded-lg border px-3 py-2 text-[11px] font-bold transition-colors hover:border-[#F69507]/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB13B]/60"
